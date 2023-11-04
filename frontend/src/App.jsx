@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-
+import Timetable from './components/TimeTable';
 
 function App() {
 
@@ -23,6 +23,9 @@ function App() {
 
   return (
     <>
+      <Timetable>
+        
+      </Timetable>
     </>
   )
 }

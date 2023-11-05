@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import Timetable from './components/TimeTable';
-import LineChart from './components/StatisticsPage';
-import Login from './pages/login';
+import CourseCountdown from './components/CourseCountdown';
 
 function App() {
 
@@ -26,7 +24,7 @@ function App() {
 
   return (
     <>
-      <Login />
+      <CourseCountdown />
       
     </>
   )

@@ -22,7 +22,6 @@ const courses = [
     // Add more courses as needed
 ];
 
-
 const Timetable = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -51,7 +50,6 @@ const Timetable = () => {
     
         return rowData;
     });
-    
 
     const columns = [
         {

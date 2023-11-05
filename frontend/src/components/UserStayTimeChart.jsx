@@ -12,7 +12,7 @@ const xLabels = [
   'Page G',
 ];
 
-export default function SimpleLineChart() {
+function UserStayTimeChart() {
   return (
     <LineChart
       width={500}
@@ -24,3 +24,5 @@ export default function SimpleLineChart() {
     />
   );
 }
+
+export default UserStayTimeChart;

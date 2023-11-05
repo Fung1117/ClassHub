@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import Timetable from './components/TimeTable';
+import LineChart from './components/StatisticsPage';
+import UserActivity from './components/UserActivity';
 
 function App() {
 
@@ -23,9 +25,9 @@ function App() {
 
   return (
     <>
-      <Timetable>
-        
-      </Timetable>
+      <UserActivity>
+
+      </UserActivity>
     </>
   )
 }

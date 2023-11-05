@@ -1,18 +1,25 @@
 from flask import Flask
-from flask_restful import Api, Resource, reqparse #ModuleNotFoundError: No module named 'flask_restful' = pip install flask-restful
-from flask_cors import CORS #ModuleNotFoundError: No module named 'flask_cors' = pip install Flask-Cors
+# ModuleNotFoundError: No module named 'flask_restful' = pip install flask-restful
+from flask_restful import Api, Resource, reqparse
+# ModuleNotFoundError: No module named 'flask_cors' = pip install Flask-Cors
+from flask_cors import CORS
 from api.ApiHandler import ApiHandler
- 
+
 app = Flask(__name__)
- 
+
 CORS(app)
 api = Api(app)
- 
+
 api.add_resource(ApiHandler, '/flask')
- 
+
+
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
- 
+    return {
+        'resultStatus': 'SUCCESS',
+        'message': "Hello Api Handler ApiHandler.py"
+    }
+
+
 if __name__ == '__main__':
     app.run(debug=True)

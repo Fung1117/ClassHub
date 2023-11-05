@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import Timetable from './components/TimeTable';
 import LineChart from './components/StatisticsPage';
-import UserActivity from './components/UserActivity';
+import Login from './pages/login';
 
 function App() {
 
   useEffect(() => {
-    fetch('http://localhost:5000/flask')
+    fetch('http://localhost:5000/')
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -23,11 +23,11 @@ function App() {
       });
   })
 
+
   return (
     <>
-      <UserActivity>
-
-      </UserActivity>
+      <Login />
+      
     </>
   )
 }

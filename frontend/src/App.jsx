@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import CourseCountdown from './components/CourseCountdown';
+import Statistic from './pages/Statistics';
 
 function App() {
 
@@ -24,8 +24,7 @@ function App() {
 
   return (
     <>
-      <CourseCountdown />
-      
+      <Statistic />
     </>
   )
 }

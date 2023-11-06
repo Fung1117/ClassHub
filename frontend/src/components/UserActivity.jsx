@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, ClockCircleOutlined, HourglassOutlined } from 'antd';
+import { Card } from 'antd';
 
-const UserActivityBlock = () => {
+const UserActivity = () => {
   // Static data for testing
   const totalTimeInMinutes = 342; // 5 hours 42 minutes
 
@@ -10,10 +10,10 @@ const UserActivityBlock = () => {
 
   return (
     <Card title="User Activity">
-      <p><ClockCircleOutlined /> <strong>Last Login:</strong> 2023-11-01 15:30:00</p>
-      <p><HourglassOutlined /> <strong>Total Time in System:</strong> {hours > 0 && `${hours} hours`} {minutes > 0 && `${minutes} minutes`}</p>
+      <p> <strong>Last Login:</strong> 2023-11-01 15:30:00</p>
+      <p> <strong>Total Time in System:</strong> {hours > 0 && `${hours} hours`} {minutes > 0 && `${minutes} minutes`}</p>
     </Card>
   );
 };
 
-export default UserActivityBlock;
+export default UserActivity;

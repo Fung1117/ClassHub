@@ -3,6 +3,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image } from 'antd';
 import TimeTable from './components/TimeTable';
 import Statistic from './pages/Statistics';
+import Login from './pages/Login'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -32,7 +33,7 @@ const App = () => {
     { key: '3', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
   ];
 
-  return (
+  return ( 
     <Layout style={{ minHeight: '90vh' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys}>
@@ -69,6 +70,7 @@ const App = () => {
           }}
         >
           <Routes>
+            <Route path="/login" element={<Login />} />
             <Route path="/TimeTable" element={<TimeTable />} />
             <Route path="/Statistic" element={<Statistic />} />
           </Routes>

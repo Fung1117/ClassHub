@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image } from 'antd';
-import TimeTable from './components/TimeTable';
+import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login'
 import {
@@ -29,7 +29,7 @@ const App = () => {
 
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'Nav 1', link: '/nav1' },
-    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/TimeTable' },
+    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Course' },
     { key: '3', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
   ];
 
@@ -70,8 +70,8 @@ const App = () => {
           }}
         >
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/TimeTable" element={<TimeTable />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Course" element={<CourseInformation />} />
             <Route path="/Statistic" element={<Statistic />} />
           </Routes>
         </Content>

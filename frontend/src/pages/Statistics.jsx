@@ -5,7 +5,7 @@ import UserStayTimeChart from '../components/UserStayTimeChart'
 
 const Statstics = () => {
     return (
-        <Flex gap="middle" align="center" justify="center" style={{ height: '100vh' }} >
+        <Flex gap="middle" align="center" justify="center" >
             <Flex gap="middle" align="center" justify="center" >
                 <UserStayTimeChart />
                 <UserActivity />

@@ -16,7 +16,6 @@ import {
 } from '@ant-design/icons';
 
 import { GiEvilBook } from 'react-icons/gi';
-
 import HeaderLogo from './assets/Header.svg';
 import useToken from 'antd/es/theme/useToken';
 
@@ -38,16 +37,16 @@ const App = () => {
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Course' },
     { key: '3', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
-    { key: '4', icon: <AppstoreAddOutlined/>, label: 'Enroll', link: '/Enroll' },
+    { key: '4', icon: <AppstoreAddOutlined />, label: 'Enroll', link: '/Enroll' },
   ];
 
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
     if (location.pathname != '/login' && !localStorage.getItem("userToken")) {
-        navigate('/login')
-        setSelectedKeys(['1'])
-        alert("Please login first")
+      navigate('/login')
+      setSelectedKeys(['1'])
+      alert("Please login first")
     }
     if (location.pathname == '/login' && !!localStorage.getItem("userToken")) {
       navigate('/')
@@ -79,18 +78,11 @@ const App = () => {
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>
             <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
-          <Link to="/login" onClick={() => setSelectedKeys(['0'])}>
-            <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 30, right: 30 }}>
-              Login
-            </Button>
-          </Link>
-            <Button
-              style={{
-                marginLeft: '100px',
-              }}
-              >
-              <Link to="/login" onClick={() => {logout(); setSelectedKeys(['1']);}}>Logout</Link>
-            </Button>
+            <Link to="/login" onClick={() => setSelectedKeys(['0'])}>
+              <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 30, right: 30 }}>
+                Login
+              </Button>
+            </Link>
           </Space>
         </Header>
         <Content

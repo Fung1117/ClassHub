@@ -33,7 +33,7 @@ const App = () => {
   ];
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <Link to="/" onClick={() => setSelectedKeys(['1'])}>
           <div style={{ textAlign: 'center', padding: '16px' }}>

@@ -93,7 +93,7 @@ const Timetable = () => {
             <Table columns={columns} dataSource={data} pagination={false} />
             <Modal
                 title={selectedCourse ? selectedCourse.name : ''}
-                visible={modalVisible}
+                open={modalVisible}
                 onCancel={() => setModalVisible(false)}
                 footer={null}
             >

@@ -1,7 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography, Image, Flex, Modal, Spin, Result } from 'antd';
 import Webcam from "react-webcam";
 import { TbFaceId } from 'react-icons/tb'
+import { UserContext } from '../App';
 import loginImage from '../assets/password-login.svg';
 import faceLoginImage from '../assets/face-login.svg'
 const { Title } = Typography;
@@ -14,6 +16,8 @@ const Login = () => {
     const [error, setError] = useState(false);
 
     const webcamRef = useRef(null);
+    const userTokenController = useContext(UserContext);
+    const navigate = useNavigate();
 
     const toggleLoginMethod = () => {
         setLoginMethod((prevMethod) => (prevMethod === 'password' ? 'faceId' : 'password'));
@@ -66,6 +70,8 @@ const Login = () => {
     const onFinish = (values) => {
         console.log(values)
         if (loginMethod == 'password') {
+            userTokenController.setUserToken("bruh");
+            navigate('/TimeTable');
             setLoading(true);
         }
         showModal();
@@ -85,7 +91,6 @@ const Login = () => {
             />
             <Form name="login" onFinish={onFinish} style={{ width: 500 }}>
                 <Form.Item
-                    name="username"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
                     <Input placeholder="Username" />
@@ -98,7 +103,6 @@ const Login = () => {
                     <Input.Password placeholder="Password" />
                 </Form.Item>
                 <Form.Item
-                    name="faceId"
                     style={{ display: loginMethod === 'faceId' ? 'block' : 'none' }}
                 >
                 </Form.Item>

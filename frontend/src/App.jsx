@@ -79,7 +79,6 @@ const App = () => {
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>
             <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
-          {/* <div style={{ position: 'absolute', top: 30, right: 30, height: '100%' }}> */}
           <Link to="/login" onClick={() => setSelectedKeys(['0'])}>
             <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 30, right: 30 }}>
               Login

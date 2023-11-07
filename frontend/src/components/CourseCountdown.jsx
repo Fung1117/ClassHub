@@ -1,28 +1,23 @@
 import React from 'react';
-import { Col, Row } from 'antd';
-import CountdownClock from 'react-countdown-clock';
+import { Grid, LinearProgress } from '@mui/material';
 
-// Set the deadline for the upcoming course (static data)
-const deadline = Date.now() + 1000 * 60 * 10; // 7 days from now
+const deadline = Date.now() + 1000 * 60 * 10;
+const totalDuration = 1000 * 60 * 10;
 
 const CourseCountdown = () => {
   const timeRemaining = deadline - Date.now();
-  const isCloseToStart = timeRemaining < 1000 * 60 * 1; // 15 minutes
+  const progressPercentage = ((totalDuration - timeRemaining) / totalDuration) * 100;
 
   return (
-      <Row gutter={16} justify="center">
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <div>
-            <CountdownClock
-              seconds={Math.floor(timeRemaining / 1000)}
-              color={isCloseToStart ? '#FF0000' : '#FFA500'}
-              alpha={0.8}
-              size={100}
-              onComplete={() => console.log('Countdown finished!')}
-            />
-          </div>
-        </Col>
-      </Row>
+    <Grid container spacing={2} justifyContent="center">
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <LinearProgress
+          variant="determinate"
+          value={progressPercentage}
+          sx={{ height: '30px' }}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

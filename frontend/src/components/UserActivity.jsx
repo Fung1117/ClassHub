@@ -43,7 +43,6 @@ const UserActivity = () => {
     // Add more activity history data as needed
   ];
 
-
   const columns = [
     {
       title: 'Date',

@@ -12,7 +12,6 @@ api = Api(app)
 
 api.add_resource(ApiHandler, '/flask')
 
-
 @app.route("/")
 def hello_world():
     return {
@@ -20,6 +19,14 @@ def hello_world():
         'message': "Hello Api Handler ApiHandler.py"
     }
 
+@app.route('/getCourse')
+def getCourse():
+    sql = ''
+    result = 0
+    return {
+        'resultStatus': 'SUCCESS',
+        'message': result
+    }
 
 if __name__ == '__main__':
     app.run(debug=True)

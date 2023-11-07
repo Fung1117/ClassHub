@@ -15,8 +15,8 @@ const xLabels = [
 function UserStayTimeChart() {
   return (
     <LineChart
-      width={500}
-      height={300}
+      width={900}
+      height={600}
       series={[
         { data: uData, label: 'the time u spend' },
       ]}

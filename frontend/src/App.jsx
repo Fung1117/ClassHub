@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image, Space } from 'antd';
+
 import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login';
@@ -17,16 +18,10 @@ import {
 
 import { GiEvilBook } from 'react-icons/gi';
 import HeaderLogo from './assets/Header.svg';
-import useToken from 'antd/es/theme/useToken';
-
-export const UserContext = React.createContext(false);
 
 const { Header, Sider, Content, Footer } = Layout;
 
 const App = () => {
-  const getUserToken = () => { return localStorage.getItem("userToken") }
-  const setUserToken = (token) => { localStorage.setItem("userToken", token) }
-  const logout = () => { localStorage.removeItem("userToken") }
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState(['1']);
   const {
@@ -39,18 +34,6 @@ const App = () => {
     { key: '3', icon: <AppstoreAddOutlined />, label: 'Enroll', link: '/Enroll' },
     { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
   ];
-
-  const location = useLocation();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (location.pathname != '/login' && !localStorage.getItem("userToken")) {
-      navigate('/login')
-      alert("Please login first")
-    }
-    if (location.pathname == '/login' && !!localStorage.getItem("userToken")) {
-      navigate('/')
-    }
-  })
 
   return (
     <Layout>
@@ -98,15 +81,13 @@ const App = () => {
             justifyContent: 'center',
           }}
         >
-          <UserContext.Provider value={{ getUserToken: getUserToken, setUserToken: setUserToken }}>
-            <Routes>
-              <Route path="/Login" element={<Login />} />
-              <Route path="/Course" element={<CourseInformation />} />
-              <Route path="/Statistic" element={<Statistic />} />
-              <Route path="/Logout" element={<Logout />} />
-              <Route path="/Enroll" element={<Enroll />} />
-            </Routes>
-          </UserContext.Provider>
+          <Routes>
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Course" element={<CourseInformation />} />
+            <Route path="/Statistic" element={<Statistic />} />
+            <Route path="/Logout" element={<Logout />} />
+            <Route path="/Enroll" element={<Enroll />} />
+          </Routes>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           intelligent Course Management System ©2023 Created by Group 28

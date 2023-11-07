@@ -1,32 +1,33 @@
-from flask import Flask
-# ModuleNotFoundError: No module named 'flask_restful' = pip install flask-restful
-from flask_restful import Api, Resource, reqparse
+from flask import Flask, request, jsonify
 # ModuleNotFoundError: No module named 'flask_cors' = pip install Flask-Cors
 from flask_cors import CORS
-from api.ApiHandler import ApiHandler
 
 app = Flask(__name__)
 
 CORS(app)
-api = Api(app)
 
-api.add_resource(ApiHandler, '/flask')
+@app.route('/Login', methods=['POST'])
+def Login():
+    login_data = request.json
+    is_face = login_data.get('isFace', False)
+    email = login_data.get('email')
+    if is_face:
+        # Face login logic
+        login_data.get('image')
+        # Implement your face login verification here
 
-@app.route("/")
-def hello_world():
-    return {
-        'resultStatus': 'SUCCESS',
-        'message': "Hello Api Handler ApiHandler.py"
-    }
+        if True:
+            return jsonify({'success': True, 'UID': 1})
+        else:
+            return jsonify({'success': False})
+    else:
+        password = login_data.get('password')
 
-@app.route('/getCourse')
-def getCourse():
-    sql = ''
-    result = 0
-    return {
-        'resultStatus': 'SUCCESS',
-        'message': result
-    }
+        if email == "example@example.com" and password == "123456":
+            return jsonify({'success': True, 'UID': 1})
+        else:
+            return jsonify({'success': False})
+
 
 if __name__ == '__main__':
     app.run(debug=True)

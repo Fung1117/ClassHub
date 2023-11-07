@@ -1,22 +1,23 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Form, Input, Button, Typography, Image, Flex, Modal, Spin, Result } from 'antd';
 import Webcam from "react-webcam";
 import { TbFaceId } from 'react-icons/tb'
-import { UserContext } from '../App';
 import loginImage from '../assets/password-login.svg';
 import faceLoginImage from '../assets/face-login.svg'
+
 const { Title } = Typography;
 
 const Login = () => {
     const [loginMethod, setLoginMethod] = useState('password'); // Default to password login
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
 
     const webcamRef = useRef(null);
-    const userTokenController = useContext(UserContext);
     const navigate = useNavigate();
 
     const toggleLoginMethod = () => {
@@ -27,40 +28,16 @@ const Login = () => {
         setOpen(true);
     };
 
-    const handleOk = () => {
+    const handleOk = async () => {
+        if (success) {
+            setOpen(false);
+            navigate('/');
+        } else if (error) {
+            setOpen(false);
+            setError(false);
+        }
         const imageSrc = webcamRef.current.getScreenshot();
-        console.log('Captured image:', imageSrc);
-        setLoading(true);
-        setTimeout(() => {
-            setSuccess(true);
-            setLoading(false);
-        }, 5000)
-
-        // fetch('YOUR_BACKEND_API_ENDPOINT', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ image: imageSrc }),
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Backend response handling
-        //     console.log('Backend Response:', data);
-        //     setLoading(false); // Stop loading spinner
-
-        //     // Update captureSuccess state based on the backend response
-        //     if (data.success) {
-        //         setCaptureSuccess(true);
-        //     } else {
-        //         setCaptureSuccess(false);
-        //     }
-        // })
-        // .catch(error => {
-        //     console.error('Error:', error);
-        //     setLoading(false); // Stop loading spinner
-        //     // Handle error, show error message, etc.
-        // });
+        faceLogin(imageSrc)
     };
 
     const handleCancel = () => {
@@ -68,14 +45,48 @@ const Login = () => {
     };
 
     const onFinish = (values) => {
-        console.log(values)
+        setEmail(values.email);
         if (loginMethod == 'password') {
-            userTokenController.setUserToken("bruh");
-            navigate('/TimeTable');
             setLoading(true);
+            passwordLogin(values.password);
         }
         showModal();
     };
+
+    const passwordLogin = async (password) => {
+        try {
+            const response = await axios.post(`${import.meta.env.REACT_APP_API_KEY}Login`, { isFace: false, email: email, password: password });
+            const data = response.data;
+            console.log('Backend Response:', data);
+            setLoading(false);
+            if (data.success) {
+                setSuccess(true);
+            } else {
+                setError(true);
+            }
+        } catch (error) {
+            setLoading(false);
+            setError(true);
+        }
+    }
+
+    const faceLogin = async (imageSrc) => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}Login`, { isFace: true, email: email, image: imageSrc });
+            const data = response.data;
+            console.log('Backend Response:', data);
+            setLoading(false);
+            if (data.success) {
+                // set up the UID
+                setSuccess(true);
+            } else {
+                setError(true);
+            }
+        } catch (error) {
+            setLoading(false);
+            setError(true);
+        }
+    }
 
     return (
         <Flex justify="center" align="center" vertical style={{ width: '100%' }}>
@@ -91,6 +102,7 @@ const Login = () => {
             />
             <Form name="login" onFinish={onFinish} style={{ width: 500 }}>
                 <Form.Item
+                    name="email"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
                     <Input placeholder="Username" />
@@ -136,15 +148,15 @@ const Login = () => {
                             status={'warning'}
                             title={'Wrong Face!'}
                         />
-                    ): loading ? (
-                    <Spin size="large" />
+                    ) : loading ? (
+                        <Spin size="large" />
                     ) : (
-                    <Webcam
-                        audio={false}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                        videoConstraints={{ width: 450, height: 300, facingMode: 'user' }}
-                    />
+                        <Webcam
+                            audio={false}
+                            ref={webcamRef}
+                            screenshotFormat="image/jpeg"
+                            videoConstraints={{ width: 450, height: 300, facingMode: 'user' }}
+                        />
                     )}
                 </Flex>
             </Modal>

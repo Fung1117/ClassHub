@@ -9,7 +9,7 @@
 
 1. Run the following command to clone the repository:
 ```shell
-   git clone <repository-url>
+   git clone https://github.com/Fung1117/database-project.git
 ```
 2. Navigate to the project directory
 ```shell

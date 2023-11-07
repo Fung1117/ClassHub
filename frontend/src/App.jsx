@@ -45,13 +45,13 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
-    if (location.pathname != '/' && !localStorage.getItem("userToken")) {
-        navigate('/')
+    if (location.pathname != '/login' && !localStorage.getItem("userToken")) {
+        navigate('/login')
         setSelectedKeys(['1'])
         alert("Please login first")
     }
-    if (location.pathname == '/' && !!localStorage.getItem("userToken")) {
-      navigate('/TimeTable')
+    if (location.pathname == '/login' && !!localStorage.getItem("userToken")) {
+      navigate('/')
     }
   })
 
@@ -82,7 +82,7 @@ const App = () => {
                 marginLeft: '100px',
               }}
               >
-              <Link to="/" onClick={() => {logout(); setSelectedKeys(['1']);}}>Logout</Link>
+              <Link to="/login" onClick={() => {logout(); setSelectedKeys(['1']);}}>Logout</Link>
             </Button>
           </Space>
         </Header>

@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography, Image, Flex } from 'antd';
 import { TbFaceId } from 'react-icons/tb'
+import { UserContext } from '../App';
 import loginImage from '../assets/login.svg';
 import faceLoginImage from '../assets/faceLogin.svg'
 const { Title } = Typography;
 
 const Login = () => {
     const [loginMethod, setLoginMethod] = useState('password'); // Default to password login
+    const userTokenController = useContext(UserContext);
+    const navigate = useNavigate();
 
     const toggleLoginMethod = () => {
         setLoginMethod((prevMethod) => (prevMethod === 'password' ? 'faceId' : 'password'));
@@ -14,7 +18,8 @@ const Login = () => {
 
     const onFinish = (values) => {
         if (loginMethod == 'password') {
-
+            userTokenController.setUserToken("bruh");
+            navigate('/TimeTable');
         } else {
             
         }
@@ -34,20 +39,17 @@ const Login = () => {
             />
             <Form name="login" onFinish={onFinish} style={{ width: 500}}>
                 <Form.Item
-                    name="username"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
                     <Input placeholder="Username" />
                 </Form.Item>
                 <Form.Item
-                    name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                     style={{ display: loginMethod === 'password' ? 'block' : 'none' }}
                 >
                     <Input.Password placeholder="Password" />
                 </Form.Item>
                 <Form.Item
-                    name="faceId"
                     style={{ display: loginMethod === 'faceId' ? 'block' : 'none' }}
                 >
                     {/* Implement face ID authentication component here */}

@@ -36,8 +36,8 @@ const App = () => {
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Course' },
-    { key: '3', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
-    { key: '4', icon: <AppstoreAddOutlined />, label: 'Enroll', link: '/Enroll' },
+    { key: '3', icon: <AppstoreAddOutlined />, label: 'Enroll', link: '/Enroll' },
+    { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
   ];
 
   const location = useLocation();
@@ -45,7 +45,6 @@ const App = () => {
   useEffect(() => {
     if (location.pathname != '/login' && !localStorage.getItem("userToken")) {
       navigate('/login')
-      setSelectedKeys(['1'])
       alert("Please login first")
     }
     if (location.pathname == '/login' && !!localStorage.getItem("userToken")) {
@@ -69,7 +68,7 @@ const App = () => {
           ))}
         </Menu>
         <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} style={{ position: 'absolute', bottom: 60, left: 0, width: '100%' }}>
-          <Menu.Item key="4" icon={<LogoutOutlined />}>
+          <Menu.Item key="5" icon={<LogoutOutlined />}>
             <Link to="/logout" onClick={() => setSelectedKeys(['4'])}>Logout</Link>
           </Menu.Item>
         </Menu>

@@ -33,7 +33,7 @@ const App = () => {
   ];
 
   return (
-    <Layout style={{ minHeight: '90vh' }}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <Link to="/" onClick={() => setSelectedKeys(['1'])}>
           <div style={{ textAlign: 'center', padding: '16px' }}>
@@ -47,7 +47,7 @@ const App = () => {
             </Menu.Item>
           ))}
         </Menu>
-        <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} style={{ position: 'absolute', bottom: 20, left: 0, width: '100%' }}>
+        <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} style={{ position: 'absolute', bottom: 60, left: 0, width: '100%' }}>
           <Menu.Item key="4" icon={<LogoutOutlined />}>
             <Link to="/logout" onClick={() => setSelectedKeys(['4'])}>Logout</Link>
           </Menu.Item>
@@ -71,6 +71,10 @@ const App = () => {
             minHeight: 280,
             height: 700,
             background: colorBgContainer,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Routes>

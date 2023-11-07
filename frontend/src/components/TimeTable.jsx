@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Table, Modal } from 'antd';
-// import 'antd/dist/antd.css';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 const timeSlots = [

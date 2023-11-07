@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react';
 import { Form, Input, Button, Typography, Image, Flex, Modal, Spin, Result } from 'antd';
 import Webcam from "react-webcam";
 import { TbFaceId } from 'react-icons/tb'
-import loginImage from '../assets/login.svg';
-import faceLoginImage from '../assets/faceLogin.svg'
+import loginImage from '../assets/password-login.svg';
+import faceLoginImage from '../assets/face-login.svg'
 const { Title } = Typography;
 
 const Login = () => {

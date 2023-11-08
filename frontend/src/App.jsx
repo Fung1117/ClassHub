@@ -5,14 +5,15 @@ import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
-import Enroll from './pages/Enroll'
+import OneHrCourse from './pages/OneHrCourse';
 import {
   HomeOutlined,
   CalendarOutlined,
   LineChartOutlined,
-  AppstoreAddOutlined,
   LoginOutlined,
   LogoutOutlined,
+  ClockCircleOutlined,
+
 } from '@ant-design/icons';
 
 import { GiEvilBook } from 'react-icons/gi';
@@ -30,7 +31,7 @@ const App = () => {
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Course' },
-    { key: '3', icon: <AppstoreAddOutlined />, label: 'Enroll', link: '/Enroll' },
+    { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/OneHrCourse'},
     { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
   ];
 
@@ -81,9 +82,9 @@ const App = () => {
           <Routes>
             <Route path="/Login" element={<Login />} />
             <Route path="/Course" element={<CourseInformation />} />
+            <Route path="/OneHrCourse" element={<OneHrCourse />} />
             <Route path="/Statistic" element={<Statistic />} />
             <Route path="/Logout" element={<Logout />} />
-            <Route path="/Enroll" element={<Enroll />} />
           </Routes>
         </Content>
         <Footer style={{ textAlign: 'center' }}>

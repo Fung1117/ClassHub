@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image, Space } from 'antd';
-
 import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login';
@@ -37,25 +36,23 @@ const App = () => {
 
   return (
     <Layout>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <Link to="/" onClick={() => setSelectedKeys(['1'])}>
-          <div style={{ textAlign: 'center', padding: '16px' }}>
-            <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
-          </div>
-        </Link>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
-          {menuItems.map((item) => (
-            <Menu.Item key={item.key} icon={item.icon}>
-              <Link to={item.link} onClick={() => setSelectedKeys([item.key])}>{item.label}</Link>
+        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+          <Link to="/" onClick={() => setSelectedKeys(['1'])}>
+            <div style={{ textAlign: 'center', padding: '16px' }}>
+              <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
+            </div>
+          </Link>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
+            {menuItems.map((item) => (
+              <Menu.Item key={item.key} icon={item.icon}>
+                <Link to={item.link} onClick={() => setSelectedKeys([item.key])}>{item.label}</Link>
+              </Menu.Item>
+            ))}
+            <Menu.Item key="5" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0}}>
+              <Link to="/logout" onClick={() => setSelectedKeys(['5'])}>Logout</Link>
             </Menu.Item>
-          ))}
-        </Menu>
-        <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} style={{ position: 'absolute', bottom: 60, left: 0, width: '100%' }}>
-          <Menu.Item key="5" icon={<LogoutOutlined />}>
-            <Link to="/logout" onClick={() => setSelectedKeys(['4'])}>Logout</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
+          </Menu>
+        </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>

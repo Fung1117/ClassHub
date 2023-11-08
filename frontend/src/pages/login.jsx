@@ -28,14 +28,16 @@ const Login = () => {
         setOpen(true);
     };
 
-    const handleOk = async () => {
+    const handleOk = () => {
         if (success) {
             setOpen(false);
             navigate('/');
         } else if (error) {
             setOpen(false);
+            setLoading(false);
             setError(false);
         }
+        setLoading(true);
         const imageSrc = webcamRef.current.getScreenshot();
         faceLogin(imageSrc)
     };

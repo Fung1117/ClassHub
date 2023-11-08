@@ -1,23 +1,43 @@
-import React from 'react';
-import { Grid, LinearProgress } from '@mui/material';
-
-const deadline = Date.now() + 1000 * 60 * 10;
-const totalDuration = 1000 * 60 * 10;
+import React, { useState, useEffect } from 'react';
+import { Line } from 'rc-progress';
 
 const CourseCountdown = () => {
-  const timeRemaining = deadline - Date.now();
-  const progressPercentage = ((totalDuration - timeRemaining) / totalDuration) * 100;
+  const totalMilliseconds = 60 * 1000; // 1 minute in milliseconds
+  const [progress, setProgress] = useState(0);
+  const [startTime, setStartTime] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const elapsedMilliseconds = Date.now() - startTime;
+      const increasingProgress = (elapsedMilliseconds / totalMilliseconds) * 100;
+      if (increasingProgress <= 100) {
+        setProgress(increasingProgress);
+      } else {
+        setProgress(100);
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [totalMilliseconds, startTime]);
+
+  const calculateTimeLeft = () => {
+    const remainingMilliseconds = totalMilliseconds - (Date.now() - startTime);
+    if (remainingMilliseconds < 0) {
+      return 'Time to Lession'
+    }
+    const seconds = Math.floor((remainingMilliseconds / 1000) % 60);
+    const minutes = Math.floor((remainingMilliseconds / 1000 / 60) % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
 
   return (
-    <Grid container spacing={2} justifyContent="center">
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <LinearProgress
-          variant="determinate"
-          value={progressPercentage}
-          sx={{ height: '30px' }}
-        />
-      </Grid>
-    </Grid>
+    <div>
+      <h1>Linear Progress Bar: {calculateTimeLeft()}</h1>
+      <Line percent={progress} strokeWidth={4} strokeColor="#007bff" />
+    </div>
   );
 };
 

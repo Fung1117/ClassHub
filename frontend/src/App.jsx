@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image, Space } from 'antd';
-
 import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
-import Enroll from './pages/Enroll'
+import OneHrCourse from './pages/OneHrCourse';
 import {
   HomeOutlined,
   CalendarOutlined,
   LineChartOutlined,
-  AppstoreAddOutlined,
   LoginOutlined,
   LogoutOutlined,
+  ClockCircleOutlined,
+
 } from '@ant-design/icons';
 
 import { GiEvilBook } from 'react-icons/gi';
@@ -31,31 +31,29 @@ const App = () => {
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Course' },
-    { key: '3', icon: <AppstoreAddOutlined />, label: 'Enroll', link: '/Enroll' },
+    { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/OneHrCourse'},
     { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
   ];
 
   return (
     <Layout>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <Link to="/" onClick={() => setSelectedKeys(['1'])}>
-          <div style={{ textAlign: 'center', padding: '16px' }}>
-            <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
-          </div>
-        </Link>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
-          {menuItems.map((item) => (
-            <Menu.Item key={item.key} icon={item.icon}>
-              <Link to={item.link} onClick={() => setSelectedKeys([item.key])}>{item.label}</Link>
+        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+          <Link to="/" onClick={() => setSelectedKeys(['1'])}>
+            <div style={{ textAlign: 'center', padding: '16px' }}>
+              <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
+            </div>
+          </Link>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
+            {menuItems.map((item) => (
+              <Menu.Item key={item.key} icon={item.icon}>
+                <Link to={item.link} onClick={() => setSelectedKeys([item.key])}>{item.label}</Link>
+              </Menu.Item>
+            ))}
+            <Menu.Item key="5" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0}}>
+              <Link to="/logout" onClick={() => setSelectedKeys(['5'])}>Logout</Link>
             </Menu.Item>
-          ))}
-        </Menu>
-        <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} style={{ position: 'absolute', bottom: 60, left: 0, width: '100%' }}>
-          <Menu.Item key="5" icon={<LogoutOutlined />}>
-            <Link to="/logout" onClick={() => setSelectedKeys(['4'])}>Logout</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
+          </Menu>
+        </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>
@@ -84,9 +82,9 @@ const App = () => {
           <Routes>
             <Route path="/Login" element={<Login />} />
             <Route path="/Course" element={<CourseInformation />} />
+            <Route path="/OneHrCourse" element={<OneHrCourse />} />
             <Route path="/Statistic" element={<Statistic />} />
             <Route path="/Logout" element={<Logout />} />
-            <Route path="/Enroll" element={<Enroll />} />
           </Routes>
         </Content>
         <Footer style={{ textAlign: 'center' }}>

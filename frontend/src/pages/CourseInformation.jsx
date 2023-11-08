@@ -8,9 +8,11 @@ const CourseInformation = () => {
     return (
         <Flex gap="middle" align="center" justify="center" >
             <Flex gap="middle" align="center" justify="center" >
-                {/* <Timetable /> */}
-                <CourseCountdown />
-                {/* <TeacherMessageBoard /> */}
+                <Timetable />
+                <Flex gap="middle" align="center" justify="center" vertical>
+                    <CourseCountdown />
+                    <TeacherMessageBoard />
+                </Flex>
             </Flex>
         </Flex>
     );

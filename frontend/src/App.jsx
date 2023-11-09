@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image, Space } from 'antd';
+import Home from './pages/Home';
 import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login';
@@ -92,6 +93,7 @@ const App = () => {
           }}
         >
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Course" element={<CourseInformation />} />
             <Route path="/OneHrCourse" element={<OneHrCourse />} />

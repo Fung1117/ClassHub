@@ -37,6 +37,23 @@ def TimeTable():
     ]
     return jsonify(courses)
 
+@app.route('/messages', methods=['GET'])
+def Messages():
+    uid = request.args.get('uid')
+    messages = [
+        {
+            "course": "COMP3330",
+            "teacher": "Teacher 1",
+            "message": "Hello students! Please submit your assignments by the end of this week.",
+        },
+        {
+            "course": "COMP3330",
+            "teacher": "Teacher 2",
+            "message": "Reminder: There will be a quiz on Monday. Prepare well!",
+        },
+    ]
+    return jsonify(messages)
+
 @app.route('/Time', methods=['GET'])
 def Time():
     uid = request.args.get('uid')
@@ -56,6 +73,7 @@ def LastLogin():
 
 @app.route('/Logout', methods=['POST'])
 def Logout():
+
     pass
 if __name__ == '__main__':
     app.run(debug=True)

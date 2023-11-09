@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Table, Modal } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Modal } from 'antd';
+import axios from 'axios';
 
-const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const timeSlots = [
     { start: '8:30', end: '9:20' },
     { start: '9:30', end: '10:20' },
@@ -13,17 +14,23 @@ const timeSlots = [
     { start: '17:30', end: '18:20' }
 ];
 
-const courses = [
-    { day: 'Mon', startTime: '8:30', endTime: '9:20', name: 'Math', color: '#ffcccb' },
-    { day: 'Tue', startTime: '9:30', endTime: '10:20', name: 'English', color: '#aaffcc' },
-    { day: 'Wed', startTime: '10:30', endTime: '11:20', name: 'Physics', color: '#bbccff' },
-    { day: 'Thu', startTime: '11:30', endTime: '12:20', name: 'Chemistry', color: '#ffeedd' },
-    // Add more courses as needed
-];
-
 const Timetable = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}course`);
+                setCourses(response.data);
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+            }
+        };
+
+        fetchCourses(); 
+    }, []);
 
     const parseTime = timeString => {
         const [hours, minutes] = timeString.split(':');
@@ -89,7 +96,7 @@ const Timetable = () => {
     ];
 
     return (
-        <>
+        <Card hoverable title="Weekly Time Table" style={{height: 650}}>
             <Table columns={columns} dataSource={data} pagination={false} />
             <Modal
                 title={selectedCourse ? selectedCourse.name : ''}
@@ -101,11 +108,10 @@ const Timetable = () => {
                     <div>
                         <p>Start Time: {selectedCourse.startTime}</p>
                         <p>End Time: {selectedCourse.endTime}</p>
-                        {/* Add more course details here as needed */}
                     </div>
                 )}
             </Modal>
-        </>
+        </Card>
     );
 };
 

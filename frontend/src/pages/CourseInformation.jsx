@@ -9,10 +9,7 @@ const CourseInformation = () => {
         <Flex gap="middle" align="center" justify="center" >
             <Flex gap="middle" align="center" justify="center" >
                 <Timetable />
-                <Flex gap="middle" align="center" justify="center" vertical>
-                    <CourseCountdown />
-                    <TeacherMessageBoard />
-                </Flex>
+                <TeacherMessageBoard />
             </Flex>
         </Flex>
     );

@@ -51,7 +51,7 @@ const UserActivity = ({ data }) => {
   };
 
   return (
-    <Card hoverable cover={<img src={activity} />} style={{ height: 500, width: 350 }}>
+    <Card hoverable cover={<img src={activity} />} style={{ height: 650, width: 450 }}>
       <Meta
         avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />}
         title={`Name: Fung`}
@@ -63,7 +63,7 @@ const UserActivity = ({ data }) => {
         style={{marginTop: 30}}
       />
       <div style={{ textAlign: 'center', margin: '0', width: '100%' }}>
-        <Button type="primary" onClick={handleButtonClick} icon={<HistoryOutlined />} style={{ width: '100%', marginTop: 30 }}>
+        <Button type="primary" onClick={handleButtonClick} icon={<HistoryOutlined />} style={{ width: '100%', marginTop: 60 }}>
           Show all record
         </Button>
         <Modal

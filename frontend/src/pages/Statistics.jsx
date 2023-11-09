@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Spin } from 'antd';
+import { Flex, Empty,  Spin } from 'antd';
 import UserActivity from '../components/UserActivity';
 import UserStayTimeChart from '../components/UserStayTimeChart';
 import axios from 'axios';
@@ -36,7 +36,7 @@ const Statistics = () => {
                         <UserActivity data={data}/>
                     </Flex>
                 ) : (
-                    <p>No data available</p>
+                    <Empty description={'No data available'} />
                 )}
             </Spin>
         </Flex>

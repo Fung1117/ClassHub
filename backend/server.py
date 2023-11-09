@@ -12,23 +12,22 @@ def Login():
     email = login_data.get('email')
     if is_face:
         # Face login logic
-        login_data.get('image')
+        image = login_data.get('image')
         # Implement your face login verification here
-
         if True:
-            return jsonify({'success': True, 'UID': 1})
+            return jsonify({'success': True, 'UID': 1, 'Name': 'Fung'})
         else:
             return jsonify({'success': False})
     else:
         password = login_data.get('password')
-
         if email == "example@example.com" and password == "123456":
-            return jsonify({'success': True, 'UID': 1})
+            return jsonify({'success': True, 'UID': 1, 'Name': 'Fung'})
         else:
             return jsonify({'success': False})
 
 @app.route('/Time', methods=['GET'])
 def Time():
+    uid = request.args.get('uid')
     time_data = [100, 200, 300, 400, 150, 200, 10, 100, 200, 300, 400, 150, 200, 10]
     date_data = [
         '11/11', '12/11', '13/11', '14/11', '15/11', '16/11',
@@ -36,6 +35,12 @@ def Time():
         '16/10', '17/10'
     ]
     return jsonify(time=time_data, date=date_data)
+
+@app.route('/last-login', methods=['GET'])
+def LastLogin():
+    uid = request.args.get('uid')
+    last_login = '2023-11-01 15:33:00'
+    return jsonify({'lastLogin': last_login})
 
 
 if __name__ == '__main__':

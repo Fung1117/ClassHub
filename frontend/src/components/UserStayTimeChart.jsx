@@ -9,9 +9,10 @@ function UserStayTimeChart({ data }) {
       width={900}
       height={600}
       series={[
-        { data: time, label: 'the time u spend' },
+        { data: time, label: 'User Activity Duration' },
       ]}
-      xAxis={[{ scaleType: 'point', data: date }]}
+      xAxis={[{ scaleType: 'point', data: date, label: 'Date'}]}
+      yAxis={[{ scaleType: 'linear', label: 'Time (in minutes)' }]} 
     />
   );
 }

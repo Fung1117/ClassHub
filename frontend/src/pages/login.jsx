@@ -57,7 +57,7 @@ const Login = () => {
 
     const passwordLogin = async (password) => {
         try {
-            const response = await axios.post(`${import.meta.env.REACT_APP_API_KEY}Login`, { isFace: false, email: email, password: password });
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}Login`, { isFace: false, email: email, password: password });
             const data = response.data;
             console.log('Backend Response:', data);
             setLoading(false);

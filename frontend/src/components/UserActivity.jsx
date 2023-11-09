@@ -4,44 +4,9 @@ import ScrollElement from 'rc-scroll-anim/lib/ScrollElement';
 import { HistoryOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 
-const UserActivity = () => {
+const UserActivity = ({data}) => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  // Static data for testing
-  const activityHistory = [
-    { date: '10/01', Duration: '1 hour 20 mins' },
-    { date: '10/02', Duration: '1 hour 45 mins' },
-    { date: '10/03', Duration: '2 hours 10 mins' },
-    { date: '10/04', Duration: '1 hour 30 mins' },
-    { date: '10/05', Duration: '2 hours' },
-    { date: '10/06', Duration: '1 hour 15 mins' },
-    { date: '10/07', Duration: '2 hours 30 mins' },
-    { date: '10/08', Duration: '1 hour 40 mins' },
-    { date: '10/09', Duration: '1 hour 55 mins' },
-    { date: '10/10', Duration: '1 hour 10 mins' },
-    { date: '10/11', Duration: '50 mins' },
-    { date: '10/12', Duration: '2 hours 30 mins' },
-    { date: '10/13', Duration: '1 hour' },
-    { date: '10/14', Duration: '45 mins' },
-    { date: '10/15', Duration: '2 hours' },
-    { date: '10/16', Duration: '1 hour 20 mins' },
-    { date: '10/17', Duration: '1 hour 45 mins' },
-    { date: '10/18', Duration: '2 hours 10 mins' },
-    { date: '10/19', Duration: '1 hour 30 mins' },
-    { date: '10/20', Duration: '2 hours' },
-    { date: '10/21', Duration: '1 hour 15 mins' },
-    { date: '10/22', Duration: '2 hours 30 mins' },
-    { date: '10/23', Duration: '1 hour 40 mins' },
-    { date: '10/24', Duration: '1 hour 55 mins' },
-    { date: '10/25', Duration: '1 hour 10 mins' },
-    { date: '10/26', Duration: '50 mins' },
-    { date: '10/27', Duration: '2 hours 30 mins' },
-    { date: '10/28', Duration: '1 hour' },
-    { date: '10/29', Duration: '45 mins' },
-    { date: '10/30', Duration: '2 hours' },
-    { date: '10/31', Duration: '1 hour 20 mins' },
-    // Add more activity history data as needed
-  ];
+  const history = data.date.map((date, index) => ({ date, Duration: data.time[index] }))
 
   const columns = [
     {
@@ -56,13 +21,11 @@ const UserActivity = () => {
     },
   ];
 
-  const totalTimeInMinutes = 342; // 5 hours 42 minutes
-  const hours = Math.floor(totalTimeInMinutes / 60);
-  const minutes = totalTimeInMinutes % 60;
+  const totalTime = data.time.reduce((total, number) => total + number, 0)
+  const hours = Math.floor(totalTime / 3600);
+  const minutes = Math.floor((totalTime % 3600) / 60);
 
   const handleButtonClick = () => {
-    // Handle button click logic here
-    console.log('Button clicked!');
     setModalVisible(true);
   };
 
@@ -88,8 +51,8 @@ const UserActivity = () => {
           centered
           footer={null}
         >
-          <ScrollElement style={{maxHeight: '400px',overflowY: 'auto'}}>
-            <Table dataSource={activityHistory} columns={columns} pagination={false} />
+          <ScrollElement style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <Table dataSource={history} columns={columns} pagination={false} />
           </ScrollElement>
         </Modal>
       </div>

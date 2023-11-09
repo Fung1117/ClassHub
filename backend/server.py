@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-# ModuleNotFoundError: No module named 'flask_cors' = pip install Flask-Cors
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -27,6 +26,16 @@ def Login():
             return jsonify({'success': True, 'UID': 1})
         else:
             return jsonify({'success': False})
+
+@app.route('/Time', methods=['GET'])
+def Time():
+    time_data = [100, 200, 300, 400, 150, 200, 10, 100, 200, 300, 400, 150, 200, 10]
+    date_data = [
+        '11/11', '12/11', '13/11', '14/11', '15/11', '16/11',
+        '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
+        '16/10', '17/10'
+    ]
+    return jsonify(time=time_data, date=date_data)
 
 
 if __name__ == '__main__':

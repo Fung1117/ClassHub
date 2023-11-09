@@ -1,18 +1,46 @@
-import React from 'react';
-import { Flex } from 'antd';
-import UserActivity from '../components/UserActivity'
-import UserStayTimeChart from '../components/UserStayTimeChart'
+import React, { useState, useEffect } from 'react';
+import { Flex, Spin } from 'antd';
+import UserActivity from '../components/UserActivity';
+import UserStayTimeChart from '../components/UserStayTimeChart';
+import axios from 'axios';
 
-const Statstics = () => {
+const Statistics = () => {
+    const [data, setData] = useState({ time: [], date: [] });
+    const [loading, setLoading] = useState(true);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}Time`);
+            setData({
+                time: response.data.time,
+                date: response.data.date
+            });
+            console.log(data)
+            setLoading(false); // Set loading to false once data is fetched
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setLoading(false); // Set loading to false in case of an error
+        }
+    };
+
+    useEffect(() => {
+        fetchData(); // Call the async function inside useEffect
+    }, []);
+
     return (
         <Flex justify="center" align="center" style={{ width: '100%' }}>
-            <Flex gap="middle" align="center" justify="center" >
-                <UserStayTimeChart />
-                <UserActivity />
-            </Flex>
+            <Spin spinning={loading}>
+                {data.time.length > 0 && data.date.length > 0 ? (
+                    <Flex gap="middle" align="center" justify="center" >
+                        <UserStayTimeChart data={data} />
+                        <UserActivity data={data}/>
+                    </Flex>
+                ) : (
+                    <p>No data available</p>
+                )}
+            </Spin>
         </Flex>
-
     );
 };
 
-export default Statstics;
+export default Statistics;

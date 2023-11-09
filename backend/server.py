@@ -25,6 +25,18 @@ def Login():
         else:
             return jsonify({'success': False})
 
+@app.route('/course', methods=['GET'])
+def TimeTable():
+    uid = request.args.get('uid')
+    courses = [
+        { 'day': 'Mon', 'startTime': '8:30', 'endTime': '9:20', 'name': 'Math', 'color': '#ffcccb' },
+        { 'day': 'Tue', 'startTime': '9:30', 'endTime': '10:20', 'name': 'English', 'color': '#aaffcc' },
+        { 'day': 'Wed', 'startTime': '10:30', 'endTime': '11:20', 'name': 'Physics', 'color': '#bbccff' },
+        { 'day': 'Thu', 'startTime': '11:30', 'endTime': '12:20', 'name': 'Chemistry', 'color': '#ffeedd' },
+        # Add more courses as needed
+    ]
+    return jsonify(courses)
+
 @app.route('/Time', methods=['GET'])
 def Time():
     uid = request.args.get('uid')
@@ -42,6 +54,8 @@ def LastLogin():
     last_login = '2023-11-01 15:33:00'
     return jsonify({'lastLogin': last_login})
 
-
+@app.route('/Logout', methods=['POST'])
+def Logout():
+    pass
 if __name__ == '__main__':
     app.run(debug=True)

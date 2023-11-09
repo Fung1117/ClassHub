@@ -1,14 +1,11 @@
 import React from 'react';
-import { Result } from 'antd';
+import { Image, Result } from 'antd';
+import logoutImage from '../assets/logout-image.svg';
 
 const Logout = () => {
     return (
-        <div style={{
-            height: '500px', // Set a fixed height for the container
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-        }}>
+        <div>
+            <Image src={logoutImage} preview={false}/>
             <Result
                 status="success"
                 title="Successfully logged out!"

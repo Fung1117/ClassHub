@@ -1,7 +1,6 @@
 import React from 'react';
 import { Flex } from 'antd';
 import Timetable from '../components/TimeTable';
-import CourseCountdown from '../components/CourseCountdown';
 import TeacherMessageBoard from '../components/TeacherMessageBoard';
 
 const CourseInformation = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Empty,  Spin } from 'antd';
+import { Flex, Empty, Spin } from 'antd';
 import UserActivity from '../components/UserActivity';
 import UserStayTimeChart from '../components/UserStayTimeChart';
 import axios from 'axios';
@@ -16,10 +16,10 @@ const Statistics = () => {
                 date: response.data.date
             });
             console.log(data)
-            setLoading(false); // Set loading to false once data is fetched
+            setLoading(false); 
         } catch (error) {
             console.error('Error fetching data:', error);
-            setLoading(false); // Set loading to false in case of an error
+            setLoading(false); 
         }
     };
 
@@ -33,7 +33,7 @@ const Statistics = () => {
                 {data.time.length > 0 && data.date.length > 0 ? (
                     <Flex gap="middle" align="center" justify="center" >
                         <UserStayTimeChart data={data} />
-                        <UserActivity data={data}/>
+                        <UserActivity data={data} />
                     </Flex>
                 ) : (
                     <Empty description={'No data available'} />

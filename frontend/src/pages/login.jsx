@@ -19,7 +19,7 @@ const Login = () => {
 
     const webcamRef = useRef(null);
     const navigate = useNavigate();
-
+    
     const toggleLoginMethod = () => {
         setLoginMethod((prevMethod) => (prevMethod === 'password' ? 'faceId' : 'password'));
     };
@@ -79,7 +79,7 @@ const Login = () => {
             console.log('Backend Response:', data);
             setLoading(false);
             if (data.success) {
-                // set up the UID
+                console.log(localStorage.getItem('uid'))
                 setSuccess(true);
             } else {
                 setError(true);

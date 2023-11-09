@@ -4,7 +4,7 @@ import { Card } from 'antd';
 
 function UserStayTimeChart({ data }) {
   const { time, date } = data;
-  console.log(data)
+
   return (
     <Card hoverable style={{width: 900, height: 650}}>
       <LineChart

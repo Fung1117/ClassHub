@@ -25,14 +25,19 @@ const { Header, Sider, Content, Footer } = Layout;
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState(['0']);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
+
   useEffect(() => {
     const storedKey = localStorage.getItem('selectedKey');
-    if (storedKey) {
+    if (storedKey && menuItems.some(item => item.key === storedKey)) {
       setSelectedKeys([storedKey]);
+    } else {
+      // Handle the case where the stored key is not valid or not set
+      // For example, you could set a default selected key here.
     }
   }, []);
 
@@ -71,7 +76,7 @@ const App = () => {
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>
             <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
-            <Link to="/login" onClick={() => handleMenuItemClick(['0'])}>
+            <Link to="/Login" onClick={() => handleMenuItemClick(['0'])}>
               <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 30, right: 30 }}>
                 Login
               </Button>

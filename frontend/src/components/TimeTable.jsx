@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Table, Modal } from 'antd';
+import { FieldTimeOutlined, UserOutlined } from '@ant-design/icons';
+import { FaPersonChalkboard } from "react-icons/fa6";
 import axios from 'axios';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -19,11 +21,16 @@ const Timetable = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [courses, setCourses] = useState([]);
 
+    const colors = ['#ffcccb', '#aaffcc', '#bbccff', '#ffeedd', '#ffe4e1', '#add8e6', '#ffb6c1', '#98fb98'];
+
     useEffect(() => {
         const fetchCourses = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}course`);
-                setCourses(response.data);
+                const data = response.data.map((item, index) => {
+                    return { ...item, color: colors[index] };
+                });
+                setCourses(data);
             } catch (error) {
                 console.error('Error fetching courses:', error);
             }
@@ -106,8 +113,9 @@ const Timetable = () => {
             >
                 {selectedCourse && (
                     <div>
-                        <p>Start Time: {selectedCourse.startTime}</p>
-                        <p>End Time: {selectedCourse.endTime}</p>
+                        <h4> <FieldTimeOutlined /> Time: {selectedCourse.startTime} - {selectedCourse.endTime}</h4>
+                        <h4> <UserOutlined /> Teacher: {selectedCourse.teacher}</h4>
+                        <h4> <FaPersonChalkboard /> Classroom: {selectedCourse.classroom}</h4>
                     </div>
                 )}
             </Modal>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Button, Card, Modal, Table } from 'antd';
 import ScrollElement from 'rc-scroll-anim/lib/ScrollElement';
-import { HistoryOutlined } from '@ant-design/icons';
+import { HistoryOutlined, CalendarOutlined, HourglassOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import activity from '../assets/activity.svg'
 
@@ -14,14 +14,22 @@ const UserActivity = ({ data }) => {
 
   const columns = [
     {
-      title: 'Date',
+      title: <span><CalendarOutlined /> Date</span>,
       dataIndex: 'date',
       key: 'date',
+      sorter: (a, b) => {
+        const dateA = a.date.split('/').reverse().join('-'); // Convert DD/MM to YYYY-MM-DD
+        const dateB = b.date.split('/').reverse().join('-'); // Convert DD/MM to YYYY-MM-DD
+        return new Date(dateA) - new Date(dateB);
+      },
+      sortDirections: ['ascend', 'descend'],
     },
     {
-      title: 'Duration',
+      title: <span><HourglassOutlined /> Duration</span>,
       dataIndex: 'Duration',
       key: 'Duration',
+      sorter: (a, b) => a.Duration - b.Duration,
+      sortDirections: ['ascend', 'descend'],
     },
   ];
 

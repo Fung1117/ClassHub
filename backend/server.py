@@ -29,10 +29,10 @@ def Login():
 def TimeTable():
     uid = request.args.get('uid')
     courses = [
-        { 'day': 'Mon', 'startTime': '8:30', 'endTime': '9:20', 'name': 'Math', 'color': '#ffcccb' },
-        { 'day': 'Tue', 'startTime': '9:30', 'endTime': '10:20', 'name': 'English', 'color': '#aaffcc' },
-        { 'day': 'Wed', 'startTime': '10:30', 'endTime': '11:20', 'name': 'Physics', 'color': '#bbccff' },
-        { 'day': 'Thu', 'startTime': '11:30', 'endTime': '12:20', 'name': 'Chemistry', 'color': '#ffeedd' },
+        { 'day': 'Mon', 'startTime': '8:30', 'endTime': '9:20', 'name': 'Math', 'teacher': 'T1', 'classroom': 'RM100' },
+        { 'day': 'Tue', 'startTime': '9:30', 'endTime': '10:20', 'name': 'English', 'teacher': 'T2', 'classroom': 'RM101' },
+        { 'day': 'Wed', 'startTime': '10:30', 'endTime': '11:20', 'name': 'Physics', 'teacher': 'T3', 'classroom': 'RM102' },
+        { 'day': 'Thu', 'startTime': '11:30', 'endTime': '12:20', 'name': 'Chemistry', 'teacher': 'T4', 'classroom': 'RM103' },
         # Add more courses as needed
     ]
     return jsonify(courses)

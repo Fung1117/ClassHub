@@ -19,7 +19,6 @@ import {
 
 import { GiEvilBook } from 'react-icons/gi';
 import HeaderLogo from './assets/Header.svg';
-import scrollbar from './scrollbar.css';
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -49,30 +48,30 @@ const App = () => {
 
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
-    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Course' },
-    { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/OneHrCourse'},
-    { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
+    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/timetable' },
+    { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/upcoming-course' },
+    { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
   ];
 
   return (
     <Layout>
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-          <Link to="/" onClick={() => handleMenuItemClick(['1'])}>
-            <div style={{ textAlign: 'center', padding: '16px' }}>
-              <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
-            </div>
-          </Link>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
-            {menuItems.map((item) => (
-              <Menu.Item key={item.key} icon={item.icon}>
-                <Link to={item.link} onClick={() => handleMenuItemClick([item.key])}>{item.label}</Link>
-              </Menu.Item>
-            ))}
-            <Menu.Item key="5" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0}}>
-              <Link to="/logout" onClick={() => handleMenuItemClick(['5'])}>Logout</Link>
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <Link to="/" onClick={() => handleMenuItemClick(['1'])}>
+          <div style={{ textAlign: 'center', padding: '16px' }}>
+            <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
+          </div>
+        </Link>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
+          {menuItems.map((item) => (
+            <Menu.Item key={item.key} icon={item.icon}>
+              <Link to={item.link} onClick={() => handleMenuItemClick([item.key])}>{item.label}</Link>
             </Menu.Item>
-          </Menu>
-        </Sider>
+          ))}
+          <Menu.Item key="5" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0 }}>
+            <Link to="/logout" onClick={() => handleMenuItemClick(['5'])}>Logout</Link>
+          </Menu.Item>
+        </Menu>
+      </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>
@@ -101,13 +100,18 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
-            <Route path="/Course" element={<CourseInformation />} />
-            <Route path="/OneHrCourse" element={<OneHrCourse />} />
-            <Route path="/Statistic" element={<Statistic />} />
+            <Route path="/timetable" element={<CourseInformation />} />
+            <Route path="/upcoming-course" element={<OneHrCourse />} />
+            <Route path="/statistic" element={<Statistic />} />
             <Route path="/Logout" element={<Logout />} />
           </Routes>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
           intelligent Course Management System ©2023 Created by Group 28
         </Footer>
       </Layout>

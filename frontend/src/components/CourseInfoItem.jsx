@@ -1,49 +1,102 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Row, Col, Progress, Space, Button } from 'antd';
+import { Card, Flex, Result, Space, Button, notification } from 'antd';
+import CountdownClock from 'react-countdown-clock';
 import {
+    MailOutlined,
+    SmileOutlined,
     VideoCameraOutlined,
     ReadOutlined,
 } from '@ant-design/icons';
+import classImage from '../assets/class.svg';
+import courseImage from '../assets/course.svg';
+import timeImage from '../assets/time.svg';
 
-export const CourseInfoItem = ({courseName: courseTitle, timeLeft, zoomLink, resourceLink}) => {
-    const [timeLeftState, setTimeLeft] = useState(timeLeft);
-    const [courseTitleState, setCourseName] = useState(courseTitle);
+const { Meta } = Card;
+
+const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceLink }) => {
+    const [color, setColor] = useState('#1E90FF');
+    const [countdownComplete, setCountdownComplete] = useState(false)
+    const [api, contextHolder] = notification.useNotification();
+    const openNotification = () => {
+        api.open({
+            message: 'Your class is starting soon!',
+            description: 'Please join the class to ensure you do not miss any important information.',
+            icon: (
+                <SmileOutlined
+                    style={{
+                        color: '#108ee9',
+                    }}
+                />
+            ),
+        })
+    }
 
     useEffect(() => {
-        setTimeLeft(timeLeft);
-        setCourseName(courseTitle);
-    }, [])
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            if (timeLeftState <= 0) {
-                clearInterval(timer);
-                return;
-            }
-            setTimeLeft(timeLeftState - 1);
-        }, 1000);
-        return () => {
-            clearInterval(timer);
-        };
-    });
+        if (timeLeft <= 300) {
+            setColor('#A7171A');
+        } else {
+            setColor('#1E90FF');
+        }
+    }, [timeLeft]);
 
     return (
-        <Flex vertical gap="small" align="center" justify="start" style={{ width: "100%"}}>
-            <Col>
-                <Row span={6} justify="center" style={{ fontSize: "24px", fontWeight: "700"}}>
-                    {courseTitleState}
-                </Row>
-                <Row span={12}>
-                    <Space size="large">
-                        <Button href={zoomLink} icon={<VideoCameraOutlined/>} style={{ fontSize: "18px"}}>To Zoom</Button>
-                        <Button href={resourceLink} icon={<ReadOutlined />} style={{ fontSize: "18px"}}>To course resource</Button>
+        <Flex gap="middle" align="center" justify="center" >
+            {contextHolder}
+            <Card hoverable cover={<img src={courseImage} height={500} />} style={{ height: 650, width: 1000 }}>
+                <Meta title={courseTitle} />
+                <Flex justify='flex-end' align='flex-end'>
+                    <Space>
+                        <Button
+                            type="primary"
+                            size="large"
+                            href={zoomLink}
+                            icon={<VideoCameraOutlined />}
+                            onClick={() => { }}
+                        >
+                            Start Class
+                        </Button>
+                        <Button
+                            type="primary"
+                            size="large"
+                            href={resourceLink}
+                            icon={<ReadOutlined />}
+                            onClick={() => { }}
+                        >
+                            Resources
+                        </Button>
+                        <Button
+                            type="primary"
+                            size="large"
+                            icon={<MailOutlined />}
+                            onClick={() => { }}
+                        >
+                            Send Email
+                        </Button>
                     </Space>
-                </Row>
-                <Row justify="center" style={{ fontSize: "18px"}}>
-                    time left before lesson: {parseInt(timeLeftState/60) < 10 ? '0' : null}{parseInt(timeLeftState/60)}:{parseInt(timeLeftState%60) < 10 ? '0' : null}{parseInt(timeLeftState%60)}
-                </Row>
-            </Col>
-            <Progress percent={(3600-timeLeftState)/3600 * 100} showInfo={false}/>
+                </Flex>
+            </Card>
+            <Card hoverable cover={<img src={!countdownComplete ? timeImage : classImage} height={300} />} style={{ height: 650, width: 450 }}>
+                <Meta title={!countdownComplete ? `Time left before ${courseTitle} lesson: ` : ''} />
+                {countdownComplete ? (
+                    <Result
+                        title="Join your class now !!!"
+                        extra={
+                            <Button type="primary" key="console" size="large" icon={<VideoCameraOutlined />} >
+                                Zoom
+                            </Button>
+                        }
+                    />
+                ) : (
+                    <Flex align="center" justify="center" style={{ marginTop: 50 }}>
+                        <CountdownClock seconds={timeLeft} color={color} alpha={0.9} size={200}
+                            onComplete={() => {
+                                setCountdownComplete(true);
+                                openNotification();
+                              }}
+                            />
+                    </Flex>
+                )}
+            </Card>
         </Flex>
     );
 }

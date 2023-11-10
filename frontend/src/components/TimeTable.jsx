@@ -103,7 +103,7 @@ const Timetable = () => {
     ];
 
     return (
-        <Card hoverable title="Weekly Time Table" style={{height: 650}}>
+        <Card hoverable title="Weekly Time Table" style={{ height: 650, width: 1000 }}>
             <Table columns={columns} dataSource={data} pagination={false} />
             <Modal
                 title={selectedCourse ? selectedCourse.name : ''}

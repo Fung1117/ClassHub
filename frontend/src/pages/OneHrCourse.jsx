@@ -12,12 +12,7 @@ const OneHrCourse = () => {
                 zoomLink="https://zoom.us/j/1234567890"
                 resourceLink="https://www.google.com"
             />
-            <CourseInfoItem
-                courseName="English"
-                timeLeft={1800}
-                zoomLink="https://zoom.us/j/1234567890"
-                resourceLink="https://www.google.com"
-            />
+            
         </Flex>
     );
 };

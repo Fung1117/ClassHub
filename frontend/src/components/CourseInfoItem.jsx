@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Row, Col, Progress, Space, Button } from 'antd';
+import { Card, Flex, Row, Col, Progress, Space, Button } from 'antd';
 import {
     VideoCameraOutlined,
     ReadOutlined,
 } from '@ant-design/icons';
+import courseImage from '../assets/course.svg'
 
-export const CourseInfoItem = ({courseName: courseTitle, timeLeft, zoomLink, resourceLink}) => {
+const { Meta } = Card;
+
+export const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceLink }) => {
     const [timeLeftState, setTimeLeft] = useState(timeLeft);
     const [courseTitleState, setCourseName] = useState(courseTitle);
 
@@ -28,23 +31,32 @@ export const CourseInfoItem = ({courseName: courseTitle, timeLeft, zoomLink, res
     });
 
     return (
-        <Flex vertical gap="small" align="center" justify="start" style={{ width: "100%"}}>
-            <Col>
-                <Row span={6} justify="center" style={{ fontSize: "24px", fontWeight: "700"}}>
-                    {courseTitleState}
-                </Row>
-                <Row span={12}>
-                    <Space size="large">
-                        <Button href={zoomLink} icon={<VideoCameraOutlined/>} style={{ fontSize: "18px"}}>To Zoom</Button>
-                        <Button href={resourceLink} icon={<ReadOutlined />} style={{ fontSize: "18px"}}>To course resource</Button>
+        <>
+            <Card hoverable cover={<img src={courseImage} height={500} />} style={{ width: 900 }}>
+                <Meta title={courseTitle} description="www.instagram.com" />
+                <Flex justify={'flex-end'} align={'center'}>
+                    <Space>
+                        <Button
+                            type="primary"
+                            size="large"
+                            icon={<VideoCameraOutlined />}
+                            onClick={() => { }}
+                        >
+                            Start Class
+                        </Button>
+                        <Button
+                            type="primary"
+                            size="large"
+                            icon={<ReadOutlined />}
+                            onClick={() => { }}
+                        >
+                            Resources
+                        </Button>
                     </Space>
-                </Row>
-                <Row justify="center" style={{ fontSize: "18px"}}>
-                    time left before lesson: {parseInt(timeLeftState/60) < 10 ? '0' : null}{parseInt(timeLeftState/60)}:{parseInt(timeLeftState%60) < 10 ? '0' : null}{parseInt(timeLeftState%60)}
-                </Row>
-            </Col>
-            <Progress percent={(3600-timeLeftState)/3600 * 100} showInfo={false}/>
-        </Flex>
+                </Flex>
+            </Card>
+
+        </>
     );
 }
 

@@ -19,6 +19,7 @@ import {
 
 import { GiEvilBook } from 'react-icons/gi';
 import HeaderLogo from './assets/Header.svg';
+import scrollbar from './scrollbar.css';
 
 const { Header, Sider, Content, Footer } = Layout;
 

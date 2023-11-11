@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import errorcode
 
-conn = mysql.connector.connect(user='root', password='Fol!dTricia2240', database='project')   #local mysql
+conn = mysql.connector.connect(user='root', password='your password', database='project')   #local mysql
 cursor = conn.cursor()
 
 TABLES = {}

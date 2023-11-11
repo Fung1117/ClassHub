@@ -9,7 +9,7 @@ import faceLoginImage from '../assets/face-login.svg'
 
 const { Title } = Typography;
 
-const Login = () => {
+const Login = ({setUserUid}) => {
     const [loginMethod, setLoginMethod] = useState('password'); // Default to password login
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -63,6 +63,7 @@ const Login = () => {
             setLoading(false);
             if (data.success) {
                 setSuccess(true);
+                setUserUid(data.uid);
             } else {
                 setError(true);
             }
@@ -79,8 +80,8 @@ const Login = () => {
             console.log('Backend Response:', data);
             setLoading(false);
             if (data.success) {
-                console.log(localStorage.getItem('uid'))
                 setSuccess(true);
+                setUserUid(data.uid);
             } else {
                 setError(true);
             }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image, Space } from 'antd';
 import Home from './pages/Home';
@@ -20,16 +20,40 @@ import {
 import { GiEvilBook } from 'react-icons/gi';
 import HeaderLogo from './assets/Header.svg';
 
+export const UserContext = React.createContext(null);
 const { Header, Sider, Content, Footer } = Layout;
 
 const App = () => {
+
+  /////////////////////////////////////////////////////////
+  /////// remove this when token is actually in use ///////
+  useEffect(() => {
+    localStorage.setItem('userUid', '123456789');
+  }, []);
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  const getUserUid = () => localStorage.getItem('userUid');
+  const setUserUid = (token) => localStorage.setItem('userUid', token);
+  const removeUserUid = () => localStorage.removeItem('userUid')
+  useEffect(() => {
+    if (location.pathname != '/Login' && !getUserUid()) {
+        navigate('/Login')
+        setSelectedKeys(['1'])
+    }
+    if (location.pathname == '/Login' && !!getUserUid()) {
+      navigate('/')
+    }
+  })
+
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState(['0']);
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
 
   useEffect(() => {
     const storedKey = localStorage.getItem('selectedKey');
@@ -41,17 +65,21 @@ const App = () => {
     }
   }, []);
 
-  const handleMenuItemClick = (key) => {
-    setSelectedKeys(key);
-    localStorage.setItem('selectedKey', key);
-  };
-
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/timetable' },
     { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/upcoming-course' },
     { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
   ];
+
+  const handleMenuItemClick = (key, link) => {
+    if (getUserUid() === null) return;
+
+    setSelectedKeys(key);
+    localStorage.setItem('selectedKey', key);
+    console.log(link);
+    navigate(link);
+  };
 
   return (
     <Layout>
@@ -64,7 +92,7 @@ const App = () => {
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
           {menuItems.map((item) => (
             <Menu.Item key={item.key} icon={item.icon}>
-              <Link to={item.link} onClick={() => handleMenuItemClick([item.key])}>{item.label}</Link>
+              <Button onClick={() => handleMenuItemClick(item.key, item.link)} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}>{item.label}</Button>
             </Menu.Item>
           ))}
           <Menu.Item key="5" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0 }}>
@@ -97,14 +125,16 @@ const App = () => {
             justifyContent: 'center',
           }}
         >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Login" element={<Login />} />
-            <Route path="/timetable" element={<CourseInformation />} />
-            <Route path="/upcoming-course" element={<OneHrCourse />} />
-            <Route path="/statistic" element={<Statistic />} />
-            <Route path="/Logout" element={<Logout />} />
-          </Routes>
+          <UserContext.Provider value={{getUserUid}}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/Login" element={<Login setUserUid={setUserUid} />} />
+              <Route path="/timetable" element={<CourseInformation />} />
+              <Route path="/upcoming-course" element={<OneHrCourse />} />
+              <Route path="/statistic" element={<Statistic />} />
+              <Route path="/Logout" element={<Logout removeUserUid={removeUserUid} />} />
+            </Routes>
+          </UserContext.Provider>
         </Content>
         <Footer style={{
           display: 'flex',

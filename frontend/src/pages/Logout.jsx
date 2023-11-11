@@ -5,6 +5,8 @@ import axios from 'axios';
 
 const Logout = () => {
 
+    removeUserUid();
+
     return (
         <div>
             <Image src={logoutImage} preview={false}/>

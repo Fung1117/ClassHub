@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Card, Table, Modal } from 'antd';
 import { FieldTimeOutlined, UserOutlined } from '@ant-design/icons';
 import { FaPersonChalkboard } from "react-icons/fa6";
 import axios from 'axios';
+
+import { UserContext } from '../App';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const timeSlots = [
@@ -24,6 +26,10 @@ const Timetable = () => {
     const [courses, setCourses] = useState([]);
 
     const colors = ['#ffcccb', '#aaffcc', '#bbccff', '#ffeedd', '#ffe4e1', '#add8e6', '#ffb6c1', '#98fb98'];
+
+    // get current user uid like this:
+    const userContext = useContext(UserContext);
+    const userUid = userContext.getUserUid();
 
     useEffect(() => {
         const fetchCourses = async () => {

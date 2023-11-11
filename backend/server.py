@@ -1,5 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import mysql.connector
+from mysql.connector import errorcode
+
+conn = mysql.connector.connect(user='root', password='Fol!dTricia2240', database='project')   #local mysql
+cursor = conn.cursor()
 
 app = Flask(__name__)
 
@@ -28,13 +33,11 @@ def Login():
 @app.route('/course', methods=['GET'])
 def TimeTable():
     uid = request.args.get('uid')
-    courses = [
-        { 'day': 'Mon', 'startTime': '8:30', 'endTime': '9:20', 'name': 'Math', 'teacher': 'T1', 'classroom': 'RM100' },
-        { 'day': 'Tue', 'startTime': '9:30', 'endTime': '10:20', 'name': 'English', 'teacher': 'T2', 'classroom': 'RM101' },
-        { 'day': 'Wed', 'startTime': '10:30', 'endTime': '11:20', 'name': 'Physics', 'teacher': 'T3', 'classroom': 'RM102' },
-        { 'day': 'Thu', 'startTime': '11:30', 'endTime': '12:20', 'name': 'Chemistry', 'teacher': 'T4', 'classroom': 'RM103' },
-        # Add more courses as needed
-    ]
+    cursor.execute('select * from course')
+    query = cursor.fetchall()
+    keys = ['ID', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
+    courses = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
+    print(courses)
     return jsonify(courses)
 
 @app.route('/messages', methods=['GET'])

@@ -15,7 +15,7 @@ import {
   LoginOutlined,
   LogoutOutlined,
   ClockCircleOutlined,
-
+  ScheduleOutlined,
 } from '@ant-design/icons';
 
 import { GiEvilBook } from 'react-icons/gi';
@@ -70,7 +70,7 @@ const App = () => {
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/timetable' },
     { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/upcoming-course' },
-    { key: '4', icon: <ClockCircleOutlined />, label: 'Enroll', link: '/enroll' },
+    { key: '4', icon: <ScheduleOutlined />, label: 'Enroll', link: '/enroll' },
     { key: '5', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
   ];
 

@@ -3,12 +3,14 @@ from flask_cors import CORS
 import mysql.connector
 from mysql.connector import errorcode
 
-conn = mysql.connector.connect(user='root', password='your password', database='project')   #local mysql
+conn = mysql.connector.connect(
+    user='root', password='your password', database='project')  # local mysql
 cursor = conn.cursor()
 
 app = Flask(__name__)
 
 CORS(app)
+
 
 @app.route('/Login', methods=['POST'])
 def Login():
@@ -30,15 +32,18 @@ def Login():
         else:
             return jsonify({'success': False})
 
+
 @app.route('/course', methods=['GET'])
 def TimeTable():
     uid = request.args.get('uid')
     cursor.execute('select * from course')
     query = cursor.fetchall()
-    keys = ['ID', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
+    keys = ['ID', 'name', 'classroom', 'startTime',
+            'endTime', 'day', 'zoomLink', 'teacher']
     courses = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
     print(courses)
     return jsonify(courses)
+
 
 @app.route('/messages', methods=['GET'])
 def Messages():
@@ -57,10 +62,61 @@ def Messages():
     ]
     return jsonify(messages)
 
+
+@app.route("/enroll", methods=["POST"])
+def enroll_course():
+    data = request.get_json()
+    course_id = data.get("courseId")
+    # add course here pls by sql
+    return jsonify({"success": True, "message": "Course enrolled successfully"})
+
+
+@app.route("/drop", methods=["POST"])
+def drop_course():
+    data = request.get_json()
+    course_id = data.get("courseId")
+    # drop course here pls by sql
+    return jsonify({"success": True, "message": "Course dropped successfully"})
+
+@app.route("/get-current-courses", methods=["GET"])
+def get_current_courses():
+    current_courses = [
+        {"id": 1, "title": "Mathematics"},
+        {"id": 2, "title": "History"},
+        # Add more courses as needed
+    ]
+    return jsonify({"currentCourses": current_courses})
+
+@app.route("/get-available-courses", methods=["GET"])
+def get_available_courses():
+    available_courses = [
+        {
+            "id": 1,
+            "courseName": "Introduction to React",
+            "teacher": "John Doe",
+            "startTime": "9:00 AM",
+            "endTime": "11:00 AM",
+            "day": "Monday",
+            "classroom": "Room 101",
+        },
+        {
+            "id": 2,
+            "courseName": "Advanced JavaScript",
+            "teacher": "Jane Smith",
+            "startTime": "1:00 PM",
+            "endTime": "3:00 PM",
+            "day": "Tuesday",
+            "classroom": "Room 202",
+        },
+    ]
+    return jsonify({"availableCourses": available_courses})
+
+
 @app.route('/Time', methods=['GET'])
 def Time():
     uid = request.args.get('uid')
-    time_data = [100, 200, 300, 400, 150, 200, 10, 100, 200, 300, 400, 150, 200, 10]
+    time_data = [100, 200, 300, 400, 150, 200,
+                 10, 100, 200, 300, 400, 150, 200, 10]
     date_data = [
         '11/11', '12/11', '13/11', '14/11', '15/11', '16/11',
         '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
@@ -68,15 +124,19 @@ def Time():
     ]
     return jsonify(time=time_data, date=date_data)
 
+
 @app.route('/last-login', methods=['GET'])
 def LastLogin():
     uid = request.args.get('uid')
     last_login = '2023-11-01 15:33:00'
     return jsonify({'lastLogin': last_login})
 
+
 @app.route('/Logout', methods=['POST'])
 def Logout():
 
     pass
+
+
 if __name__ == '__main__':
     app.run(debug=True)

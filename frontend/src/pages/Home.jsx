@@ -1,10 +1,11 @@
 import React from 'react';
+import {Flex} from 'antd';
 
 const Home = () => {
     return (
-        <div style={{ height: '100vh', padding: '20px' }}>
+        <Flex justify="center" align="center" vertical style={{ width: '100%' }}>
             
-        </div>
+        </Flex>
     );
 };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Layout, Menu, Button, theme, Image, Space } from 'antd';
 import Home from './pages/Home';
+import Enroll from './pages/Enroll';
 import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login';
@@ -69,7 +70,8 @@ const App = () => {
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/timetable' },
     { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/upcoming-course' },
-    { key: '4', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
+    { key: '4', icon: <ClockCircleOutlined />, label: 'Enroll', link: '/enroll' },
+    { key: '5', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
   ];
 
   const handleMenuItemClick = (key, link) => {
@@ -95,8 +97,8 @@ const App = () => {
               <Button onClick={() => handleMenuItemClick(item.key, item.link)} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}>{item.label}</Button>
             </Menu.Item>
           ))}
-          <Menu.Item key="5" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0 }}>
-            <Link to="/logout" onClick={() => handleMenuItemClick(['5'])}>Logout</Link>
+          <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0 }}>
+            <Link to="/logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -128,6 +130,7 @@ const App = () => {
           <UserContext.Provider value={{getUserUid}}>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/enroll" element={<Enroll />} />
               <Route path="/Login" element={<Login setUserUid={setUserUid} />} />
               <Route path="/timetable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />

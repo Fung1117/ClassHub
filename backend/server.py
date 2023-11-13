@@ -36,6 +36,8 @@ def Login():
 @app.route('/course', methods=['GET'])
 def TimeTable():
     uid = request.args.get('uid')
+    print(uid)
+
     cursor.execute('select * from course')
     query = cursor.fetchall()
     keys = ['ID', 'name', 'classroom', 'startTime',
@@ -44,18 +46,39 @@ def TimeTable():
     print(courses)
     return jsonify(courses)
 
+@app.route('/upcomingCourse', methods=['GET'])
+def OneHrCourse():
+    uid = request.args.get('uid')
+    print(uid)
+
+    # get closest upcoming course here
+    course = {
+            "uid": "COMP3214",
+            "name": "Introduction to React",
+            "teacher": "John Doe",
+            "startTime": "22:30",
+            "endTime": "23:20",
+            "day": "Mon",
+            "classroom": "Room 101",
+            "zoomLink": "https://zoom.us/j/123456789?pwd=QWERTYUIOP",
+            "resourceLink": "https://notes.com/j/123456789?pwd=QWERTYUIOP"
+        },
+    return jsonify(course)
+
 
 @app.route('/messages', methods=['GET'])
 def Messages():
     uid = request.args.get('uid')
+    print(uid)
+
     messages = [
         {
-            "courseID": "COMP3330",
+            "courseUid": "COMP3330",
             "teacher": "Teacher 1",
             "message": "Hello students! Please submit your assignments by the end of this week.",
         },
         {
-            "courseID": "COMP3330",
+            "courseUid": "COMP3330",
             "teacher": "Teacher 2",
             "message": "Reminder: There will be a quiz on Monday. Prepare well!",
         },
@@ -115,6 +138,8 @@ def get_available_courses():
 @app.route('/Time', methods=['GET'])
 def Time():
     uid = request.args.get('uid')
+    print(uid)
+
     time_data = [100, 200, 300, 400, 150, 200,
                  10, 100, 200, 300, 400, 150, 200, 10]
     date_data = [
@@ -128,6 +153,7 @@ def Time():
 @app.route('/last-login', methods=['GET'])
 def LastLogin():
     uid = request.args.get('uid')
+    print(uid)
     last_login = '2023-11-01 15:33:00'
     return jsonify({'lastLogin': last_login})
 

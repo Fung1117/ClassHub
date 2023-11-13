@@ -25,13 +25,13 @@ GET, /course:
 
     [
         {
-            "uid": "COMP2396" , // no use yet
-            "name": "Advanced JavaScript",
-            "teacher": "Jane Smith",
-            "startTime": "09:30",
-            "endTime": "10:20",
-            "day": "Tue",
-            "classroom": "Room 202",
+            "uid": str (COMPXXXX) , // no use yet
+            "name": str,
+            "teacher": str,
+            "startTime": str (HH:MM),
+            "endTime": str (HH:MM),
+            "day": str (Mon, Tue, Wed, Thu, Fri, Sat, Sun)
+            "classroom": str,
         },
         ...
     ]
@@ -51,7 +51,7 @@ const Timetable = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}course`);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}course`, {params:{uid: userContext.getUserUid()}});
                 const data = response.data.map((item, index) => {
                     return { ...item, color: colors[index] };
                 });

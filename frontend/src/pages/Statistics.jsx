@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Flex, Empty, Spin } from 'antd';
 import UserActivity from '../components/UserActivity';
 import UserStayTimeChart from '../components/UserStayTimeChart';
 import axios from 'axios';
 
+import { UserContext } from '../App';
+
 const Statistics = () => {
     const [data, setData] = useState({ time: [], date: [] });
     const [loading, setLoading] = useState(true);
 
+    const userContext = useContext(UserContext);
+
     const fetchData = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}Time`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}Time`, {params:{uid: userContext.getUserUid()}});
             setData({
                 time: response.data.time,
                 date: response.data.date

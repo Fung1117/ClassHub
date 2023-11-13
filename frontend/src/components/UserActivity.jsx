@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Avatar, Button, Card, Modal, Table } from 'antd';
 import ScrollElement from 'rc-scroll-anim/lib/ScrollElement';
 import { HistoryOutlined, CalendarOutlined, HourglassOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import activity from '../assets/activity.svg'
 
+import { UserContext } from '../App';
+
 const { Meta } = Card;
 
 const UserActivity = ({ data }) => {
   const [lastLogin, setLastLogin] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const userContext = useContext(UserContext);
   const history = data.date.map((date, index) => ({ date, Duration: data.time[index] }))
 
   const columns = [
@@ -36,7 +39,7 @@ const UserActivity = ({ data }) => {
   useEffect(() => {
     const fetchLastLogin = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}last-login`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}last-login`, {params:{uid: userContext.getUserUid()}});
         setLastLogin(response.data.lastLogin);
       } catch (error) {
         console.error('Error fetching data:', error);

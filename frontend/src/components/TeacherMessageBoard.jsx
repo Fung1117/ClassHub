@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ScrollElement from 'rc-scroll-anim/lib/ScrollElement';
 import { Card, List } from 'antd';
 import TeacherMessage from '../assets/teacher-message.svg'
 import axios from 'axios';
 
+import { UserContext } from '../App';
+
 /*
 GET, /messages:
   [
     {
-      "courseID": str (COMPXXXX),
+      "courseUid": str (COMPXXXX),
       "teacher": str,
       "message": str
     },
@@ -18,11 +20,12 @@ GET, /messages:
 
 const TeacherMessageBoard = () => {
   const [messages, setMessages] = useState([]);
+  const userContext = useContext(UserContext);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}messages`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}messages`, {params:{uid: userContext.getUserUid()}});
         setMessages(response.data);
       } catch (error) {
         console.error('Error fetching messages:', error);
@@ -41,7 +44,7 @@ const TeacherMessageBoard = () => {
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
-                title={`${item.courseID}: ${item.teacher}`}
+                title={`${item.courseUid}: ${item.teacher}`}
                 description={item.message}
               />
             </List.Item>

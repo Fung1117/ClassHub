@@ -20,6 +20,24 @@ const timeSlots = [
     { start: '17:30', end: '18:20' }
 ];
 
+/*
+GET, /get-available-courses:
+
+    availableCourses:
+    {
+        {
+            "uid": "COMP2396" ,
+            "name": "Advanced JavaScript",
+            "teacher": "Jane Smith",
+            "startTime": "09:30",
+            "endTime": "10:20",
+            "day": "Tue",
+            "classroom": "Room 202",
+        },
+        ...
+    }
+*/
+
 const Timetable = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -34,8 +52,8 @@ const Timetable = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}course`);
-                const data = response.data.map((item, index) => {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}get-available-courses`);
+                const data = response.data.availableCourses.map((item, index) => {
                     return { ...item, color: colors[index] };
                 });
                 setCourses(data);
@@ -57,18 +75,19 @@ const Timetable = () => {
             key: slot.start,
             time: `${slot.start} - ${slot.end}`,
         };
-    
+
         daysOfWeek.forEach(day => {
-            const matchingCourses = courses.filter(course =>
-                course.day === day &&
-                parseTime(course.startTime) <= parseTime(slot.start) &&
-                parseTime(course.endTime) >= parseTime(slot.end)
-            );
+            const matchingCourses = courses.filter(course =>{
+                return course.day === day &&
+                    parseTime(course.startTime) <= parseTime(slot.start) &&
+                    parseTime(course.endTime) >= parseTime(slot.end)
+            });
     
             const cellContent = matchingCourses.map(course => course.name).join(', ');
             rowData[day] = cellContent;
         });
-    
+        
+        console.log(rowData)
         return rowData;
     });
 
@@ -84,7 +103,8 @@ const Timetable = () => {
             dataIndex: day,
             key: day,
             width: 150,
-            render: text => {
+            onCell: text => {
+                // console.log(day)
                 const course = text && courses.find(c => c.name === text);
                 return {
                     children: (

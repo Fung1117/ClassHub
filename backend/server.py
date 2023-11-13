@@ -91,21 +91,21 @@ def get_current_courses():
 def get_available_courses():
     available_courses = [
         {
-            "id": 1,
-            "courseName": "Introduction to React",
+            "uid": "COMP3214",
+            "name": "Introduction to React",
             "teacher": "John Doe",
-            "startTime": "9:00 AM",
-            "endTime": "11:00 AM",
-            "day": "Monday",
+            "startTime": "09:30",
+            "endTime": "10:20",
+            "day": "Mon",
             "classroom": "Room 101",
         },
         {
-            "id": 2,
-            "courseName": "Advanced JavaScript",
+            "uid": "COMP2396",
+            "name": "Advanced JavaScript",
             "teacher": "Jane Smith",
-            "startTime": "1:00 PM",
-            "endTime": "3:00 PM",
-            "day": "Tuesday",
+            "startTime": "13:30",
+            "endTime": "15:20",
+            "day": "Tue",
             "classroom": "Room 202",
         },
     ]

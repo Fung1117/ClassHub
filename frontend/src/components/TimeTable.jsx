@@ -21,12 +21,11 @@ const timeSlots = [
 ];
 
 /*
-GET, /get-available-courses:
+GET, /course:
 
-    availableCourses:
-    {
+    [
         {
-            "uid": "COMP2396" ,
+            "uid": "COMP2396" , // no use yet
             "name": "Advanced JavaScript",
             "teacher": "Jane Smith",
             "startTime": "09:30",
@@ -35,7 +34,7 @@ GET, /get-available-courses:
             "classroom": "Room 202",
         },
         ...
-    }
+    ]
 */
 
 const Timetable = () => {
@@ -52,8 +51,8 @@ const Timetable = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}get-available-courses`);
-                const data = response.data.availableCourses.map((item, index) => {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}course`);
+                const data = response.data.map((item, index) => {
                     return { ...item, color: colors[index] };
                 });
                 setCourses(data);
@@ -87,7 +86,6 @@ const Timetable = () => {
             rowData[day] = cellContent;
         });
         
-        console.log(rowData)
         return rowData;
     });
 
@@ -104,7 +102,6 @@ const Timetable = () => {
             key: day,
             width: 150,
             onCell: text => {
-                // console.log(day)
                 const course = text && courses.find(c => c.name === text);
                 return {
                     children: (

@@ -50,12 +50,12 @@ def Messages():
     uid = request.args.get('uid')
     messages = [
         {
-            "course": "COMP3330",
+            "courseID": "COMP3330",
             "teacher": "Teacher 1",
             "message": "Hello students! Please submit your assignments by the end of this week.",
         },
         {
-            "course": "COMP3330",
+            "courseID": "COMP3330",
             "teacher": "Teacher 2",
             "message": "Reminder: There will be a quiz on Monday. Prepare well!",
         },

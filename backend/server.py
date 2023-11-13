@@ -50,12 +50,12 @@ def Messages():
     uid = request.args.get('uid')
     messages = [
         {
-            "course": "COMP3330",
+            "courseID": "COMP3330",
             "teacher": "Teacher 1",
             "message": "Hello students! Please submit your assignments by the end of this week.",
         },
         {
-            "course": "COMP3330",
+            "courseID": "COMP3330",
             "teacher": "Teacher 2",
             "message": "Reminder: There will be a quiz on Monday. Prepare well!",
         },
@@ -92,20 +92,22 @@ def get_available_courses():
     available_courses = [
         {
             "id": 1,
+            "courseID": 'COMP9999',
             "courseName": "Introduction to React",
             "teacher": "John Doe",
-            "startTime": "9:00 AM",
-            "endTime": "11:00 AM",
-            "day": "Monday",
+            "startTime": "09:00",
+            "endTime": "11:00",
+            "day": "Mon",
             "classroom": "Room 101",
         },
         {
             "id": 2,
+            "courseID": "COMP8888",
             "courseName": "Advanced JavaScript",
             "teacher": "Jane Smith",
-            "startTime": "1:00 PM",
-            "endTime": "3:00 PM",
-            "day": "Tuesday",
+            "startTime": "13:00",
+            "endTime": "15:00",
+            "day": "Tue",
             "classroom": "Room 202",
         },
     ]

@@ -4,6 +4,18 @@ import { Card, List } from 'antd';
 import TeacherMessage from '../assets/teacher-message.svg'
 import axios from 'axios';
 
+/*
+GET, /messages:
+  [
+    {
+      "courseID": str (COMPXXXX),
+      "teacher": str,
+      "message": str
+    },
+    ...
+  ]
+*/
+
 const TeacherMessageBoard = () => {
   const [messages, setMessages] = useState([]);
 
@@ -29,7 +41,7 @@ const TeacherMessageBoard = () => {
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
-                title={`${item.course}: ${item.teacher}`}
+                title={`${item.courseID}: ${item.teacher}`}
                 description={item.message}
               />
             </List.Item>

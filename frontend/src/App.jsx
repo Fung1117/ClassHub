@@ -26,13 +26,13 @@ const { Header, Sider, Content, Footer } = Layout;
 
 const App = () => {
 
-  /////////////////////////////////////////////////////////
-  /////// remove this when token is actually in use ///////
-  useEffect(() => {
-    localStorage.setItem('userUid', '123456789');
-  }, []);
-  /////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////
+  // // uncomment this when u don't want to care about login logout stuff ///
+  // useEffect(() => {
+  //   localStorage.setItem('userUid', '123456789');
+  // }, []);
+  // ////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -75,7 +75,17 @@ const App = () => {
   ];
 
   const handleMenuItemClick = (key, link) => {
-    if (getUserUid() === null) return;
+    if (key === '0') {
+      if (getUserUid() === null) {
+        navigate('/Login');
+        return;
+      }
+      return;
+    }
+    if (getUserUid() === null) {
+      alert('Please login first!');
+      return;
+    }
 
     setSelectedKeys(key);
     localStorage.setItem('selectedKey', key);
@@ -106,11 +116,10 @@ const App = () => {
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>
             <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
-            <Link to="/Login" onClick={() => handleMenuItemClick(['0'])}>
+              <Button onClick={() => handleMenuItemClick(['0'])} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}/>
               <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 35, right: 30 }}>
                 Login
               </Button>
-            </Link>
           </Space>
         </Header>
         <Content

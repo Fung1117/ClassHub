@@ -50,12 +50,13 @@ const Login = ({setUserUid}) => {
         setEmail(values.email);
         if (loginMethod == 'password') {
             setLoading(true);
-            passwordLogin(values.password);
+            // email state isn't updated immediately, have to pass email in as param
+            passwordLogin(values.email, values.password);
         }
         showModal();
     };
 
-    const passwordLogin = async (password) => {
+    const passwordLogin = async (email, password) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}Login`, { isFace: false, email: email, password: password });
             const data = response.data;
@@ -64,6 +65,9 @@ const Login = ({setUserUid}) => {
             if (data.success) {
                 setSuccess(true);
                 setUserUid(data.uid);
+                setTimeout(() => {
+                    navigate('/');
+                }, 2000);
             } else {
                 setError(true);
             }
@@ -82,6 +86,9 @@ const Login = ({setUserUid}) => {
             if (data.success) {
                 setSuccess(true);
                 setUserUid(data.uid);
+                setTimeout(() => {
+                    navigate('/');
+                }, 2000);
             } else {
                 setError(true);
             }

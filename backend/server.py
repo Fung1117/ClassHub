@@ -27,6 +27,7 @@ def Login():
             return jsonify({'success': False})
     else:
         password = login_data.get('password')
+        print(email, password)
         if email == "example@example.com" and password == "123456":
             return jsonify({'success': True, 'UID': 1, 'Name': 'Fung'})
         else:

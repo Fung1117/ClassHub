@@ -3,7 +3,9 @@ import { Image, Result } from 'antd';
 import logoutImage from '../assets/logout-image.svg';
 import axios from 'axios';
 
-const Logout = () => {
+
+const Logout = ({removeUserUid}) => {
+
 
     removeUserUid();
 

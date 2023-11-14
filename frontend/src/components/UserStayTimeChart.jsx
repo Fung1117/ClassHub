@@ -6,9 +6,8 @@ function UserStayTimeChart({ data }) {
   const { time, date } = data;
 
   return (
-    <Card hoverable style={{width: 1000, height: 650}}>
+    <Card hoverable style={{width: '60%', height: 650}}>
       <LineChart
-        width={900}
         height={600}
         series={[
           { data: time, label: 'User Activity Duration' },

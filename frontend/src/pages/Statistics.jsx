@@ -14,16 +14,16 @@ const Statistics = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}Time`, {params:{uid: userContext.getUserUid()}});
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}Time`, { params: { uid: userContext.getUserUid() } });
             setData({
                 time: response.data.time,
                 date: response.data.date
             });
             console.log(data)
-            setLoading(false); 
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -32,19 +32,24 @@ const Statistics = () => {
     }, []);
 
     return (
-        <Flex justify="center" align="center" style={{ width: '100%' }}>
-            <Spin spinning={loading}>
-                {data.time.length > 0 && data.date.length > 0 ? (
-                    <Flex gap="middle" align="center" justify="center" >
-                        <UserStayTimeChart data={data} />
-                        <UserActivity data={data} />
-                    </Flex>
-                ) : (
-                    <Empty description={'No data available'} />
-                )}
-            </Spin>
+        <Flex gap="middle" justify="center" align="center" style={{ width: '100%' }}>
+            {data.time.length > 0 && data.date.length > 0 ? (
+                <Flex gap="middle" align="center" justify="center" style={{ width: '100%', }}>
+                    <UserStayTimeChart data={data} />
+                    <UserActivity data={data} />
+                </Flex>
+            ) : (
+                <p>No data available.</p>
+            )}
         </Flex>
     );
 };
 
 export default Statistics;
+
+{/* <Spin spinning={loading} style={{ width: '100%', backgroundColor: 'blue' }}>
+                {data.time.length > 0 && data.date.length > 0 ? (
+) : (
+    <Empty description={'No data available'} />
+)}
+</Spin> */}

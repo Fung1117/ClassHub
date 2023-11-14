@@ -62,7 +62,7 @@ const UserActivity = ({ data }) => {
   };
 
   return (
-    <Card hoverable cover={<img src={activity} />} style={{ height: 650, width: 450 }}>
+    <Card hoverable cover={<img src={activity} />} style={{ height: 650, width: '30%' }}>
       <Meta
         avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />}
         title={`Name: Fung`}

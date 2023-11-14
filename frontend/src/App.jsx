@@ -26,13 +26,11 @@ const { Header, Sider, Content, Footer } = Layout;
 
 const App = () => {
 
-  // ////////////////////////////////////////////////////////////////////////
-  // // uncomment this when u don't want to care about login logout stuff ///
+
   // useEffect(() => {
   //   localStorage.setItem('userUid', '123456789');
   // }, []);
-  // ////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////
+
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,10 +66,10 @@ const App = () => {
 
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
-    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/timetable' },
+    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Timetable' },
     { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/upcoming-course' },
-    { key: '4', icon: <ScheduleOutlined />, label: 'Enroll', link: '/enroll' },
-    { key: '5', icon: <LineChartOutlined />, label: 'Statistic', link: '/statistic' },
+    { key: '4', icon: <ScheduleOutlined />, label: 'Enroll', link: '/Enroll' },
+    { key: '5', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
   ];
 
   const handleMenuItemClick = (key, link) => {
@@ -114,7 +112,7 @@ const App = () => {
               <Button onClick={() => handleMenuItemClick(item.key, item.link)} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}>{item.label}</Button>
             </Menu.Item>
           ))}
-          <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 60, left: 0 }}>
+          <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: '7%', left: 0 }}>
             <Link to="/logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
           </Menu.Item>
         </Menu>
@@ -132,7 +130,7 @@ const App = () => {
         </Header>
         <Content
           style={{
-            paddingTop: 75,
+            paddingTop: 40,
             minHeight: 280,
             height: '100%',
             width: '100%',
@@ -146,11 +144,11 @@ const App = () => {
           <UserContext.Provider value={{getUserUid}}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/enroll" element={<Enroll />} />
+              <Route path="/Enroll" element={<Enroll />} />
               <Route path="/Login" element={<Login setUserUid={setUserUid} />} />
-              <Route path="/timetable" element={<CourseInformation />} />
+              <Route path="/Timetable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />
-              <Route path="/statistic" element={<Statistic />} />
+              <Route path="/Statistic" element={<Statistic />} />
               <Route path="/Logout" element={<Logout removeUserUid={removeUserUid} />} />
             </Routes>
           </UserContext.Provider>

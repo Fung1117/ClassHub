@@ -5,8 +5,8 @@ import TeacherMessageBoard from '../components/TeacherMessageBoard';
 
 const CourseInformation = () => {
     return (
-        <Flex gap="middle" align="center" justify="center" >
-            <Flex gap="middle" align="center" justify="center" >
+        <Flex gap="middle" align="center" justify="center" style={{ width: '100%' }}>
+            <Flex gap="middle" align="center" justify="center" style={{ width: '100%' }}>
                 <Timetable />
                 <TeacherMessageBoard />
             </Flex>

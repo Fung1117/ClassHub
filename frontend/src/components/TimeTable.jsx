@@ -46,7 +46,6 @@ const Timetable = () => {
 
     // get current user uid like this:
     const userContext = useContext(UserContext);
-    const userUid = userContext.getUserUid();
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -128,7 +127,7 @@ const Timetable = () => {
     ];
 
     return (
-        <Card hoverable title="Weekly Time Table" style={{ height: 650, width: 1000 }}>
+        <Card hoverable style={{ height: 650, width: '65%' }}>
             <Table columns={columns} dataSource={data} pagination={false} />
             <Modal
                 title={selectedCourse ? selectedCourse.name : ''}

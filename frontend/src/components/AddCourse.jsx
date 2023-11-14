@@ -72,7 +72,7 @@ const AddCourse = () => {
         <Card
             title='Add course'
             cover={<img src={addCourseImage} alt="Add Course" height={300} />}
-            style={{ height: 650, width: 1000 }}
+            style={{ height: 650, width: '60%' }}
             actions={[
                 <Dropdown
                     overlay={

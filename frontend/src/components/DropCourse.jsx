@@ -72,7 +72,7 @@ const DropCourse = () => {
         <Card
             cover={<img src={dropCourseImage} alt="Drop Course" />}
             title={`Drop Courses`}
-            style={{ height: 650, width: 450 }}
+            style={{ height: 650, width: '30%' }}
         >
             {courseNames}
         </Card>

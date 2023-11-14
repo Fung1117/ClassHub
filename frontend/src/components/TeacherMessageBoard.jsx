@@ -36,7 +36,7 @@ const TeacherMessageBoard = () => {
   }, []);
 
   return (
-    <Card hoverable title='Teacher Message Board' cover={<img src={TeacherMessage} height={300} />} style={{ width: 450, height: 650 }}>
+    <Card hoverable title='Teacher Message Board' cover={<img src={TeacherMessage} height={300} />} style={{ width: 450, height: '30%' }}>
       <ScrollElement style={{ height: '250px', maxHeight: '250px', overflowY: 'auto' }}>
         <List
           itemLayout="horizontal"

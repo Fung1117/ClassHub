@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Button, Empty } from 'antd';
 import axios from 'axios';
-
 import CourseInfoItem from '../components/CourseInfoItem';
 import { UserContext } from '../App';
 
@@ -71,9 +71,13 @@ const OneHrCourse = () => {
             />
         }
         {!oneHrCourseExist &&
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
-                <h1>No upcoming course</h1>
-            </div>
+            <Empty 
+            description={
+                <span>
+                    No upcoming course
+                </span>
+              }>
+            </Empty>
         }
         </>
     );

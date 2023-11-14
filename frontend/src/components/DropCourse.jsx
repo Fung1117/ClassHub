@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { Card, Button, Modal } from 'antd';
 import axios from 'axios';
 import dropCourseImage from '../assets/dropCourse.svg';
 
+import { UserContext } from '../App';
+
 const DropCourse = () => {
     const [visible, setVisible] = useState(false);
     const [currentCourses, setCurrentCourses] = useState([]);
+
+    const userContext = useContext(UserContext);
+    const userUid = userContext.getUserUid();
 
     useEffect(() => {
         // Fetch current courses when the component mounts
@@ -14,7 +19,7 @@ const DropCourse = () => {
 
     const fetchCurrentCourses = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}get-current-courses`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}get-current-courses`, {params:{uid: userContext.getUserUid()}});
             const result = response.data;
 
             if (result.currentCourses) {

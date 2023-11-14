@@ -4,7 +4,7 @@ import mysql.connector
 from mysql.connector import errorcode
 
 conn = mysql.connector.connect(
-    user='root', password='your password', database='project')  # local mysql
+    user='root', password='v137334a', database='project')  # local mysql
 cursor = conn.cursor()
 
 app = Flask(__name__)

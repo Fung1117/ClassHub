@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { Card, Dropdown, Button, Menu, Modal } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import addCourseImage from '../assets/addCourse.svg';
 
+import { UserContext } from '../App';
+
 const AddCourse = () => {
     const [availableCourses, setAvailableCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const userContext = useContext(UserContext);
+    const userUid = userContext.getUserUid();
 
     useEffect(() => {
         // Fetch available courses when the component mounts
@@ -16,7 +21,7 @@ const AddCourse = () => {
 
     const fetchAvailableCourses = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}get-available-courses`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}get-available-courses`, {params:{uid: userContext.getUserUid()}});
             const result = response.data;
 
             if (result.availableCourses) {

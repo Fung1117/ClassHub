@@ -102,7 +102,7 @@ const App = () => {
 
   return (
     <Layout>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0  }}>
         <Link to="/" onClick={() => handleMenuItemClick(['1'])}>
           <div style={{ textAlign: 'center', padding: '16px' }}>
             <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
@@ -114,12 +114,13 @@ const App = () => {
               <Button onClick={() => handleMenuItemClick(item.key, item.link)} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}>{item.label}</Button>
             </Menu.Item>
           ))}
-          <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 10, left: 0 }}>
+          <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: 60, left: 0 }}>
             <Link to="/logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout>
+
+      <Layout style={{ marginLeft: collapsed ? 50 : 170, transition: 'margin-left 0.3s' }}>
         <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
           <Space>
             <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
@@ -131,11 +132,10 @@ const App = () => {
         </Header>
         <Content
           style={{
-            margin: '24px 16px',
-            marginBottom: '0px',
-            padding: 24,
+            paddingTop: 75,
             minHeight: 280,
-            height: 700,
+            height: '100%',
+            width: '100%',
             background: colorBgContainer,
             display: 'flex',
             flexDirection: 'column',
@@ -156,10 +156,17 @@ const App = () => {
           </UserContext.Provider>
         </Content>
         <Footer style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
+           position: 'fixed',
+           bottom: 0,
+           width: '100%',
+           display: 'flex',
+           flexDirection: 'column',
+           alignItems: 'center',
+           justifyContent: 'center',
+           background: '#001529',
+           color: 'white',
+           padding: '15px',
+           marginLeft: '1%',
         }}>
           intelligent Course Management System ©2023 Created by Group 28
         </Footer>

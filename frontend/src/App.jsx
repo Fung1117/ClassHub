@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Layout, Menu, Button, theme, Image, Space } from 'antd';
+import { notification, Layout, Menu, Button, theme, Image, Space } from 'antd';
 import Home from './pages/Home';
 import Enroll from './pages/Enroll';
 import CourseInformation from './pages/CourseInformation';
@@ -83,19 +83,26 @@ const App = () => {
       return;
     }
     if (getUserUid() === null) {
-      alert('Please login first!');
+      showLoginAlert();
       return;
     }
-
+  
     setSelectedKeys(key);
     localStorage.setItem('selectedKey', key);
     console.log(link);
     navigate(link);
   };
 
+  const showLoginAlert = () => {
+    notification.warning({
+      message: 'Please login first!',
+      placement: 'topRight',
+    });
+  };
+
   return (
     <Layout>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
         <Link to="/" onClick={() => handleMenuItemClick(['1'])}>
           <div style={{ textAlign: 'center', padding: '16px' }}>
             <GiEvilBook style={{ color: 'white', fontSize: 36 }} />

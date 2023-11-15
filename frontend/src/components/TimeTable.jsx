@@ -82,8 +82,18 @@ const TimeTable = () => {
                 viewerExtraComponent={(fields, event) => {
                     return (
                         <div style={{ marginLeft: 1 }}>
-                            <h3> <UserOutlined /> Teacher: {event.teacher}</h3>
-                            <h3> <FaPersonChalkboard /> Classroom: {event.classroom}</h3>
+                            {event.teacher && (
+                                <h3>
+                                    {' '}
+                                    <UserOutlined /> Teacher: {event.teacher}
+                                </h3>
+                            )}
+                            {event.classroom && (
+                                <h3>
+                                    {' '}
+                                    <FaPersonChalkboard /> Classroom: {event.classroom}
+                                </h3>
+                            )}
                         </div>
                     );
                 }}

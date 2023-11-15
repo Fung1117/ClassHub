@@ -1,56 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Card, Table, Modal } from 'antd';
-import { FieldTimeOutlined, UserOutlined } from '@ant-design/icons';
-import { FaPersonChalkboard } from "react-icons/fa6";
+import { Scheduler } from "@aldabil/react-scheduler";
+import { Card } from 'antd';
 import axios from 'axios';
+import { UserOutlined } from '@ant-design/icons';
+import { FaPersonChalkboard } from "react-icons/fa6";
 
 import { UserContext } from '../App';
 
-const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const timeSlots = [
-    { start: '8:30', end: '9:20' },
-    { start: '9:30', end: '10:20' },
-    { start: '10:30', end: '11:20' },
-    { start: '11:30', end: '12:20' },
-    { start: '12:30', end: '13:20' },
-    { start: '13:30', end: '14:20' },
-    { start: '14:30', end: '15:20' },
-    { start: '15:30', end: '16:20' },
-    { start: '16:30', end: '17:20' },
-    { start: '17:30', end: '18:20' }
-];
-
-/*
-GET, /course:
-
-    [
-        {
-            "uid": str (COMPXXXX) , // no use yet
-            "name": str,
-            "teacher": str,
-            "startTime": str (HH:MM),
-            "endTime": str (HH:MM),
-            "day": str (Mon, Tue, Wed, Thu, Fri, Sat, Sun)
-            "classroom": str,
-        },
-        ...
-    ]
-*/
-
-const Timetable = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    const [courses, setCourses] = useState([]);
-
+const TimeTable = () => {
+    const userContext = useContext(UserContext);
     const colors = ['#ffcccb', '#aaffcc', '#bbccff', '#ffeedd', '#ffe4e1', '#add8e6', '#ffb6c1', '#98fb98'];
 
-    // get current user uid like this:
-    const userContext = useContext(UserContext);
+    const [courses, setCourses] = useState([]);
 
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}course`, {params:{uid: userContext.getUserUid()}});
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}course`, { params: { uid: userContext.getUserUid() } });
                 const data = response.data.map((item, index) => {
                     return { ...item, color: colors[index] };
                 });
@@ -60,91 +26,81 @@ const Timetable = () => {
             }
         };
 
-        fetchCourses(); 
-    }, []);
+        fetchCourses();
+    }, [userContext]);
 
-    const parseTime = timeString => {
-        const [hours, minutes] = timeString.split(':');
-        return new Date(0, 0, 0, hours, minutes);
-    };
-    
-    const data = timeSlots.map(slot => {
-        const rowData = {
-            key: slot.start,
-            time: `${slot.start} - ${slot.end}`,
-        };
+    const generateSemesterEvents = (scheduleData) => {
+        const events = [];
 
-        daysOfWeek.forEach(day => {
-            const matchingCourses = courses.filter(course =>{
-                return course.day === day &&
-                    parseTime(course.startTime) <= parseTime(slot.start) &&
-                    parseTime(course.endTime) >= parseTime(slot.end)
+        const startDate = new Date(`2023-09-01`);
+        const endDate = new Date(`2023-11-30`);
+
+        // Loop through each day of the week
+        for (let currentDate = startDate; currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+            const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
+
+            // Find the classes scheduled for the current day
+            const dayClasses = scheduleData.filter((event) => event.day === currentDay);
+
+            // Generate events for each class on the current day
+            dayClasses.forEach((classEvent) => {
+                const startDateTime = new Date(currentDate);
+                startDateTime.setHours(Number(classEvent.startTime.split(':')[0]));
+                startDateTime.setMinutes(Number(classEvent.startTime.split(':')[1]));
+
+                const endDateTime = new Date(currentDate);
+                endDateTime.setHours(Number(classEvent.endTime.split(':')[0]));
+                endDateTime.setMinutes(Number(classEvent.endTime.split(':')[1]));
+
+                events.push({
+                    event_id: classEvent.ID,
+                    title: classEvent.name,
+                    start: startDateTime,
+                    end: endDateTime,
+                    teacher: classEvent.teacher,
+                    zoomLink: classEvent.zoomLink,
+                    classroom: classEvent.classroom,
+                    disabled: false, // Set to true if needed
+                    color: classEvent.color,
+                    editable: false, // Adjust based on your requirements
+                    deletable: false, // Adjust based on your requirements
+                    draggable: false, // Adjust based on your requirements
+                    allDay: false, // Adjust based on your requirements
+                });
             });
-    
-            const cellContent = matchingCourses.map(course => course.name).join(', ');
-            rowData[day] = cellContent;
-        });
-        
-        return rowData;
-    });
+        }
 
-    const columns = [
-        {
-            title: 'Time',
-            dataIndex: 'time',
-            key: 'time',
-            width: 150,
-        },
-        ...daysOfWeek.map(day => ({
-            title: day,
-            dataIndex: day,
-            key: day,
-            width: 150,
-            onCell: text => {
-                const course = text && courses.find(c => c.name === text);
-                return {
-                    children: (
-                        <div
-                            style={{ textAlign: 'center', cursor: 'pointer' }}
-                            onClick={() => {
-                                if (course) {
-                                    setSelectedCourse(course);
-                                    setModalVisible(true);
-                                }
-                            }}
-                        >
-                            {text}
-                        </div>
-                    ),
-                    props: {
-                        style: {
-                            backgroundColor: course ? course.color : 'transparent',
-                        },
-                    },
-                };
-            },
-        })),
-    ];
+        return events;
+    };
+
+    const semesterEvents = generateSemesterEvents(courses);
 
     return (
-        <Card hoverable style={{ height: 650, width: '65%' }}>
-            <Table columns={columns} dataSource={data} pagination={false} />
-            <Modal
-                title={selectedCourse ? selectedCourse.name : ''}
-                open={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                footer={null}
-            >
-                {selectedCourse && (
-                    <div>
-                        <h4> <FieldTimeOutlined /> Time: {selectedCourse.startTime} - {selectedCourse.endTime}</h4>
-                        <h4> <UserOutlined /> Teacher: {selectedCourse.teacher}</h4>
-                        <h4> <FaPersonChalkboard /> Classroom: {selectedCourse.classroom}</h4>
-                    </div>
-                )}
-            </Modal>
+        <Card hoverable style={{ width: '60%', height: 650 }}>
+            <Scheduler
+                height={525}
+                viewerExtraComponent={(fields, event) => {
+                    return (
+                        <div style={{ marginLeft: 1 }}>
+                            {event.teacher && (
+                                <h3>
+                                    {' '}
+                                    <UserOutlined /> Teacher: {event.teacher}
+                                </h3>
+                            )}
+                            {event.classroom && (
+                                <h3>
+                                    {' '}
+                                    <FaPersonChalkboard /> Classroom: {event.classroom}
+                                </h3>
+                            )}
+                        </div>
+                    );
+                }}
+                events={semesterEvents}>
+            </Scheduler>
         </Card>
     );
-};
+}
 
-export default Timetable;
+export default TimeTable;

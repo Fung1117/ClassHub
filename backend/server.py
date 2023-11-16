@@ -9,7 +9,7 @@ import os
 load_dotenv()
 
 conn = mysql.connector.connect(
-    user='root', password="Fol!dTricia2240", database='project')  # local mysql
+    user='root', password=os.getenv("DB_PASSWORD"), database='project')  # local mysql
 cursor = conn.cursor()
 
 app = Flask(__name__)

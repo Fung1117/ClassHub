@@ -9,7 +9,7 @@ import os
 load_dotenv()
 
 conn = mysql.connector.connect(
-    user='root', password=os.getenv("DB_PASSWORD"), database='project')  # local mysql
+    user='root', password="Fol!dTricia2240", database='project')  # local mysql
 cursor = conn.cursor()
 
 app = Flask(__name__)
@@ -117,26 +117,35 @@ def get_current_courses():
 
 @app.route("/get-available-courses", methods=["GET"])
 def get_available_courses():
-    available_courses = [
-        {
-            "uid": "COMP3214",
-            "name": "Introduction to React",
-            "teacher": "John Doe",
-            "startTime": "09:30",
-            "endTime": "10:20",
-            "day": "Mon",
-            "classroom": "Room 101",
-        },
-        {
-            "uid": "COMP2396",
-            "name": "Advanced JavaScript",
-            "teacher": "Jane Smith",
-            "startTime": "13:30",
-            "endTime": "15:20",
-            "day": "Tue",
-            "classroom": "Room 202",
-        },
-    ]
+    # available_courses = [
+    #     {
+    #         "id": 1,
+    #         "uid": "COMP3214",
+    #         "courseName": "Introduction to React",
+    #         "teacher": "John Doe",
+    #         "startTime": "09:30",
+    #         "endTime": "10:20",
+    #         "day": "Mon",
+    #         "classroom": "Room 101",
+    #     },
+    #     {
+    #         "id": 2,
+    #         "uid": "COMP2396",
+    #         "courseName": "Advanced JavaScript",
+    #         "teacher": "Jane Smith",
+    #         "startTime": "13:30",
+    #         "endTime": "15:20",
+    #         "day": "Tue",
+    #         "classroom": "Room 202",
+    #     },
+    # ]
+    cursor.execute('select * from course')
+    query = cursor.fetchall()
+    keys = ['uid', 'courseName', 'classroom', 'startTime',
+            'endTime', 'day', 'zoomLink', 'teacher']
+    available_courses = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
+    for i in range(len(available_courses)):
+        available_courses[i]['id'] = i
     return jsonify({"availableCourses": available_courses})
 
 

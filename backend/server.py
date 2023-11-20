@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_mail import Mail
 import mysql.connector
 from mysql.connector import errorcode
 from dotenv import load_dotenv
@@ -15,6 +16,16 @@ cursor = conn.cursor()
 app = Flask(__name__)
 
 CORS(app)
+
+# Configure Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.office365.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+
+# Initialize Flask-Mail
+mail = Mail(app)
 
 @app.route('/Login', methods=['POST'])
 def Login():

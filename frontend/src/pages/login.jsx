@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Input, Button, Typography, Image, Flex, Modal, Spin, Result } from 'antd';
@@ -7,9 +7,11 @@ import { TbFaceId } from 'react-icons/tb'
 import loginImage from '../assets/password-login.svg';
 import faceLoginImage from '../assets/face-login.svg'
 
+import { UserContext } from '../App';
+
 const { Title } = Typography;
 
-const Login = ({setUserUid}) => {
+const Login = ({setUserUid, setMenuItemKey}) => {
     const [loginMethod, setLoginMethod] = useState('password'); // Default to password login
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -19,6 +21,7 @@ const Login = ({setUserUid}) => {
 
     const webcamRef = useRef(null);
     const navigate = useNavigate();
+    const userContext = useContext(UserContext);
     
     const toggleLoginMethod = () => {
         setLoginMethod((prevMethod) => (prevMethod === 'password' ? 'faceId' : 'password'));
@@ -28,10 +31,19 @@ const Login = ({setUserUid}) => {
         setOpen(true);
     };
 
-    const handleOk = () => {
+    const handleOk = async () => {
         if (success) {
             setOpen(false);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
+            const data = response.data;
+            console.log(data)
+            if (data.length >= 0) {
+                navigate('/upcoming-course')
+                setMenuItemKey('3')
+                return
+            }
             navigate('/');
+            setMenuItemKey('0')
         } else if (error) {
             setOpen(false);
             setLoading(false);
@@ -65,9 +77,17 @@ const Login = ({setUserUid}) => {
             if (data.success) {
                 setSuccess(true);
                 setUserUid(data.uid);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
                 setTimeout(() => {
-                    navigate('/');
-                }, 2000);
+                    const data = response.data;
+                    if (data.length > 0) {
+                        navigate('/upcoming-course')
+                        setMenuItemKey('3')
+                        return
+                    }
+                    navigate('/')
+                    setMenuItemKey('0')
+                }, 2000);                
             } else {
                 setError(true);
             }
@@ -86,8 +106,16 @@ const Login = ({setUserUid}) => {
             if (data.success) {
                 setSuccess(true);
                 setUserUid(data.uid);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
                 setTimeout(() => {
-                    navigate('/');
+                    const data = response.data;
+                    if (data.length > 0) {
+                        navigate('/upcoming-course')
+                        setMenuItemKey('3')
+                        return
+                    }
+                    navigate('/')
+                    setMenuItemKey('0')
                 }, 2000);
             } else {
                 setError(true);

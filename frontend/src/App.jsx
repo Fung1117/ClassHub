@@ -106,6 +106,7 @@ const App = () => {
             <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
           </div>
         </Link>
+        {!!getUserUid() &&
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
           {menuItems.map((item) => (
             <Menu.Item key={item.key} icon={item.icon}>
@@ -115,7 +116,7 @@ const App = () => {
           <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: '7%', left: 0 }}>
             <Link to="/logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
           </Menu.Item>
-        </Menu>
+        </Menu>}
       </Sider>
 
       <Layout style={{ marginLeft: collapsed ? 50 : 170, transition: 'margin-left 0.3s' }}>
@@ -123,9 +124,10 @@ const App = () => {
           <Space>
             <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
               <Button onClick={() => handleMenuItemClick(['0'])} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}/>
+              {!getUserUid() &&
               <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 35, right: 30 }}>
                 Login
-              </Button>
+              </Button>}
           </Space>
         </Header>
         <Content
@@ -145,7 +147,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Enroll" element={<Enroll />} />
-              <Route path="/Login" element={<Login setUserUid={setUserUid} />} />
+              <Route path="/Login" element={<Login setUserUid={setUserUid} setMenuItemKey={setSelectedKeys} />} />
               <Route path="/Timetable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />
               <Route path="/Statistic" element={<Statistic />} />

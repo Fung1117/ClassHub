@@ -1,3 +1,4 @@
+import time
 from flask import Flask, request, render_template, redirect, jsonify
 from flask_cors import CORS
 from flask_mail import Mail
@@ -97,19 +98,20 @@ def OneHrCourse():
     print(uid)
 
     # get closest upcoming course here
-    course = {
-        "uid": "COMP3214",
-        "name": "Introduction to React",
-        "teacher": "John Doe",
-        "startTime": "22:30",
-        "endTime": "23:20",
-        "day": "Mon",
-        "classroom": "Room 101",
-        "zoomLink": "https://zoom.us/j/123456789?pwd=QWERTYUIOP",
-        "resourceLink": "https://notes.com/j/123456789?pwd=QWERTYUIOP"
-    },
+    now = time.strftime('%a %H:%M').split(" ")
+    cursor.execute("select * from course "
+                   "where day = %s and "
+                   "startTime > %s and "
+                   "courseID in (select courseID from study where UID = %s) "
+                   "order by startTime "
+                   "limit 1", [now[0], now[1], '3035926447'])
+    query = cursor.fetchall()
+    if query == []:
+        return jsonify([])
+    print(query)
+    keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
+    course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
     return jsonify(course)
-
 
 @app.route('/messages', methods=['GET'])
 def Messages():

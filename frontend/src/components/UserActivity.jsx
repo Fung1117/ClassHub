@@ -46,7 +46,7 @@ const UserActivity = ({ data }) => {
       }
     };
 
-    fetchLastLogin(); // Call the async function inside useEffect
+    fetchLastLogin();
   }, []);
 
   const totalTime = data.time.reduce((total, number) => total + number, 0)
@@ -66,7 +66,7 @@ const UserActivity = ({ data }) => {
       <Meta
         avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />}
         title={`Name: Fung`}
-        description={`UID: 3035928287`}
+        description={`UID: ${userContext.getUserUid()}`}
       />
       <Meta
         title={`Last Login: ${lastLogin}`}

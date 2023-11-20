@@ -18,7 +18,7 @@ const Home = () => {
                     <Meta title={`Welcome to ICMS! name`} />
                 </Card>
                 <Flex justify="center" align="center" vertical gap={20} style={{ height: 650, width: '30%' }}>
-                    <Card hoverable cover={<img src={SoonClass} height={200} />} style={{ height: 320, width: '100%' }} actions={[<Link to="/upcoming-course" onClick={() => localStorage.setItem('selectedKey', '3')}><RightOutlined /></Link>]}>
+                    <Card hoverable cover={<img src={SoonClass} height={200} />} style={{ height: 320, width: '100%' }} actions={[<Link to="/upcoming-course"><RightOutlined /></Link>]}>
                         <Meta
                             title="If you have a class soon, find all the details—classroom, teacher's message, Zoom link, and materials—all in one place."
                         />

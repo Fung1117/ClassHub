@@ -45,7 +45,27 @@ const App = () => {
     if (location.pathname == '/Login' && !!getUserUid()) {
       navigate('/')
     }
-  })
+    console.log(location.pathname)
+    switch (location.pathname) {
+      case '/':
+        setSelectedKeys(['1'])
+        break;
+      case '/TimeTable':
+        setSelectedKeys(['2'])
+        break;
+      case '/upcoming-course':
+        setSelectedKeys(['3'])
+        break;
+      case '/Enroll':
+        setSelectedKeys(['4'])
+        break;
+      case '/Statistic':
+        setSelectedKeys(['5'])
+        break;
+      default:
+        break;
+    }
+  }, [location])
 
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState(['0']);
@@ -68,7 +88,7 @@ const App = () => {
 
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
-    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Timetable' },
+    { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/TimeTable' },
     { key: '3', icon: <ClockCircleOutlined />, label: 'Upcoming Course', link: '/upcoming-course' },
     { key: '4', icon: <ScheduleOutlined />, label: 'Enroll', link: '/Enroll' },
     { key: '5', icon: <LineChartOutlined />, label: 'Statistic', link: '/Statistic' },
@@ -153,8 +173,8 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Enroll" element={<Enroll />} />
-              <Route path="/Login" element={<Login setUserUid={setUserUid} setMenuItemKey={setSelectedKeys} />} />
-              <Route path="/Timetable" element={<CourseInformation />} />
+              <Route path="/Login" element={<Login setUserUid={setUserUid}/>} />
+              <Route path="/TimeTable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />
               <Route path="/Statistic" element={<Statistic />} />
               <Route path="/Logout" element={<Logout removeUserUid={removeUserUid} />} />

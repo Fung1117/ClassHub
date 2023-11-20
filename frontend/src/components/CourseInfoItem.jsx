@@ -39,6 +39,10 @@ const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceL
         }
     }, [timeLeft]);
 
+    const OnSendEmail = () => {
+        // TODO: send email
+    }
+
     return (
         <Flex gap="middle" align="center" justify="center" style={{width: '100%'}} >
             {contextHolder}
@@ -68,7 +72,7 @@ const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceL
                             type="primary"
                             size="large"
                             icon={<MailOutlined />}
-                            onClick={() => { }}
+                            onClick={() => {OnSendEmail}}
                         >
                             Send Email
                         </Button>

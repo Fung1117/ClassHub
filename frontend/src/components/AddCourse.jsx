@@ -44,7 +44,7 @@ const AddCourse = () => {
     const handleEnrollButtonClick = async () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}enroll`, {
-                courseId: selectedCourse.id,
+                courseId: selectedCourse.uid,
             });
 
             const result = response.data;

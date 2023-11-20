@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Flex, Empty, Spin } from 'antd';
+import { Flex, Empty } from 'antd';
 import UserActivity from '../components/UserActivity';
 import UserStayTimeChart from '../components/UserStayTimeChart';
 import axios from 'axios';
@@ -28,7 +28,7 @@ const Statistics = () => {
     };
 
     useEffect(() => {
-        fetchData(); // Call the async function inside useEffect
+        fetchData();
     }, []);
 
     return (
@@ -39,17 +39,10 @@ const Statistics = () => {
                     <UserActivity data={data} />
                 </Flex>
             ) : (
-                <p>No data available.</p>
+                <Empty description="No data available." />
             )}
         </Flex>
     );
 };
 
 export default Statistics;
-
-{/* <Spin spinning={loading} style={{ width: '100%', backgroundColor: 'blue' }}>
-                {data.time.length > 0 && data.date.length > 0 ? (
-) : (
-    <Empty description={'No data available'} />
-)}
-</Spin> */}

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, render_template, redirect, jsonify
 from flask_cors import CORS
 from flask_mail import Mail
 import mysql.connector
@@ -26,6 +26,34 @@ app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 
 # Initialize Flask-Mail
 mail = Mail(app)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def manage_courses():
+    if request.method == 'POST':
+        # Handle form submission to create a new course
+        courseID = request.form['courseID']
+        courseName = request.form['courseName']
+        classroom = request.form['classroom']
+        day = request.form['day']
+        zoomLink = request.form['zoomLink']
+        teacherName = request.form['teacherName']
+
+        # Insert data into the 'course' table
+        cursor.execute('INSERT INTO course (courseID, course_name, classroom, day, zoomLink, teacher_name) VALUES (%s, %s, %s, %s, %s, %s)',
+                       (courseID, courseName, classroom, day, zoomLink, teacherName))
+        conn.commit()
+
+        # Redirect to the home page after creating the course
+        return redirect('/')
+
+    else:
+        # Fetch existing courses from the database
+        cursor.execute('SELECT * FROM course')
+        existing_courses = cursor.fetchall()
+
+        return render_template('create_course.html', existing_courses=existing_courses)
+
 
 @app.route('/Login', methods=['POST'])
 def Login():
@@ -62,6 +90,7 @@ def TimeTable():
     print(courses)
     return jsonify(courses)
 
+
 @app.route('/upcomingCourse', methods=['GET'])
 def OneHrCourse():
     uid = request.args.get('uid')
@@ -69,16 +98,16 @@ def OneHrCourse():
 
     # get closest upcoming course here
     course = {
-            "uid": "COMP3214",
-            "name": "Introduction to React",
-            "teacher": "John Doe",
-            "startTime": "22:30",
-            "endTime": "23:20",
-            "day": "Mon",
-            "classroom": "Room 101",
-            "zoomLink": "https://zoom.us/j/123456789?pwd=QWERTYUIOP",
-            "resourceLink": "https://notes.com/j/123456789?pwd=QWERTYUIOP"
-        },
+        "uid": "COMP3214",
+        "name": "Introduction to React",
+        "teacher": "John Doe",
+        "startTime": "22:30",
+        "endTime": "23:20",
+        "day": "Mon",
+        "classroom": "Room 101",
+        "zoomLink": "https://zoom.us/j/123456789?pwd=QWERTYUIOP",
+        "resourceLink": "https://notes.com/j/123456789?pwd=QWERTYUIOP"
+    },
     return jsonify(course)
 
 
@@ -117,6 +146,7 @@ def drop_course():
     # drop course here pls by sql
     return jsonify({"success": True, "message": "Course dropped successfully"})
 
+
 @app.route("/get-current-courses", methods=["GET"])
 def get_current_courses():
     current_courses = [
@@ -125,6 +155,7 @@ def get_current_courses():
         # Add more courses as needed
     ]
     return jsonify({"currentCourses": current_courses})
+
 
 @app.route("/get-available-courses", methods=["GET"])
 def get_available_courses():
@@ -154,7 +185,8 @@ def get_available_courses():
     query = cursor.fetchall()
     keys = ['uid', 'courseName', 'classroom', 'startTime',
             'endTime', 'day', 'zoomLink', 'teacher']
-    available_courses = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
+    available_courses = [{key: value for key,
+                          value in zip(keys, tpl)} for tpl in query]
     for i in range(len(available_courses)):
         available_courses[i]['id'] = i
     return jsonify({"availableCourses": available_courses})

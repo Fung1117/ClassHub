@@ -12,7 +12,7 @@ cursor = conn.cursor()
 
 TABLES = {}
 TABLES['user'] = ('create table user ('
-                  'UID int primary key NOT NULL,'
+                  'UID varchar(10) primary key NOT NULL,'
                   'name varchar(20),'
                   'email varchar(30),'
                   'password varchar(20) NOT NULL)')
@@ -26,7 +26,7 @@ TABLES['course'] = ('create table course ('
                     'zoomLink varchar(300),'
                     'teacher_name varchar(20))')
 TABLES['study'] =  ('create table study ('
-                    'UID int,'
+                    'UID varchar(10),'
                     'courseID varchar(8),'
                     'PRIMARY KEY(UID, courseID),'
                     'FOREIGN KEY(UID) REFERENCES user(UID),'
@@ -40,7 +40,7 @@ TABLES['course_message'] = ('create table course_message ('
                             'message varchar(1000),'
                             'FOREIGN KEY(courseID) REFERENCES course(courseID))')
 TABLES['time'] = ('create table time ('
-                  'UID int,'
+                  'UID varchar(10),'
                   'login_time varchar(10),'
                   'logout_time varchar(10),'
                   'date varchar(10),'
@@ -60,7 +60,7 @@ for table_name in TABLES:
         print("OK")
 
 courses = [
-    { 'day': 'Mon', 'startTime': '9:30', 'endTime': '10:20', 'ID': 'MATH1851', 'name': 'Math', 'teacher': 'T1', 'classroom': 'RM100' },
+    { 'day': 'Mon', 'startTime': '09:30', 'endTime': '10:20', 'ID': 'MATH1851', 'name': 'Math', 'teacher': 'T1', 'classroom': 'RM100' },
     { 'day': 'Tue', 'startTime': '10:30', 'endTime': '11:20', 'ID': 'CAES1000', 'name': 'English', 'teacher': 'T2', 'classroom': 'RM101' },
     { 'day': 'Wed', 'startTime': '11:30', 'endTime': '12:20', 'ID': 'PHYS1240', 'name': 'Physics', 'teacher': 'T3', 'classroom': 'RM102' },
     { 'day': 'Thu', 'startTime': '12:30', 'endTime': '14:20', 'ID': 'CHEM1340', 'name': 'Chemistry', 'teacher': 'T4', 'classroom': 'RM103' },
@@ -71,6 +71,27 @@ courses = [
 add_course = ('insert into course (courseID, course_name, classroom, startTime, endTime, day, teacher_name) values (%s, %s, %s, %s, %s, %s, %s)')
 for course in courses:
     cursor.execute(add_course, (course['ID'], course['name'], course['classroom'], course['startTime'], course['endTime'], course['day'], course['teacher']))
+conn.commit()
+
+users = [
+    {'UID': '3035928287', 'name': 'Fung Gor', 'email': 'fung@connect.hku.hk', 'password': "12345678"},
+    {'UID': '3035926447', 'name': 'P', 'email': 'pilottam@connect.hku.hk', 'password': "12345678"},
+]
+
+add_user = ('insert into user (UID, name, email, password) values (%s, %s, %s, %s)')
+for user in users:
+    cursor.execute(add_user, (user['UID'], user['name'], user['email'], user['password']))
+conn.commit()
+
+studies = [
+    {'UID': '3035926447', 'courseID': 'MATH1851'},
+    {'UID': '3035926447', 'courseID': 'CCGL9007'},
+    {'UID': '3035926447', 'courseID': 'CAES1000'},
+]
+
+add_study = ('insert into study (UID, courseID) values (%s, %s)')
+for study in studies:
+    cursor.execute(add_study, (study['UID'], study['courseID']))
 conn.commit()
 
 cursor.close()

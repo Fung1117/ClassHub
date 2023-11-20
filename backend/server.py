@@ -1,3 +1,4 @@
+import time
 from flask import Flask, request, render_template, redirect, jsonify
 from flask_cors import CORS
 from flask_mail import Mail
@@ -97,19 +98,20 @@ def OneHrCourse():
     print(uid)
 
     # get closest upcoming course here
-    course = {
-        "uid": "COMP3214",
-        "name": "Introduction to React",
-        "teacher": "John Doe",
-        "startTime": "22:30",
-        "endTime": "23:20",
-        "day": "Mon",
-        "classroom": "Room 101",
-        "zoomLink": "https://zoom.us/j/123456789?pwd=QWERTYUIOP",
-        "resourceLink": "https://notes.com/j/123456789?pwd=QWERTYUIOP"
-    },
+    now = time.strftime('%a %H:%M').split(" ")
+    cursor.execute("select * from course "
+                   "where day = %s and "
+                   "startTime > %s and "
+                   "courseID in (select courseID from study where UID = %s) "
+                   "order by startTime "
+                   "limit 1", [now[0], now[1], uid])
+    query = cursor.fetchall()
+    if query == []:
+        return jsonify([])
+    print(query)
+    keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
+    course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
     return jsonify(course)
-
 
 @app.route('/messages', methods=['GET'])
 def Messages():
@@ -133,9 +135,13 @@ def Messages():
 
 @app.route("/enroll", methods=["POST"])
 def enroll_course():
+    uid = request.args.get('uid')
     data = request.get_json()
     course_id = data.get("courseId")
+    print(course_id)
     # add course here pls by sql
+    cursor.execute("insert into study (UID, courseID) values (%s, %s)", ["3035926447", course_id])
+    conn.commit()
     return jsonify({"success": True, "message": "Course enrolled successfully"})
 
 
@@ -149,11 +155,18 @@ def drop_course():
 
 @app.route("/get-current-courses", methods=["GET"])
 def get_current_courses():
-    current_courses = [
-        {"id": 1, "title": "Mathematics"},
-        {"id": 2, "title": "History"},
-        # Add more courses as needed
-    ]
+    # current_courses = [
+    #     {"id": 1, "title": "Mathematics"},
+    #     {"id": 2, "title": "History"},
+    # ]
+    uid = request.args.get('uid')
+    cursor.execute('select courseID from study where UID = %s', ['3035926447'])
+    query = cursor.fetchall()
+    keys = ['title']
+    current_courses = [{key: value for key,
+                          value in zip(keys, tpl)} for tpl in query]
+    for i in range(len(current_courses)):
+        current_courses[i]['id'] = i
     return jsonify({"currentCourses": current_courses})
 
 
@@ -170,18 +183,10 @@ def get_available_courses():
     #         "day": "Mon",
     #         "classroom": "Room 101",
     #     },
-    #     {
-    #         "id": 2,
-    #         "uid": "COMP2396",
-    #         "courseName": "Advanced JavaScript",
-    #         "teacher": "Jane Smith",
-    #         "startTime": "13:30",
-    #         "endTime": "15:20",
-    #         "day": "Tue",
-    #         "classroom": "Room 202",
-    #     },
     # ]
-    cursor.execute('select * from course')
+    time.sleep(0.1)
+    uid = request.args.get('uid')
+    cursor.execute('select * from course where courseID not in (select courseID from study where UID = %s)', ['3035926447'])
     query = cursor.fetchall()
     keys = ['uid', 'courseName', 'classroom', 'startTime',
             'endTime', 'day', 'zoomLink', 'teacher']

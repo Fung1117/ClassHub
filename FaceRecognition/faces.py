@@ -9,7 +9,7 @@ import sys
 
 # 1 Create database connection
 myconn = mysql.connector.connect(
-    host="localhost", user="root", passwd="214753459", database="facerecognition"
+    host="localhost", user="root", passwd="214753459", database="project"
 )
 date = datetime.utcnow()
 now = datetime.now()

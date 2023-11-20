@@ -31,7 +31,7 @@ const App = () => {
   //   localStorage.setItem('userUid', '123456789');
   // }, []);
 
-  
+
   const location = useLocation();
   const navigate = useNavigate();
   const getUserUid = () => localStorage.getItem('userUid');
@@ -39,8 +39,8 @@ const App = () => {
   const removeUserUid = () => localStorage.removeItem('userUid')
   useEffect(() => {
     if (location.pathname != '/Login' && !getUserUid()) {
-        navigate('/Login')
-        setSelectedKeys(['1'])
+      navigate('/Login')
+      setSelectedKeys(['1'])
     }
     if (location.pathname == '/Login' && !!getUserUid()) {
       navigate('/')
@@ -64,6 +64,8 @@ const App = () => {
     }
   }, []);
 
+  const isLoginPage = location.pathname === '/Login';
+
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
     { key: '2', icon: <CalendarOutlined />, label: 'TimeTable', link: '/Timetable' },
@@ -84,7 +86,7 @@ const App = () => {
       showLoginAlert();
       return;
     }
-  
+
     setSelectedKeys(key);
     localStorage.setItem('selectedKey', key);
     console.log(link);
@@ -100,36 +102,40 @@ const App = () => {
 
   return (
     <Layout>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0  }}>
-        <Link to="/" onClick={() => handleMenuItemClick(['1'])}>
-          <div style={{ textAlign: 'center', padding: '16px' }}>
-            <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
-          </div>
-        </Link>
-        {!!getUserUid() &&
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
-          {menuItems.map((item) => (
-            <Menu.Item key={item.key} icon={item.icon}>
-              <Button onClick={() => handleMenuItemClick(item.key, item.link)} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}>{item.label}</Button>
-            </Menu.Item>
-          ))}
-          <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: '7%', left: 0 }}>
-            <Link to="/logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
-          </Menu.Item>
-        </Menu>}
-      </Sider>
+      {!isLoginPage && (
+        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+          <Link to="/" onClick={() => handleMenuItemClick(['1'])}>
+            <div style={{ textAlign: 'center', padding: '16px' }}>
+              <GiEvilBook style={{ color: 'white', fontSize: 36 }} />
+            </div>
+          </Link>
+          {!!getUserUid() &&
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} >
+              {menuItems.map((item) => (
+                <Menu.Item key={item.key} icon={item.icon}>
+                  <Button onClick={() => handleMenuItemClick(item.key, item.link)} style={{ background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit" }}>{item.label}</Button>
+                </Menu.Item>
+              ))}
+              <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: '7%', left: 0 }}>
+                <Link to="/logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
+              </Menu.Item>
+            </Menu>}
+        </Sider>
+      )}
 
-      <Layout style={{ marginLeft: collapsed ? 50 : 170, transition: 'margin-left 0.3s' }}>
-        <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
-          <Space>
-            <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
-              <Button onClick={() => handleMenuItemClick(['0'])} style={{background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit"}}/>
+      <Layout style={{ marginLeft:  isLoginPage ? 0 : (collapsed ? 50 : 170), transition: 'margin-left 0.3s' }}>
+        {!isLoginPage && (
+          <Header style={{ padding: 0, background: colorBgContainer, height: '100px' }}>
+            <Space>
+              <Image src={HeaderLogo} preview={false} alt="Logo" style={{ height: '100px', marginLeft: '16px', verticalAlign: 'top' }} />
+              <Button onClick={() => handleMenuItemClick(['0'])} style={{ background: "none", color: "inherit", border: "none", padding: "0", font: "inherit", cursor: "pointer", outline: "inherit" }} />
               {!getUserUid() &&
-              <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 35, right: 30 }}>
-                Login
-              </Button>}
-          </Space>
-        </Header>
+                <Button type="primary" size="large" icon={<LoginOutlined />} style={{ position: 'absolute', top: 35, right: 30 }}>
+                  Login
+                </Button>}
+            </Space>
+          </Header>
+        )}
         <Content
           style={{
             paddingTop: 40,
@@ -143,7 +149,7 @@ const App = () => {
             justifyContent: 'center',
           }}
         >
-          <UserContext.Provider value={{getUserUid}}>
+          <UserContext.Provider value={{ getUserUid }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Enroll" element={<Enroll />} />
@@ -155,21 +161,23 @@ const App = () => {
             </Routes>
           </UserContext.Provider>
         </Content>
-        <Footer style={{
-           position: 'fixed',
-           bottom: 0,
-           width: '100%',
-           display: 'flex',
-           flexDirection: 'column',
-           alignItems: 'center',
-           justifyContent: 'center',
-           background: '#001529',
-           color: 'white',
-           padding: '15px',
-           marginLeft: '1%',
-        }}>
-          intelligent Course Management System ©2023 Created by Group 28
-        </Footer>
+        {!isLoginPage && (
+          <Footer style={{
+            position: 'fixed',
+            bottom: 0,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#001529',
+            color: 'white',
+            padding: '15px',
+            marginLeft: '1%',
+          }}>
+            intelligent Course Management System ©2023 Created by Group 28
+          </Footer>
+        )}
       </Layout>
     </Layout>
   );

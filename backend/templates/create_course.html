@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Course</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2>Create Course</h2>
+
+        <!-- Display existing courses -->
+        <h4>Existing Courses</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
+                    <th>Classroom</th>
+                    <th>Day</th>
+                    <th>Zoom Link</th>
+                    <th>Teacher Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in existing_courses %}
+                <tr>
+                    <td>{{ course[0] }}</td>
+                    <td>{{ course[1] }}</td>
+                    <td>{{ course[2] }}</td>
+                    <td>{{ course[5] }}</td>
+                    <td>{{ course[6] }}</td>
+                    <td>{{ course[7] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Create Course Form -->
+        <form method="post" action="/">
+            <div class="mb-3">
+                <label for="courseID" class="form-label">Course ID:</label>
+                <input type="text" class="form-control" id="courseID" name="courseID" required>
+            </div>
+            <div class="mb-3">
+                <label for="courseName" class="form-label">Course Name:</label>
+                <input type="text" class="form-control" id="courseName" name="courseName" required>
+            </div>
+            <div class="mb-3">
+                <label for="classroom" class="form-label">Classroom:</label>
+                <input type="text" class="form-control" id="classroom" name="classroom" required>
+            </div>
+            <div class="mb-3">
+                <label for="day" class="form-label">Day:</label>
+                <select class="form-select" id="day" name="day" required>
+                    <option value="Mon">Monday</option>
+                    <option value="Tue">Tuesday</option>
+                    <option value="Wed">Wednesday</option>
+                    <option value="Thu">Thursday</option>
+                    <option value="Fri">Friday</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="zoomLink" class="form-label">Zoom Link:</label>
+                <input type="text" class="form-control" id="zoomLink" name="zoomLink" required>
+            </div>
+            <div class="mb-3">
+                <label for="teacherName" class="form-label">Teacher Name:</label>
+                <input type="text" class="form-control" id="teacherName" name="teacherName" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Course</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies (Popper.js is not required in Bootstrap 5) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

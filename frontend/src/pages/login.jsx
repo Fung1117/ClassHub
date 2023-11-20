@@ -11,7 +11,7 @@ import { UserContext } from '../App';
 
 const { Title } = Typography;
 
-const Login = ({setUserUid, setMenuItemKey}) => {
+const Login = ({setUserUid}) => {
     const [loginMethod, setLoginMethod] = useState('password'); // Default to password login
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -39,11 +39,9 @@ const Login = ({setUserUid, setMenuItemKey}) => {
             console.log(data)
             if (data.length >= 0) {
                 navigate('/upcoming-course')
-                setMenuItemKey('3')
                 return
             }
             navigate('/');
-            setMenuItemKey('0')
         } else if (error) {
             setOpen(false);
             setLoading(false);
@@ -82,11 +80,9 @@ const Login = ({setUserUid, setMenuItemKey}) => {
                     const data = response.data;
                     if (data.length > 0) {
                         navigate('/upcoming-course')
-                        setMenuItemKey('3')
                         return
                     }
                     navigate('/')
-                    setMenuItemKey('0')
                 }, 2000);                
             } else {
                 setError(true);
@@ -111,11 +107,9 @@ const Login = ({setUserUid, setMenuItemKey}) => {
                     const data = response.data;
                     if (data.length > 0) {
                         navigate('/upcoming-course')
-                        setMenuItemKey('3')
                         return
                     }
                     navigate('/')
-                    setMenuItemKey('0')
                 }, 2000);
             } else {
                 setError(true);

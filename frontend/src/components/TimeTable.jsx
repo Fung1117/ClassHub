@@ -27,7 +27,7 @@ const TimeTable = () => {
         };
 
         fetchCourses();
-    }, [userContext]);
+    }, [userContext.getUserUid()]);
 
     const generateSemesterEvents = (scheduleData) => {
         const events = [];

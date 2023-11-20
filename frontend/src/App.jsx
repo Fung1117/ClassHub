@@ -147,7 +147,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Enroll" element={<Enroll />} />
-              <Route path="/Login" element={<Login setUserUid={setUserUid} />} />
+              <Route path="/Login" element={<Login setUserUid={setUserUid} setMenuItemKey={setSelectedKeys} />} />
               <Route path="/Timetable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />
               <Route path="/Statistic" element={<Statistic />} />

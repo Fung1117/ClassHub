@@ -15,7 +15,7 @@ const Home = () => {
                 <Flex justify="center" align="center" vertical gap={20} style={{ height: 650, width: '30%' }}>
                     <Card hoverable cover={<img src={Wellcome} height={200} />} style={{ height: 320, width: '100%' }} actions={[<RightOutlined key="setting" />]}>
                         <Meta
-                            title="If you have a class soon, find all the details—classroom, teacher's message, Zoom link, and materials—all in one place. Click to redirect or send the info to your email."
+                            title="If you have a class soon, find all the details—classroom, teacher's message, Zoom link, and materials—all in one place."
                         />
                     </Card>
                     <Card hoverable cover={<img src={Wellcome} height={200} />} style={{ height: 320, width: '100%' }} actions={[<RightOutlined key="setting" />]}>

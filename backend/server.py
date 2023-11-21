@@ -28,34 +28,6 @@ app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 # Initialize Flask-Mail
 mail = Mail(app)
 
-
-@app.route('/', methods=['GET', 'POST'])
-def manage_courses():
-    if request.method == 'POST':
-        # Handle form submission to create a new course
-        courseID = request.form['courseID']
-        courseName = request.form['courseName']
-        classroom = request.form['classroom']
-        day = request.form['day']
-        zoomLink = request.form['zoomLink']
-        teacherName = request.form['teacherName']
-
-        # Insert data into the 'course' table
-        cursor.execute('INSERT INTO course (courseID, course_name, classroom, day, zoomLink, teacher_name) VALUES (%s, %s, %s, %s, %s, %s)',
-                       (courseID, courseName, classroom, day, zoomLink, teacherName))
-        conn.commit()
-
-        # Redirect to the home page after creating the course
-        return redirect('/')
-
-    else:
-        # Fetch existing courses from the database
-        cursor.execute('SELECT * FROM course')
-        existing_courses = cursor.fetchall()
-
-        return render_template('create_course.html', existing_courses=existing_courses)
-
-
 @app.route('/Login', methods=['POST'])
 def Login():
     login_data = request.json
@@ -224,6 +196,32 @@ def LastLogin():
 def Logout():
 
     pass
+
+
+@app.route('/backend/create_course', methods=['GET', 'POST'])
+def manage_courses():
+    if request.method == 'POST':
+        # Handle form submission to create a new course
+        courseID = request.form['courseID']
+        courseName = request.form['courseName']
+        classroom = request.form['classroom']
+        day = request.form['day']
+        zoomLink = request.form['zoomLink']
+        teacherName = request.form['teacherName']
+
+        # Insert data into the 'course' table
+        cursor.execute('INSERT INTO course (courseID, course_name, classroom, day, zoomLink, teacher_name) VALUES (%s, %s, %s, %s, %s, %s)',
+                       (courseID, courseName, classroom, day, zoomLink, teacherName))
+        conn.commit()
+        # Redirect to the home page after creating the course
+        return redirect('/')
+
+    else:
+        # Fetch existing courses from the database
+        cursor.execute('SELECT * FROM course')
+        existing_courses = cursor.fetchall()
+
+        return render_template('create_course.html', existing_courses=existing_courses)
 
 
 if __name__ == '__main__':

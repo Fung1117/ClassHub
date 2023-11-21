@@ -200,13 +200,17 @@ def Time():
     uid = request.args.get('uid')
     print(uid)
 
-    time_data = [100, 200, 300, 400, 150, 200,
-                 10, 100, 200, 300, 400, 150, 200, 10]
-    date_data = [
-        '11/11', '12/11', '13/11', '14/11', '15/11', '16/11',
-        '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
-        '16/10', '17/10'
-    ]
+    # time_data = [100, 200, 300, 400, 150, 200,
+    #              10, 100, 200, 300, 400, 150, 200, 10]
+    # date_data = [
+    #     '11/11', '12/11', '13/11', '14/11', '15/11', '16/11',
+    #     '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
+    #     '16/10', '17/10'
+    # ]
+    cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, date from time WHERE UID = %s order by date", [uid])
+    query = cursor.fetchall()
+    print(query)
+    time_data, date_data = zip(*query)
     return jsonify(time=time_data, date=date_data)
 
 

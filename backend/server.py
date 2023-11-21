@@ -1,3 +1,4 @@
+import datetime
 import time
 from flask import Flask, request, render_template, redirect, jsonify
 from flask_cors import CORS
@@ -48,11 +49,19 @@ def Login():
     DB_name = query[0][1]
     DB_password = query[0][2]
 
+    current_time = datetime.datetime.now()
+    today = current_time.strftime('%d/%m')
+    now = current_time.strftime('%H:%M')
+
+    print(today, now)
+
     if is_face:
         # Face login logic
         image = login_data.get('image')
         # Implement your face login verification here
         if recognize_face("FOX", image):
+            cursor.execute('update time set login_time = %s, date = %s where UID = %s', [now, today, DB_UID])
+            conn.commit()
             return jsonify({'success': True, 'UID': DB_UID, 'Name': DB_name})
         else:
             return jsonify({'success': False, 'message': 'Face not recognized'})
@@ -60,6 +69,8 @@ def Login():
         input_password = login_data.get('password')
         print(email, input_password)
         if input_password == DB_password:
+            cursor.execute('update time set login_time = %s, date = %s where UID = %s', [now, today, DB_UID])
+            conn.commit()
             return jsonify({'success': True, 'UID': DB_UID, 'Name': DB_name})
         else:
             return jsonify({'success': False, 'message': 'Wrong password'})
@@ -211,7 +222,12 @@ def LastLogin():
 
 @app.route('/Logout', methods=['POST'])
 def Logout():
-
+    logout_data = request.json
+    DB_UID = logout_data.get('uid')
+    current_time = datetime.datetime.now()
+    now = current_time.strftime('%H:%M')
+    cursor.execute('update time set logout_time = %s, where UID = %s', [now, DB_UID])
+    conn.commit()
     pass
 
 

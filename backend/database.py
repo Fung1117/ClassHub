@@ -76,6 +76,7 @@ conn.commit()
 users = [
     {'UID': '3035928287', 'name': 'Fung Gor', 'email': 'fung@connect.hku.hk', 'password': "12345678"},
     {'UID': '3035926447', 'name': 'P', 'email': 'pilottam@connect.hku.hk', 'password': "12345678"},
+    {'UID': '3035926758', 'name': 'FOX', 'email': 'foxhui71@connect.hku.hk', 'password': "12345678"},
 ]
 
 add_user = ('insert into user (UID, name, email, password) values (%s, %s, %s, %s)')
@@ -92,6 +93,17 @@ studies = [
 add_study = ('insert into study (UID, courseID) values (%s, %s)')
 for study in studies:
     cursor.execute(add_study, (study['UID'], study['courseID']))
+conn.commit()
+
+time = [
+    {"UID": '3035928287', "login_time": "09:30", "logout_time": "10:20", "date": "11/11"},
+    {"UID": '3035926447', "login_time": "10:30", "logout_time": "11:20", "date": "12/11"},
+    {"UID": '3035926758', "login_time": "11:30", "logout_time": "12:20", "date": "13/11"},
+]
+
+add_time = ('insert into time (UID, login_time, logout_time, date) values (%s, %s, %s, %s)')
+for t in time:
+    cursor.execute(add_time, (t['UID'], t['login_time'], t['logout_time'], t['date']))
 conn.commit()
 
 cursor.close()

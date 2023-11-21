@@ -34,8 +34,9 @@ const DropCourse = () => {
 
     const handleDropConfirm = async (courseId) => {
         try {
+            const course = currentCourses.find(course => course.id === courseId);
             const response = await axios.post(`${import.meta.env.VITE_API_URL}drop`, {
-                courseId: courseId,
+                courseId: course['title'],
             });
 
             const result = response.data;

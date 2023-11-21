@@ -122,6 +122,8 @@ def drop_course():
     data = request.get_json()
     course_id = data.get("courseId")
     # drop course here pls by sql
+    cursor.execute("DELETE FROM study WHERE UID = %s AND courseID = %s", ['3035926447', course_id])
+    conn.commit()    
     return jsonify({"success": True, "message": "Course dropped successfully"})
 
 

@@ -36,22 +36,33 @@ def Login():
     login_data = request.json
     is_face = login_data.get('isFace', False)
     email = login_data.get('email')
+
+    cursor.execute('select UID, name, password from user where email = %s', [email])
+    query = cursor.fetchall()
+    if query == []:
+        return jsonify({'success': False, 'message': 'User not found'})
+    print(query)
+
+    # result of query
+    DB_UID = query[0][0]
+    DB_name = query[0][1]
+    DB_password = query[0][2]
+
     if is_face:
         # Face login logic
         image = login_data.get('image')
         # Implement your face login verification here
-        name = 'fox'
-        if recognize_face(name, image):
-            return jsonify({'success': True, 'UID': 1, 'Name': 'Fung'})
+        if recognize_face("FOX", image):
+            return jsonify({'success': True, 'UID': DB_UID, 'Name': DB_name})
         else:
-            return jsonify({'success': False})
+            return jsonify({'success': False, 'message': 'Face not recognized'})
     else:
-        password = login_data.get('password')
-        print(email, password)
-        if email == "example@example.com" and password == "123456":
-            return jsonify({'success': True, 'UID': 1, 'Name': 'Fung'})
+        input_password = login_data.get('password')
+        print(email, input_password)
+        if input_password == DB_password:
+            return jsonify({'success': True, 'UID': DB_UID, 'Name': DB_name})
         else:
-            return jsonify({'success': False})
+            return jsonify({'success': False, 'message': 'Wrong password'})
 
 
 @app.route('/course', methods=['GET'])

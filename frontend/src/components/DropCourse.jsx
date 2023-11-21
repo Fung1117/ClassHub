@@ -20,6 +20,7 @@ const DropCourse = ({currentCourses, fetchCurrentCourses}) => {
             const course = currentCourses.find(course => course.id === courseId);
             const response = await axios.post(`${import.meta.env.VITE_API_URL}drop`, {
                 courseId: course['title'],
+                uid: userContext.getUserUid(),
             });
 
             const result = response.data;

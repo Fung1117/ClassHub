@@ -28,6 +28,7 @@ const AddCourse = ({availableCourses, fetchAvailableCourses}) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}enroll`, {
                 courseId: selectedCourse.uid,
+                uid: userContext.getUserUid(),
             });
 
             const result = response.data;

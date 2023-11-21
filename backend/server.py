@@ -62,7 +62,7 @@ def Login():
         if recognize_face("FOX", image):
             cursor.execute('update time set login_time = %s, date = %s where UID = %s', [now, today, DB_UID])
             conn.commit()
-            return jsonify({'success': True, 'UID': DB_UID, 'Name': DB_name})
+            return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
             return jsonify({'success': False, 'message': 'Face not recognized'})
     else:
@@ -71,7 +71,7 @@ def Login():
         if input_password == DB_password:
             cursor.execute('update time set login_time = %s, date = %s where UID = %s', [now, today, DB_UID])
             conn.commit()
-            return jsonify({'success': True, 'UID': DB_UID, 'Name': DB_name})
+            return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
             return jsonify({'success': False, 'message': 'Wrong password'})
 
@@ -86,7 +86,6 @@ def TimeTable():
     keys = ['ID', 'name', 'classroom', 'startTime',
             'endTime', 'day', 'zoomLink', 'teacher']
     courses = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
-    print(courses)
     return jsonify(courses)
 
 
@@ -106,7 +105,6 @@ def OneHrCourse():
     query = cursor.fetchall()
     if query == []:
         return jsonify([])
-    print(query)
     keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
     course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
     return jsonify(course)
@@ -133,12 +131,11 @@ def Messages():
 
 @app.route("/enroll", methods=["POST"])
 def enroll_course():
-    uid = request.args.get('uid')
     data = request.get_json()
+    uid = data.get('uid')
     course_id = data.get("courseId")
-    print(course_id)
     # add course here pls by sql
-    cursor.execute("insert into study (UID, courseID) values (%s, %s)", ["3035926447", course_id])
+    cursor.execute("insert into study (UID, courseID) values (%s, %s)", [uid, course_id])
     conn.commit()
     return jsonify({"success": True, "message": "Course enrolled successfully"})
 
@@ -146,9 +143,10 @@ def enroll_course():
 @app.route("/drop", methods=["POST"])
 def drop_course():
     data = request.get_json()
+    uid = data.get('uid')
     course_id = data.get("courseId")
     # drop course here pls by sql
-    cursor.execute("DELETE FROM study WHERE UID = %s AND courseID = %s", ['3035926447', course_id])
+    cursor.execute("DELETE FROM study WHERE UID = %s AND courseID = %s", [uid, course_id])
     conn.commit()    
     return jsonify({"success": True, "message": "Course dropped successfully"})
 
@@ -160,7 +158,7 @@ def get_current_courses():
     #     {"id": 2, "title": "History"},
     # ]
     uid = request.args.get('uid')
-    cursor.execute('select courseID from study where UID = %s', ['3035926447'])
+    cursor.execute('select courseID from study where UID = %s', [uid])
     query = cursor.fetchall()
     keys = ['title']
     current_courses = [{key: value for key,
@@ -186,7 +184,7 @@ def get_available_courses():
     # ]
     time.sleep(0.1)
     uid = request.args.get('uid')
-    cursor.execute('select * from course where courseID not in (select courseID from study where UID = %s)', ['3035926447'])
+    cursor.execute('select * from course where courseID not in (select courseID from study where UID = %s)', [uid])
     query = cursor.fetchall()
     keys = ['uid', 'courseName', 'classroom', 'startTime',
             'endTime', 'day', 'zoomLink', 'teacher']

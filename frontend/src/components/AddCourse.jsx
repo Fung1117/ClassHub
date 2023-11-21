@@ -6,34 +6,17 @@ import addCourseImage from '../assets/addCourse.svg';
 
 import { UserContext } from '../App';
 
-const AddCourse = () => {
-    const [availableCourses, setAvailableCourses] = useState([]);
+const AddCourse = ({availableCourses, fetchAvailableCourses}) => {
+    // const [availableCourses, setAvailableCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const userContext = useContext(UserContext);
-    const userUid = userContext.getUserUid();
 
     useEffect(() => {
         // Fetch available courses when the component mounts
         fetchAvailableCourses();
     }, []);
-
-    const fetchAvailableCourses = async () => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}get-available-courses`, {params:{uid: userContext.getUserUid()}});
-            const result = response.data;
-
-            if (result.availableCourses) {
-                setAvailableCourses(result.availableCourses);
-                setSelectedCourse(result.availableCourses[0]); // Set default selected course
-            } else {
-                console.error("Error fetching available courses:", result.message);
-            }
-        } catch (error) {
-            console.error("Error fetching available courses:", error);
-        }
-    };
 
     const handleMenuClick = (e) => {
         const selectedCourseId = parseInt(e.key, 10);

@@ -86,7 +86,7 @@ def train():
     recognizer.train(x_train, np.array(y_label))
     recognizer.save("train.yml")
 
-def recognize_face(image_data):
+def recognize_face(name, image_data):
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read("train.yml")
 
@@ -107,7 +107,7 @@ def recognize_face(image_data):
         roi_gray = gray[y: y + h, x: x + w]
         id_, conf = recognizer.predict(roi_gray)
 
-        if conf >= 60:
-            return labels[id_]
+        if conf >= 60 and labels[id_] == name:
+            return True
 
-    return None
+    return False

@@ -5,6 +5,9 @@ from flask_mail import Mail
 import mysql.connector
 from mysql.connector import errorcode
 from dotenv import load_dotenv
+
+from recognition import recognize_face
+
 import os
 
 # Load environment variables from .env file
@@ -37,7 +40,8 @@ def Login():
         # Face login logic
         image = login_data.get('image')
         # Implement your face login verification here
-        if True:
+        name = 'fox'
+        if recognize_face(name, image):
             return jsonify({'success': True, 'UID': 1, 'Name': 'Fung'})
         else:
             return jsonify({'success': False})

@@ -163,7 +163,7 @@ const Login = ({setUserUid}) => {
             </Form>
 
             <Modal
-                title="Basic Modal"
+                title="Basic Model"
                 open={open}
                 onOk={handleOk}
                 onCancel={handleCancel}

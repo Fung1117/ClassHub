@@ -145,8 +145,6 @@ def TimeTable():
 @app.route('/upcomingCourse', methods=['GET'])
 def OneHrCourse():
     uid = request.args.get('uid')
-    print(uid)
-
     # get closest upcoming course here
     now = time.strftime('%a %H:%M').split(" ")
     cursor.execute("select * from course "
@@ -160,6 +158,12 @@ def OneHrCourse():
         return jsonify([])
     keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
     course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
+    cursor.execute("select note from course_note where courseID = %s", ['CAES1000'])
+    query = cursor.fetchall()
+    if query:
+        course['resourceLink'] = [row[0] for row in query]
+    else:
+        course['resourceLink'] = []
     return jsonify(course)
     # return jsonify([{
     #     "uid": "COMP3278",
@@ -188,8 +192,9 @@ def Messages():
     #         "message": "Reminder: There will be a quiz on Monday. Prepare well!",
     #     },
     # ]
+    time.sleep(0.1)
     cursor.execute("select cm.courseID, cm.message, temp.teacher_name "
-                   "from course_message cm, (select c.courseID, c.teacher_name from course c, study s where s.UID = %s and s.courseID = c.courseID) as temp "
+                   "from course_message cm, (select c.courseID, c.teacher_name from course c, study s where s.UID = %s and s.courseID = c.courseID) temp "
                    "where temp.courseID = cm.courseID;", [uid])
     query = cursor.fetchall()
     print(query)

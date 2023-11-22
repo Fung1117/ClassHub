@@ -81,7 +81,7 @@ def TimeTable():
     uid = request.args.get('uid')
     print(uid)
 
-    cursor.execute('select * from course')
+    cursor.execute('select * from course where courseID in (select courseID from study where uid = %s)', [uid])
     query = cursor.fetchall()
     keys = ['ID', 'name', 'classroom', 'startTime',
             'endTime', 'day', 'zoomLink', 'teacher']

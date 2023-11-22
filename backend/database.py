@@ -86,6 +86,7 @@ users = [
     {'UID': '3035928287', 'name': 'Fung Gor', 'email': 'fung@connect.hku.hk', 'password': "12345678"},
     {'UID': '3035926447', 'name': 'P', 'email': 'pilottam@connect.hku.hk', 'password': "12345678"},
     {'UID': '3035926758', 'name': 'FOX', 'email': 'foxhui71@connect.hku.hk', 'password': "12345678"},
+    {'UID': '3035930797', 'name': 'Ian', 'email': 'iltlo@connect.hku.hk', 'password': "12345678"},
 ]
 
 add_user = ('insert into user (UID, name, email, password) values (%s, %s, %s, %s)')

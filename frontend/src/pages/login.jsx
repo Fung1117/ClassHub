@@ -142,9 +142,9 @@ const Login = ({setUserUid}) => {
             <Form name="login" onFinish={onFinish} style={{ width: 500 }}>
                 <Form.Item
                     name="email"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    rules={[{ required: true, message: 'Please input your email!' }]}
                 >
-                    <Input placeholder="Username" />
+                    <Input placeholder="Email" />
                 </Form.Item>
                 <Form.Item
                     name="password"

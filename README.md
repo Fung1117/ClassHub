@@ -1,5 +1,10 @@
 # database-project
 
+## Error:
+```shell
+  pip.exe install opencv-contrib-python --user
+```
+
 ## Prerequisites
 - Node.js: Install Node.js on your machine. You can download it from the official website: [Node.js Downloads](https://nodejs.org)
 

@@ -137,7 +137,7 @@ const App = () => {
                 </Menu.Item>
               ))}
               <Menu.Item key="6" icon={<LogoutOutlined />} style={{ position: 'absolute', bottom: '7%', left: 0 }}>
-                <Link to="/logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
+                <Link to="/Logout" onClick={() => handleMenuItemClick(['6'])}>Logout</Link>
               </Menu.Item>
             </Menu>}
         </Sider>

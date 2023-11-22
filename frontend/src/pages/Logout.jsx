@@ -1,13 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Image, Result } from 'antd';
 import logoutImage from '../assets/logout-image.svg';
 import axios from 'axios';
 
+import { UserContext } from '../App';
 
 const Logout = ({removeUserUid}) => {
 
+    const userContext = useContext(UserContext);
 
-    removeUserUid();
+    useEffect(() => {
+        axios.post(`${import.meta.env.VITE_API_URL}Logout`, {uid: userContext.getUserUid()})
+        removeUserUid();
+    }, [])
 
     return (
         <div>

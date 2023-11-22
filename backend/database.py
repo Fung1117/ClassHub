@@ -108,13 +108,17 @@ conn.commit()
 
 time = [
     {"UID": '3035928287', "login_time": "09:30", "logout_time": "10:20", "login_date": "11/11", "logout_date": "11/11"},
-    {"UID": '3035930797', "login_time": "11:30", "logout_time": "12:20", "login_date": "11/11", "logout_date": "11/11"},
     {"UID": '3035926447', "login_time": "10:30", "logout_time": "11:20", "login_date": "12/11", "logout_date": "12/11"},
-    {"UID": '3035930797', "login_time": "09:30", "logout_time": "12:20", "login_date": "13/11", "logout_date": "13/11"},
-    {"UID": '3035926758', "login_time": "11:30", "logout_time": "12:20", "login_date": "13/11", "logout_date": "13/11"},
-    {"UID": '3035926758', "login_time": "09:30", "logout_time": "12:20", "login_date": "15/11", "logout_date": "15/11"},
-    {"UID": '3035930797', "login_time": "13:30", "logout_time": "13:40", "login_date": "18/11", "logout_date": "18/11"},
-    {"UID": '3035926758', "login_time": "13:30", "logout_time": "13:40", "login_date": "20/11", "logout_date": "20/11"},
+    {"UID": '3035926758', "login_time": "21:18", "logout_time": "21:19", "login_date": "22/11", "logout_date": "22/11"},
+    {"UID": '3035930797', "login_time": "08:01", "logout_time": "12:41", "login_date": "21/11", "logout_date": "21/11"},
+    {"UID": '3035930797', "login_time": "22:50", "logout_time": "23:55", "login_date": "18/11", "logout_date": "18/11"},
+    {"UID": '3035930797', "login_time": "22:50", "logout_time": "23:55", "login_date": "18/11", "logout_date": "18/11"},
+    {"UID": '3035926758', "login_time": "22:58", "logout_time": "22:59", "login_date": "22/11", "logout_date": "22/11"},
+    {"UID": '3035926758', "login_time": "23:19", "logout_time": "23:20", "login_date": "22/11", "logout_date": "22/11"},
+    {"UID": '3035930797', "login_time": "17:20", "logout_time": "18:00", "login_date": "14/11", "logout_date": "14/11"},
+    {"UID": '3035930797', "login_time": "23:21", "logout_time": "02:08", "login_date": "13/11", "logout_date": "23/11"},
+    {"UID": '3035926758', "login_time": "23:50", "logout_time": "01:18", "login_date": "22/11", "logout_date": "23/11"},
+
 ]
 
 add_time = ('insert into time (UID, login_time, logout_time, login_date, logout_date) values (%s, %s, %s, %s, %s)')

@@ -111,8 +111,8 @@ def Login():
         # Face login logic
         image = login_data.get('image')
         # Implement your face login verification here
-        print(recognize_face("FOX", image))
-        if recognize_face("FOX", image):
+        print("sign in with face for ", DB_UID)
+        if recognize_face(DB_UID, image):
             cursor.execute('INSERT INTO time (login_time, login_date, UID) VALUES (%s, %s, %s)', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})

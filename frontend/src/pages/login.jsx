@@ -48,9 +48,10 @@ const Login = ({setUserUid, setUserEmail}) => {
             setOpen(false);
             setLoading(false);
             setError(false);
-        }
-        if (loading) {
+        } else if (loading) {
             setLoading(false);
+            const imageSrc = webcamRef.current.getScreenshot();
+            faceLogin(imageSrc);
         }
         const imageSrc = webcamRef.current.getScreenshot();
         faceLogin(imageSrc)

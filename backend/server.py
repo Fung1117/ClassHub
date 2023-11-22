@@ -243,13 +243,15 @@ def manage_courses():
         day = request.form['day']
         zoomLink = request.form['zoomLink']
         teacherName = request.form['teacherName']
+        startTime = request.form['startTime']
+        endTime = request.form['endTime']
 
         # Insert data into the 'course' table
-        cursor.execute('INSERT INTO course (courseID, course_name, classroom, day, zoomLink, teacher_name) VALUES (%s, %s, %s, %s, %s, %s)',
-                       (courseID, courseName, classroom, day, zoomLink, teacherName))
+        cursor.execute('INSERT INTO course (courseID, course_name, classroom, day, zoomLink, teacher_name, startTime, endTime) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
+                       (courseID, courseName, classroom, day, zoomLink, teacherName, startTime, endTime))
         conn.commit()
         # Redirect to the home page after creating the course
-        return redirect('/')
+        return redirect('/backend/create_course')
 
     else:
         # Fetch existing courses from the database

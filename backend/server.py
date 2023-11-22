@@ -176,19 +176,26 @@ def OneHrCourse():
 def Messages():
     uid = request.args.get('uid')
     print(uid)
-
-    messages = [
-        {
-            "courseUid": "COMP3330",
-            "teacher": "Teacher 1",
-            "message": "Hello students! Please submit your assignments by the end of this week.",
-        },
-        {
-            "courseUid": "COMP3330",
-            "teacher": "Teacher 2",
-            "message": "Reminder: There will be a quiz on Monday. Prepare well!",
-        },
-    ]
+    # messages = [
+    #     {
+    #         "courseUid": "COMP3330",
+    #         "teacher": "Teacher 1",
+    #         "message": "Hello students! Please submit your assignments by the end of this week.",
+    #     },
+    #     {
+    #         "courseUid": "COMP3330",
+    #         "teacher": "Teacher 2",
+    #         "message": "Reminder: There will be a quiz on Monday. Prepare well!",
+    #     },
+    # ]
+    cursor.execute("select cm.courseID, cm.message, temp.teacher_name "
+                   "from course_message cm, (select c.courseID, c.teacher_name from course c, study s where s.UID = %s and s.courseID = c.courseID) as temp "
+                   "where temp.courseID = cm.courseID;", [uid])
+    query = cursor.fetchall()
+    print(query)
+    keys = ['courseUid', 'message', 'teacher']
+    messages = [{key: value for key,
+                          value in zip(keys, tpl)} for tpl in query]
     return jsonify(messages)
 
 
@@ -280,8 +287,6 @@ def Time():
 @app.route('/last-login', methods=['GET'])
 def LastLogin():
     uid = request.args.get('uid')
-    print(uid)
-
     cursor.execute('select logout_time, logout_date from time where UID = %s order by logout_date DESC, logout_time DESC LIMIT 1', [uid])
     query = cursor.fetchall()
     if query == []:

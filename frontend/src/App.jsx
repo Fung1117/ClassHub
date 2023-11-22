@@ -31,9 +31,11 @@ const App = () => {
   //   localStorage.setItem('userUid', '123456789');
   // }, []);
 
-
   const location = useLocation();
   const navigate = useNavigate();
+  const getUserEmail = () => localStorage.getItem('userEmail');
+  const setUserEmail = (token) => localStorage.setItem('userEmail', token);
+  const removeUserEmail = () => localStorage.removeItem('userEmail')
   const getUserUid = () => localStorage.getItem('userUid');
   const setUserUid = (token) => localStorage.setItem('userUid', token);
   const removeUserUid = () => localStorage.removeItem('userUid')
@@ -169,15 +171,15 @@ const App = () => {
             justifyContent: 'center',
           }}
         >
-          <UserContext.Provider value={{ getUserUid }}>
+          <UserContext.Provider value={{ getUserUid, getUserEmail }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Enroll" element={<Enroll />} />
-              <Route path="/Login" element={<Login setUserUid={setUserUid}/>} />
+              <Route path="/Login" element={<Login setUserUid={setUserUid} setUserEmail={setUserEmail}/>} />
               <Route path="/TimeTable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />
               <Route path="/Statistic" element={<Statistic />} />
-              <Route path="/Logout" element={<Logout removeUserUid={removeUserUid} />} />
+              <Route path="/Logout" element={<Logout removeUserUid={removeUserUid} removeUserEmail={removeUserEmail} />} />
             </Routes>
           </UserContext.Provider>
         </Content>

@@ -3,8 +3,8 @@ import time
 from flask import Flask, request, render_template, redirect, jsonify
 from flask_cors import CORS
 from flask_mail import Mail
+from flask_mail import Message
 import mysql.connector
-from mysql.connector import errorcode
 from dotenv import load_dotenv
 
 from recognition import recognize_face
@@ -31,6 +31,58 @@ app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 
 # Initialize Flask-Mail
 mail = Mail(app)
+
+@app.route('/sendEmail', methods=['POST'])
+def SendEmail():
+    send_email_data = request.json
+    courseUid = send_email_data.get('courseUid')
+    email = send_email_data.get('email')
+    cursor.execute("""
+                   select name 
+                   from user 
+                   where email = %s
+                   """, [email])
+    query = cursor.fetchall()
+    conn.commit()
+    name = query[0][0]
+
+    cursor.execute("""
+                   select C.courseID, C.course_name, C.classroom, C.zoomLink, C.teacher_name, CN.note, CM.message
+                   from course C, course_note CN, course_message CM
+                   where C.courseID = CN.courseID and C.courseID = CM.courseID and C.courseID = %s
+                   """ [courseUid])
+    query = cursor.fetchall()
+    conn.commit()
+
+    courseID = query[0][0]
+    course_name = query[0][1]
+    classroom = query[0][2]
+    zoomLink = query[0][3]
+    teacher_name = query[0][4]
+    note = query[0][5]
+    message = query[0][6]
+
+    message = f"""
+    Dear {name},
+
+    You have a class coming up soon! Here are the details:
+    courseId: {courseID}
+    course_name: {course_name}
+    classroom: {classroom}
+    teacher_name: {teacher_name}
+    message: {message}
+    note: {note}
+
+    You can click the following link to join the class:
+    zoomLink: <a href={zoomLink}>{zoomLink}</a>
+
+    Best regards,
+    Your friendly reminder
+    """
+    subject = "Information about your upcoming courses"
+    msg = Message(recipients=email, body=message, subject=subject)
+
+    conn.send(msg)
 
 @app.route('/Login', methods=['POST'])
 def Login():
@@ -109,6 +161,16 @@ def OneHrCourse():
     keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
     course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
     return jsonify(course)
+    # return jsonify([{
+    #     "uid": "COMP3278",
+    #     "name": "Introduction to React",
+    #     "classroom": "Room 101",
+    #     "startTime": "09:30",
+    #     "endTime": "10:20",
+    #     "day": "Mon",
+    #     "zoomLink": "https://zoom.us/j/1234567890",
+    #     "teacher": "John Doe",
+    # }])
 
 @app.route('/messages', methods=['GET'])
 def Messages():

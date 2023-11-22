@@ -59,8 +59,9 @@ def Login():
         # Face login logic
         image = login_data.get('image')
         # Implement your face login verification here
+        print(recognize_face("FOX", image))
         if recognize_face("FOX", image):
-            cursor.execute('update time set login_time = %s, date = %s where UID = %s', [now, today, DB_UID])
+            cursor.execute('update time set login_time = %s, login_date = %s where UID = %s', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
@@ -218,17 +219,26 @@ def Time():
 def LastLogin():
     uid = request.args.get('uid')
     print(uid)
-    last_login = '2023-11-01 15:33:00'
+
+    cursor.execute('select logout_time, logout_date from time where UID = %s', [uid])
+    query = cursor.fetchall()
+    if query == []:
+        return jsonify({'lastLogin': None})
+    print(query)
+
+    last_login = f'{query[0][1]} {query[0][0]}'
     return jsonify({'lastLogin': last_login})
 
 
 @app.route('/Logout', methods=['POST'])
 def Logout():
+    print("logout")
     logout_data = request.json
     DB_UID = logout_data.get('uid')
     current_time = datetime.datetime.now()
+    date = current_time.strftime('%d/%m')
     now = current_time.strftime('%H:%M')
-    cursor.execute('update time set logout_time = %s, where UID = %s', [now, DB_UID])
+    cursor.execute('update time set logout_time = %s, logout_date, where UID = %s', [now, date, DB_UID])
     conn.commit()
     pass
 
@@ -260,6 +270,56 @@ def manage_courses():
 
         return render_template('create_course.html', existing_courses=existing_courses)
 
+@app.route('/backend/create_message', methods=['GET', 'POST'])
+def create_message():
+    if request.method == 'POST':
+        # Handle form submission to create a new message
+        courseID = request.form['courseID']
+        message = request.form['message']
+
+        # Insert data into the 'course_message' table
+        cursor.execute('INSERT INTO course_message (courseID, message) VALUES (%s, %s)', (courseID, message))
+        conn.commit()
+
+        # Redirect to the home page or another appropriate page
+        return redirect('/backend/create_message')
+
+    else:
+        cursor.execute('SELECT courseID FROM course')
+        existing_courses = cursor.fetchall()
+        existing_courses = [course[0] for course in existing_courses]
+
+        cursor.execute('SELECT * FROM course_message')
+        existing_messages = cursor.fetchall()
+
+        # Render the create_message.html template for GET requests
+        return render_template('create_message.html', existing_courses=existing_courses, existing_messages=existing_messages)
+
+@app.route('/backend/create_note', methods=['GET', 'POST'])
+def create_note():
+    if request.method == 'POST':
+        # Handle form submission to create a new note
+        courseID = request.form['courseID']
+        note = request.form['note']
+
+        # Insert data into the 'course_note' table
+        cursor.execute('INSERT INTO course_note (courseID, note) VALUES (%s, %s)', (courseID, note))
+        conn.commit()
+
+        # Redirect to the home page or another appropriate page
+        return redirect('/backend/create_note')
+
+    else:
+        cursor.execute('SELECT courseID FROM course')
+        existing_courses = cursor.fetchall()
+        existing_courses = [course[0] for course in existing_courses]
+
+        cursor.execute('SELECT * FROM course_note')
+        existing_notes = cursor.fetchall()
+        
+
+        # Render the create_note.html template for GET requests
+        return render_template('create_note.html', existing_courses=existing_courses, existing_notes=existing_notes)
 
 if __name__ == '__main__':
     app.run(debug=True)

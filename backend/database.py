@@ -43,7 +43,8 @@ TABLES['time'] = ('create table time ('
                   'UID varchar(10),'
                   'login_time varchar(10),'
                   'logout_time varchar(10),'
-                  'date varchar(10),'
+                  'login_date varchar(10),'
+                  'logout_date varchar(10),'
                   'FOREIGN KEY(UID) REFERENCES user(UID))')
 
 for table_name in TABLES:
@@ -96,14 +97,14 @@ for study in studies:
 conn.commit()
 
 time = [
-    {"UID": '3035928287', "login_time": "09:30", "logout_time": "10:20", "date": "11/11"},
-    {"UID": '3035926447', "login_time": "10:30", "logout_time": "11:20", "date": "12/11"},
-    {"UID": '3035926758', "login_time": "11:30", "logout_time": "12:20", "date": "13/11"},
+    {"UID": '3035928287', "login_time": "09:30", "logout_time": "10:20", "login_date": "11/11", "logout_date": "11/11"},
+    {"UID": '3035926447', "login_time": "10:30", "logout_time": "11:20", "login_date": "12/11", "logout_date": "12/11"},
+    {"UID": '3035926758', "login_time": "11:30", "logout_time": "12:20", "login_date": "13/11", "logout_date": "13/11"},
 ]
 
-add_time = ('insert into time (UID, login_time, logout_time, date) values (%s, %s, %s, %s)')
+add_time = ('insert into time (UID, login_time, logout_time, login_date, logout_date) values (%s, %s, %s, %s, %s)')
 for t in time:
-    cursor.execute(add_time, (t['UID'], t['login_time'], t['logout_time'], t['date']))
+    cursor.execute(add_time, (t['UID'], t['login_time'], t['logout_time'], t['login_date'], t['logout_time']))
 conn.commit()
 
 cursor.close()

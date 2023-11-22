@@ -113,7 +113,7 @@ def Login():
         # Implement your face login verification here
         print(recognize_face("FOX", image))
         if recognize_face("FOX", image):
-            cursor.execute('update time set login_time = %s, login_date = %s where UID = %s', [now, today, DB_UID])
+            cursor.execute('INSERT INTO time (login_time, login_date, UID) VALUES (%s, %s, %s)', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
@@ -122,7 +122,7 @@ def Login():
         input_password = login_data.get('password')
         print(email, input_password)
         if input_password == DB_password:
-            cursor.execute('update time set login_time = %s, login_date = %s where UID = %s', [now, today, DB_UID])
+            cursor.execute('INSERT INTO time (login_time, login_date, UID) VALUES (%s, %s, %s)', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
@@ -270,11 +270,11 @@ def Time():
     #     '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
     #     '16/10', '17/10'
     # ]
-    cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, login_date from time WHERE UID = %s order by login_date", [uid])
+    cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, login_date from time WHERE UID = %s and logout_time is not null order by login_date DESC LIMIT 10", [uid])
     query = cursor.fetchall()
     print(query)
     time_data, date_data = zip(*query)
-    return jsonify(time=time_data, date=date_data)
+    return jsonify(time=time_data[::-1], date=date_data[::-1])
 
 
 @app.route('/last-login', methods=['GET'])
@@ -282,7 +282,7 @@ def LastLogin():
     uid = request.args.get('uid')
     print(uid)
 
-    cursor.execute('select logout_time, logout_date from time where UID = %s', [uid])
+    cursor.execute('select logout_time, logout_date from time where UID = %s order by logout_date DESC, logout_time DESC LIMIT 1', [uid])
     query = cursor.fetchall()
     if query == []:
         return jsonify({'lastLogin': None})
@@ -301,7 +301,9 @@ def Logout():
     current_time = datetime.datetime.now()
     date = current_time.strftime('%d/%m')
     now = current_time.strftime('%H:%M')
-    cursor.execute('update time set logout_time = %s, logout_date = %s where UID = %s', [now, date, DB_UID])
+    cursor.execute("select login_time from time where UID = %s order by login_time desc limit 1", [DB_UID])
+    login = cursor.fetchone()[0]
+    cursor.execute("update time set logout_time = %s, logout_date = %s where UID = %s and login_time = %s", [now, date, DB_UID, login])
     conn.commit()
     return jsonify([])
 

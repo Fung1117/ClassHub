@@ -108,6 +108,8 @@ time = [
     {"UID": '3035928287', "login_time": "09:30", "logout_time": "10:20", "login_date": "11/11", "logout_date": "11/11"},
     {"UID": '3035926447', "login_time": "10:30", "logout_time": "11:20", "login_date": "12/11", "logout_date": "12/11"},
     {"UID": '3035926758', "login_time": "11:30", "logout_time": "12:20", "login_date": "13/11", "logout_date": "13/11"},
+    {"UID": '3035926758', "login_time": "09:30", "logout_time": "12:20", "login_date": "15/11", "logout_date": "15/11"},
+    {"UID": '3035926758', "login_time": "13:30", "logout_time": "13:40", "login_date": "20/11", "logout_date": "20/11"},
 ]
 
 add_time = ('insert into time (UID, login_time, logout_time, login_date, logout_date) values (%s, %s, %s, %s, %s)')

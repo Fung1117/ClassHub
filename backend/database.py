@@ -104,7 +104,7 @@ time = [
 
 add_time = ('insert into time (UID, login_time, logout_time, login_date, logout_date) values (%s, %s, %s, %s, %s)')
 for t in time:
-    cursor.execute(add_time, (t['UID'], t['login_time'], t['logout_time'], t['login_date'], t['logout_time']))
+    cursor.execute(add_time, (t['UID'], t['login_time'], t['logout_time'], t['login_date'], t['logout_date']))
 conn.commit()
 
 cursor.close()

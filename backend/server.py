@@ -7,7 +7,7 @@ from flask_mail import Message
 import mysql.connector
 from dotenv import load_dotenv
 
-from recognition import recognize_face
+from recognition import *
 
 import os
 
@@ -83,6 +83,37 @@ def SendEmail():
     msg = Message(recipients=email, body=message, subject=subject)
 
     conn.send(msg)
+
+@app.route('/Register', methods=['POST'])
+def Register():
+    try:
+        data = request.get_json()
+
+        # Adding UID to the user data
+        uid = data.get('uid')
+        name = data.get('name')
+        email = data.get('email')
+        password = data.get('password')
+        captured_images = data.get('capturedImages')
+
+
+        save_images(name, captured_images)
+        print('done image')
+        train()
+        
+        # Insert user data into the database
+        cursor.execute(
+            "INSERT INTO user (UID, name, email, password) VALUES (%s, %s, %s, %s)",
+            (uid, name, email, password)
+        )
+        # Commit the transaction
+        conn.commit()
+
+        return jsonify({'success': True, 'message': 'Registration successful!'})
+    except Exception as e:
+        print(str(e))
+        return jsonify({'success': False, 'message': 'Error during registration'})
+        
 
 @app.route('/Login', methods=['POST'])
 def Login():

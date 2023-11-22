@@ -7,6 +7,7 @@ import CourseInformation from './pages/CourseInformation';
 import Statistic from './pages/Statistics';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
+import Register from './pages/Register';
 import OneHrCourse from './pages/OneHrCourse';
 import {
   HomeOutlined,
@@ -40,12 +41,12 @@ const App = () => {
   const setUserUid = (token) => localStorage.setItem('userUid', token);
   const removeUserUid = () => localStorage.removeItem('userUid')
   useEffect(() => {
-    if (location.pathname != '/Login' && !getUserUid()) {
-      navigate('/Login')
-      setSelectedKeys(['1'])
+    if (location.pathname !== '/Login' && location.pathname !== '/register' && !getUserUid()) {
+      navigate('/Login');
+      setSelectedKeys(['1']);
     }
-    if (location.pathname == '/Login' && !!getUserUid()) {
-      navigate('/')
+    if ((location.pathname === '/Login' || location.pathname === '/register') && !!getUserUid()) {
+      navigate('/');
     }
     console.log(location.pathname)
     switch (location.pathname) {
@@ -86,7 +87,7 @@ const App = () => {
     }
   }, []);
 
-  const isLoginPage = location.pathname === '/Login';
+  const isLoginPage = location.pathname === '/Login' || location.pathname === '/register';
 
   const menuItems = [
     { key: '1', icon: <HomeOutlined />, label: 'DashBoard', link: '/' },
@@ -175,6 +176,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Enroll" element={<Enroll />} />
+              <Route path="/Register" element={<Register />} />
               <Route path="/Login" element={<Login setUserUid={setUserUid} setUserEmail={setUserEmail}/>} />
               <Route path="/TimeTable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />

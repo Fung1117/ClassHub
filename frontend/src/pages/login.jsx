@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Input, Button, Typography, Image, Flex, Modal, Spin, Result } from 'antd';
 import Webcam from "react-webcam";
@@ -12,19 +12,19 @@ import { Loading } from 'mdi-material-ui';
 
 const { Title } = Typography;
 
-const Login = ({setUserUid, setUserEmail}) => {
+const Login = ({ setUserUid, setUserEmail }) => {
     const [loginMethod, setLoginMethod] = useState('password'); // Default to password login
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
-    const [DBmessage, setDBmessage ] = useState('Fail to connect database !!');
+    const [DBmessage, setDBmessage] = useState('Fail to connect database !!');
 
     const webcamRef = useRef(null);
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
-    
+
     const toggleLoginMethod = () => {
         setLoginMethod((prevMethod) => (prevMethod === 'password' ? 'faceId' : 'password'));
     };
@@ -36,7 +36,7 @@ const Login = ({setUserUid, setUserEmail}) => {
     const handleOk = async () => {
         if (success) {
             setOpen(false);
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, { params: { uid: userContext.getUserUid() } });
             const data = response.data;
             console.log(data)
             if (data.length >= 0) {
@@ -83,7 +83,7 @@ const Login = ({setUserUid, setUserEmail}) => {
                 setSuccess(true);
                 setUserEmail(email);
                 setUserUid(data.uid);
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, { params: { uid: userContext.getUserUid() } });
                 setTimeout(() => {
                     const data = response.data;
                     if (data.length > 0) {
@@ -91,7 +91,7 @@ const Login = ({setUserUid, setUserEmail}) => {
                         return
                     }
                     navigate('/')
-                }, 2000);                
+                }, 2000);
             } else {
                 setError(true);
             }
@@ -112,7 +112,7 @@ const Login = ({setUserUid, setUserEmail}) => {
                 setSuccess(true);
                 setUserEmail(email);
                 setUserUid(data.uid);
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, { params: { uid: userContext.getUserUid() } });
                 setTimeout(() => {
                     const data = response.data;
                     if (data.length > 0) {
@@ -202,6 +202,9 @@ const Login = ({setUserUid, setUserEmail}) => {
                     )}
                 </Flex>
             </Modal>
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                Don't have an account? <Link to="/register">Register here</Link>
+            </div>
         </Flex>
     );
 };

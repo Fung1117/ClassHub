@@ -3,10 +3,13 @@ import numpy as np
 import base64
 import os
 import pickle
+from PIL import Image
 
 def save_images(user_name, images):
-    if not os.path.exists("data/{}".format(user_name)):
-        os.mkdir("data/{}".format(user_name))
+    user_folder = os.path.join("data", user_name)
+
+    if not os.path.exists(user_folder):
+        os.makedirs(user_folder)
 
     font = cv2.FONT_HERSHEY_SIMPLEX
     bottomLeftCornerOfText = (350, 50)
@@ -17,29 +20,37 @@ def save_images(user_name, images):
     cnt = 1
 
     for image in images:
-        # Decode base64 to bytes
-        image_bytes = base64.b64decode(image)
+        try:
+            # Decode base64 to bytes
+            image_bytes = base64.b64decode(image)
 
-        # Convert bytes to numpy array
-        nparr = np.frombuffer(image_bytes, np.uint8)
+            # Convert bytes to numpy array
+            nparr = np.frombuffer(image_bytes, np.uint8)
 
-        # Decode numpy array to OpenCV BGR format
-        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # Decode numpy array to OpenCV BGR format
+            frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-        msg = "Saving {}'s Face Data [{}/{}]".format(
-            user_name, cnt, len(images))
-        cv2.putText(frame, msg,
-                    bottomLeftCornerOfText,
-                    font,
-                    fontScale,
-                    fontColor,
-                    lineType)
+            print(frame)
 
-        # Store the captured images in `data/Jack`
-        cv2.imwrite(
-            "data/{}/{}{:03d}.jpg".format(user_name, user_name, cnt), gray)  # Save as grayscale
-        cnt += 1
+            if frame is not None:  # Check if the image is successfully loaded
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+                msg = "Saving {}'s Face Data [{}/{}]".format(
+                    user_name, cnt, len(images))
+                cv2.putText(frame, msg,
+                            bottomLeftCornerOfText,
+                            font,
+                            fontScale,
+                            fontColor,
+                            lineType)
+
+                # Store the captured images
+                image_path = os.path.join(user_folder, f"{user_name}{cnt:03d}.jpg")
+                print(image_path)
+                cv2.imwrite(image_path, gray)  # Save as grayscale
+                cnt += 1
+        except Exception as e:
+            print(f"Error processing image: {str(e)}")
 
     cv2.destroyAllWindows()
 
@@ -68,7 +79,6 @@ def train():
                     label_ids[label] = current_id
                     current_id += 1
                 id_ = label_ids[label]
-                print(label_ids)
 
                 pil_image = Image.open(path).convert("L")
                 image_array = np.array(pil_image, "uint8")

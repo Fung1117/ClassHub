@@ -7,8 +7,16 @@ import os
 load_dotenv()
 
 conn = mysql.connector.connect(
-    user='root', password=os.getenv("DB_PASSWORD"), database='project')  # local mysql
+    user='root', password=os.getenv("DB_PASSWORD"))  # local mysql
 cursor = conn.cursor()
+cursor.execute("show databases like \'project\'")
+# check if project database exists and delete it
+if cursor.fetchall():
+    cursor.execute("drop database project")
+    conn.commit()
+
+cursor.execute("create database project")
+cursor.execute("use project")
 
 TABLES = {}
 TABLES['user'] = ('create table user ('

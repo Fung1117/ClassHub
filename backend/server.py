@@ -70,7 +70,7 @@ def Login():
         input_password = login_data.get('password')
         print(email, input_password)
         if input_password == DB_password:
-            cursor.execute('update time set login_time = %s, date = %s where UID = %s', [now, today, DB_UID])
+            cursor.execute('update time set login_time = %s, login_date = %s where UID = %s', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
@@ -208,7 +208,7 @@ def Time():
     #     '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
     #     '16/10', '17/10'
     # ]
-    cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, date from time WHERE UID = %s order by date", [uid])
+    cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, login_date from time WHERE UID = %s order by login_date", [uid])
     query = cursor.fetchall()
     print(query)
     time_data, date_data = zip(*query)

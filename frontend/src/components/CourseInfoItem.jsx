@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
 import { Card, Flex, Result, Space, Button, notification } from 'antd';
 import CountdownClock from 'react-countdown-clock';
 import {
@@ -11,12 +12,15 @@ import classImage from '../assets/class.svg';
 import courseImage from '../assets/course.svg';
 import timeImage from '../assets/time.svg';
 
+import { UserContext } from '../App';
+
 const { Meta } = Card;
 
 const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceLink }) => {
     const [color, setColor] = useState('#1E90FF');
     const [countdownComplete, setCountdownComplete] = useState(false)
     const [api, contextHolder] = notification.useNotification();
+    const userContext = useContext(UserContext);
     const openNotification = () => {
         api.open({
             message: 'Your class is starting soon!',
@@ -39,8 +43,13 @@ const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceL
         }
     }, [timeLeft]);
 
-    const OnSendEmail = () => {
-        // TODO: send email
+    const OnSendEmail = async () => {
+        console.log("send email")
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, {uid: userContext.getUserUid(), courseUid: courseTitle});
+        if (response.status == 200)
+            alert("email sent!")
+        else
+            console.log("send email failed")
     }
 
     return (
@@ -72,7 +81,7 @@ const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceL
                             type="primary"
                             size="large"
                             icon={<MailOutlined />}
-                            onClick={() => {OnSendEmail}}
+                            onClick={OnSendEmail}
                         >
                             Send Email
                         </Button>

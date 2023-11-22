@@ -43,6 +43,7 @@ const OneHrCourse = () => {
         const fetchUpcomingCourses = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
+                console.log(response);
                 const data = response.data[0];
                 console.log(data);
                 if (isEmpty(data)) return;

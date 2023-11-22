@@ -32,6 +32,14 @@ app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 # Initialize Flask-Mail
 mail = Mail(app)
 
+@app.route('/sendEmail', methods=['POST'])
+def SendEmail():
+    send_email_data = request.json
+    email = send_email_data.get('uid')
+    print("send email")
+    print(email)
+    return jsonify([])
+
 @app.route('/Login', methods=['POST'])
 def Login():
     login_data = request.json

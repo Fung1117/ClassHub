@@ -311,7 +311,7 @@ def Logout():
     current_time = datetime.datetime.now()
     date = current_time.strftime('%d/%m')
     now = current_time.strftime('%H:%M')
-    cursor.execute("select login_time from time where UID = %s order by login_time desc limit 1", [DB_UID])
+    cursor.execute("select login_time from time where UID = %s order by login_date desc, login_time desc limit 1", [DB_UID])
     login = cursor.fetchone()[0]
     cursor.execute("update time set logout_time = %s, logout_date = %s where UID = %s and login_time = %s", [now, date, DB_UID, login])
     conn.commit()

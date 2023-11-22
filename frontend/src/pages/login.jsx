@@ -12,7 +12,7 @@ import { Loading } from 'mdi-material-ui';
 
 const { Title } = Typography;
 
-const Login = ({setUserUid, setUserEmail}) => {
+const Login = ({setUserUid, setUserEmail, setUserName}) => {
     const [loginMethod, setLoginMethod] = useState('password'); // Default to password login
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -82,6 +82,7 @@ const Login = ({setUserUid, setUserEmail}) => {
             if (data.success) {
                 setSuccess(true);
                 setUserEmail(email);
+                setUserName(data.Name);
                 setUserUid(data.uid);
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
                 setTimeout(() => {
@@ -111,6 +112,7 @@ const Login = ({setUserUid, setUserEmail}) => {
             if (data.success) {
                 setSuccess(true);
                 setUserEmail(email);
+                setUserName(data.Name);
                 setUserUid(data.uid);
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}upcomingCourse`, {params:{uid: userContext.getUserUid()}});
                 setTimeout(() => {

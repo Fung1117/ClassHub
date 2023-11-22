@@ -59,8 +59,9 @@ def Login():
         # Face login logic
         image = login_data.get('image')
         # Implement your face login verification here
+        print(recognize_face("FOX", image))
         if recognize_face("FOX", image):
-            cursor.execute('update time set login_time = %s, date = %s where UID = %s', [now, today, DB_UID])
+            cursor.execute('update time set login_time = %s, login_date = %s where UID = %s', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
@@ -218,17 +219,26 @@ def Time():
 def LastLogin():
     uid = request.args.get('uid')
     print(uid)
-    last_login = '2023-11-01 15:33:00'
+
+    cursor.execute('select logout_time, logout_date from time where UID = %s', [uid])
+    query = cursor.fetchall()
+    if query == []:
+        return jsonify({'lastLogin': None})
+    print(query)
+
+    last_login = f'{query[0][1]} {query[0][0]}'
     return jsonify({'lastLogin': last_login})
 
 
 @app.route('/Logout', methods=['POST'])
 def Logout():
+    print("logout")
     logout_data = request.json
     DB_UID = logout_data.get('uid')
     current_time = datetime.datetime.now()
+    date = current_time.strftime('%d/%m')
     now = current_time.strftime('%H:%M')
-    cursor.execute('update time set logout_time = %s, where UID = %s', [now, DB_UID])
+    cursor.execute('update time set logout_time = %s, logout_date, where UID = %s', [now, date, DB_UID])
     conn.commit()
     pass
 

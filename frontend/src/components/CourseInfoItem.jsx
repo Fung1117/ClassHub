@@ -16,7 +16,7 @@ import { UserContext } from '../App';
 
 const { Meta } = Card;
 
-const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceLink }) => {
+const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLink }) => {
     const [color, setColor] = useState('#1E90FF');
     const [countdownComplete, setCountdownComplete] = useState(false)
     const [api, contextHolder] = notification.useNotification();
@@ -45,7 +45,7 @@ const CourseInfoItem = ({ courseName: courseTitle, timeLeft, zoomLink, resourceL
 
     const OnSendEmail = async () => {
         console.log("send email")
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, {uid: userContext.getUserUid(), email: userContext.getUserEmail()});
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, {email: userContext.getUserEmail(), courseUid: courseUid});
         if (response.status == 200)
             alert("email sent!")
         else

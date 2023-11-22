@@ -65,7 +65,8 @@ const OneHrCourse = () => {
         <>
         {oneHrCourseExist && 
             <CourseInfoItem
-                courseName={`${course.uid} ${course.name}`}
+                courseTitle={`${course.uid} ${course.name}`}
+                courseUid={course.uid}
                 timeLeft={timeLeft}
                 zoomLink={course.zoomLink}
                 resourceLink={course.resourceLink}

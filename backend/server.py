@@ -233,14 +233,14 @@ def LastLogin():
 @app.route('/Logout', methods=['POST'])
 def Logout():
     print("logout")
-    logout_data = request.json
-    DB_UID = logout_data.get('uid')
+    uid = request.args.get('uid')
+    print(uid)
     current_time = datetime.datetime.now()
     date = current_time.strftime('%d/%m')
     now = current_time.strftime('%H:%M')
-    cursor.execute('update time set logout_time = %s, logout_date, where UID = %s', [now, date, DB_UID])
+    cursor.execute('update time set logout_time = %s, logout_date = %s where UID = %s', [now, date, uid])
     conn.commit()
-    pass
+    return jsonify([])
 
 
 @app.route('/backend/create_course', methods=['GET', 'POST'])

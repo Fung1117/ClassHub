@@ -7,6 +7,7 @@ import {
     SmileOutlined,
     VideoCameraOutlined,
     ReadOutlined,
+    FilePdfOutlined,
 } from '@ant-design/icons';
 import classImage from '../assets/class.svg';
 import courseImage from '../assets/course.svg';
@@ -142,7 +143,13 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
             >
                 <List
                     dataSource={resourceLink}
-                    renderItem={(item) => <List.Item>{item}</List.Item>}
+                    renderItem={(item, index) => (
+                        <List.Item>
+                            <a href={item} target="_blank" rel="noopener noreferrer">
+                                <FilePdfOutlined /> {`Note material ${index + 1}`}
+                            </a>
+                        </List.Item>
+                    )}
                 />
             </Modal>
         </Flex>

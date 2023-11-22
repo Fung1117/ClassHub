@@ -158,12 +158,12 @@ def OneHrCourse():
         return jsonify([])
     keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
     course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
-    cursor.execute("select note from course_note where courseID = %s", ['CAES1000'])
+    cursor.execute("select note from course_note where courseID = %s", [course[0]['uid']])
     query = cursor.fetchall()
     if query:
-        course['resourceLink'] = [row[0] for row in query]
+        course[0]['resourceLink'] = [row[0] for row in query]
     else:
-        course['resourceLink'] = []
+        course[0]['resourceLink'] = []
     return jsonify(course)
     # return jsonify([{
     #     "uid": "COMP3278",

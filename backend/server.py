@@ -35,8 +35,10 @@ mail = Mail(app)
 @app.route('/sendEmail', methods=['POST'])
 def SendEmail():
     send_email_data = request.json
-    email = send_email_data.get('uid')
+    uid = send_email_data.get('uid')
+    email = send_email_data.get('email')
     print("send email")
+    print(uid)
     print(email)
     return jsonify([])
 
@@ -113,7 +115,16 @@ def OneHrCourse():
                    "limit 1", [now[0], now[1], uid])
     query = cursor.fetchall()
     if query == []:
-        return jsonify([])
+        return jsonify([{
+            'uid': 'COMP3278',
+            'name': 'No upcoming course',
+            'classroom': 'room 101',
+            'startTime': '09:30',
+            'endTime': '10:20',
+            'day': 'Mon',
+            'zoomLink': 'https://zoom.us/j/1234567890?pwd=QWERTYUIOP',
+            'teacher': 'John Doe'
+        }])
     keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
     course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
     return jsonify(course)

@@ -13,6 +13,7 @@ import courseImage from '../assets/course.svg';
 import timeImage from '../assets/time.svg';
 
 import { UserContext } from '../App';
+import { ConsoleNetworkOutline } from 'mdi-material-ui';
 
 const { Meta } = Card;
 
@@ -44,12 +45,25 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
     }, [timeLeft]);
 
     const OnSendEmail = async () => {
-        console.log("send email")
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, {email: userContext.getUserEmail(), courseUid: courseUid});
-        if (response.status == 200)
-            alert("email sent!")
-        else
-            console.log("send email failed")
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, {email: userContext.getUserEmail(), courseUid: courseUid});
+            if (response.status === 200) {
+                notification.success({
+                    message: 'Success',
+                    description: 'Email sent!',
+                });
+            } else {
+                notification.error({
+                    message: 'Error',
+                    description: 'Failed to send email. Please try again.',
+                });
+            }
+        } catch (error) {
+            notification.error({
+                message: 'Error',
+                description: 'An error occurred. Please try again later.',
+            });
+        }
     }
 
     return (

@@ -8,6 +8,7 @@ import loginImage from '../assets/password-login.svg';
 import faceLoginImage from '../assets/face-login.svg'
 
 import { UserContext } from '../App';
+import { Loading } from 'mdi-material-ui';
 
 const { Title } = Typography;
 
@@ -18,6 +19,7 @@ const Login = ({setUserUid}) => {
     const [email, setEmail] = useState('');
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const [DBmessage, setDBmessage ] = useState('Fail to connect database !!');
 
     const webcamRef = useRef(null);
     const navigate = useNavigate();
@@ -47,13 +49,16 @@ const Login = ({setUserUid}) => {
             setLoading(false);
             setError(false);
         }
-        setLoading(true);
+        if (loading) {
+            setLoading(false);
+        }
         const imageSrc = webcamRef.current.getScreenshot();
         faceLogin(imageSrc)
     };
 
     const handleCancel = () => {
         setOpen(false);
+        setLoading(false);
     };
 
     const onFinish = (values) => {
@@ -71,6 +76,7 @@ const Login = ({setUserUid}) => {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}Login`, { isFace: false, email: email, password: password });
             const data = response.data;
             console.log('Backend Response:', data);
+            setDBmessage(data.message);
             setLoading(false);
             if (data.success) {
                 setSuccess(true);
@@ -99,6 +105,7 @@ const Login = ({setUserUid}) => {
             const data = response.data;
             console.log('Backend Response:', data);
             setLoading(false);
+            setDBmessage(data.message);
             if (data.success) {
                 setSuccess(true);
                 setUserUid(data.uid);
@@ -173,12 +180,12 @@ const Login = ({setUserUid}) => {
                     {success ? (
                         <Result
                             status={'success'}
-                            title={'Face Captured Successfully!'}
+                            title={DBmessage}
                         />
                     ) : error ? (
                         <Result
                             status={'warning'}
-                            title={'Wrong Face!'}
+                            title={DBmessage}
                         />
                     ) : loading ? (
                         <Spin size="large" />

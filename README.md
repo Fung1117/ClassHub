@@ -46,4 +46,25 @@
      ```shell
      yarn run dev
      ```
-2. The development server will start, and you will see the URL where your app is running, http://localhost:5173. 
+2. The development server will start, and you will see the URL where your app is running, http://localhost:5173.
+
+### Initialize the database
+1. Navigate to backend directory:
+```shell
+  cd ../backend
+```
+2. We use local MySQL as database. Set "DB_PASSWORD" in the .env file to your password.
+3. Run the database.py file:
+```shell
+  python database.py
+```
+
+### Start the backend server
+1. Install the required packages:
+```shell
+  pip install -r requirements.txt
+```
+2. Start the Flask server:
+```shell
+  python server.py
+```

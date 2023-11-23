@@ -23,66 +23,75 @@ app = Flask(__name__)
 CORS(app)
 
 # Configure Flask-Mail
-app.config['MAIL_SERVER'] = 'smtp.office365.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
-app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'fakefungking@gmail.com'
+app.config['MAIL_PASSWORD'] = 'nrspafpukjezfrwe'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
 # Initialize Flask-Mail
 mail = Mail(app)
 
-# @app.route('/sendEmail', methods=['POST'])
-# def SendEmail():
-#     send_email_data = request.json
-#     courseUid = send_email_data.get('courseUid')
-#     email = send_email_data.get('email')
-#     cursor.execute("""
-#                    select name 
-#                    from user 
-#                    where email = %s
-#                    """, [email])
-#     query = cursor.fetchall()
-#     conn.commit()
-#     name = query[0][0]
+@app.route('/sendEmail', methods=['POST'])
+def SendEmail():
+    print("send email")
+    
+    send_email_data = request.json
+    courseUid = send_email_data.get('courseUid')
+    email = send_email_data.get('email')
 
-#     cursor.execute("""
-#                    select C.courseID, C.course_name, C.classroom, C.zoomLink, C.teacher_name, CN.note, CM.message
-#                    from course C, course_note CN, course_message CM
-#                    where C.courseID = CN.courseID and C.courseID = CM.courseID and C.courseID = %s
-#                    """ [courseUid])
-#     query = cursor.fetchall()
-#     conn.commit()
+    print(courseUid, email)
 
-#     courseID = query[0][0]
-#     course_name = query[0][1]
-#     classroom = query[0][2]
-#     zoomLink = query[0][3]
-#     teacher_name = query[0][4]
-#     note = query[0][5]
-#     message = query[0][6]
+    cursor.execute("select name "
+                   "from user " 
+                   "where email = %s", [email])
+    query = cursor.fetchall()
+    
+    #print(query)
+    
+    name = query[0][0]
+    
+    cursor.execute("select C.courseID, C.course_name, C.classroom, C.zoomLink, C.teacher_name, CN.note, CM.message "
+                   "from course C, course_note CN, course_message CM " 
+                   "where C.courseID = CN.courseID and C.courseID = CM.courseID and C.courseID = %s ", [courseUid])
 
-#     message = f"""
-#     Dear {name},
+    query = cursor.fetchall()
 
-#     You have a class coming up soon! Here are the details:
-#     courseId: {courseID}
-#     course_name: {course_name}
-#     classroom: {classroom}
-#     teacher_name: {teacher_name}
-#     message: {message}
-#     note: {note}
+    #print(query)
 
-#     You can click the following link to join the class:
-#     zoomLink: <a href={zoomLink}>{zoomLink}</a>
+    courseID = query[0][0]
+    course_name = query[0][1]
+    classroom = query[0][2]
+    zoomLink = query[0][3]
+    teacher_name = query[0][4]
+    note = query[0][5]
+    message = query[0][6]
 
-#     Best regards,
-#     Your friendly reminder
-#     """
-#     subject = "Information about your upcoming courses"
-#     msg = Message(recipients=email, body=message, subject=subject)
+    message = f"""
+Dear {name},
 
-#     conn.send(msg)
+You have a class coming up soon! Here are the details:
+courseId: {courseID}
+course_name: {course_name}
+classroom: {classroom}
+teacher_name: {teacher_name}
+message: {message}
+note: {note}
+
+You can click the following link to join the class: (if available)
+zoomLink: {zoomLink}
+
+Best regards,
+Your friendly reminder
+"""
+
+    msg = Message('Upcoming Course Info', sender = 'noreply@gmail.com', recipients = [email])
+    msg.body = message
+
+    mail.send(msg)
+
+    return jsonify({'success': True})
 
 @app.route('/Login', methods=['POST'])
 def Login():

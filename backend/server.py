@@ -400,8 +400,6 @@ def create_note():
 
         cursor.execute('SELECT * FROM course_note')
         existing_notes = cursor.fetchall()
-        
-
         # Render the create_note.html template for GET requests
         return render_template('create_note.html', existing_courses=existing_courses, existing_notes=existing_notes)
 

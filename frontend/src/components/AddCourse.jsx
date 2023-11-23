@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext} from 'react';
-import { Card, Dropdown, Button, Menu, Modal } from 'antd';
+import { notification, Card, Dropdown, Button, Menu, Modal } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import addCourseImage from '../assets/addCourse.svg';
@@ -9,7 +9,6 @@ import { UserContext } from '../App';
 const AddCourse = ({availableCourses, fetchAvailableCourses}) => {
     // const [availableCourses, setAvailableCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
-    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const userContext = useContext(UserContext);
 
@@ -34,22 +33,18 @@ const AddCourse = ({availableCourses, fetchAvailableCourses}) => {
             const result = response.data;
 
             if (result.success) {
+
                 fetchAvailableCourses(); // Update available courses after enrolling
-                setIsModalVisible(true);
+                notification.success({
+                    message: 'Enrollment Success',
+                    description: 'You have successfully enrolled in the course.',
+                });
             } else {
                 console.error(result.message);
             }
         } catch (error) {
             console.error('Error enrolling in the course:', error);
         }
-    };
-
-    const handleEnrollModalOk = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleEnrollModalCancel = () => {
-        setIsModalVisible(false);
     };
 
     return (
@@ -82,7 +77,7 @@ const AddCourse = ({availableCourses, fetchAvailableCourses}) => {
         >
             {selectedCourse && (
                 <Card.Meta
-                    title={selectedCourse.courseName}
+                    title={`${selectedCourse.uid} ${selectedCourse.courseName}`}
                     description={
                         <div>
                             <p><strong>Teacher:</strong> {selectedCourse.teacher}</p>
@@ -93,15 +88,6 @@ const AddCourse = ({availableCourses, fetchAvailableCourses}) => {
                     }
                 />
             )}
-
-            <Modal
-                title={`Enroll in ${selectedCourse ? selectedCourse.courseName : ''}`}
-                visible={isModalVisible}
-                onOk={handleEnrollModalOk}
-                onCancel={handleEnrollModalCancel}
-            >
-                <p>{`Enrolled in ${selectedCourse ? selectedCourse.courseName : ''} successfully!`}</p>
-            </Modal>
         </Card>
     );
 };

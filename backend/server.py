@@ -187,7 +187,11 @@ def OneHrCourse():
     # get closest upcoming course here
     now = time.strftime('%a %H:%M').split(" ")
     cursor.execute("select * from course "
-                   "limit 1")
+                   "where day = %s and "
+                   "startTime > %s and "
+                   "courseID in (select courseID from study where UID = %s) "
+                   "order by startTime "
+                   "limit 1", [now[0], now[1], uid])
     query = cursor.fetchall()
     if query == []:
         return jsonify([])

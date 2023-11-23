@@ -50,7 +50,7 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
     const OnSendEmail = async () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, { email: userContext.getUserEmail(), courseUid: courseUid });
-            if (response.status === 200) {
+            if (response.success) {
                 notification.success({
                     message: 'Success',
                     description: 'Email sent!',

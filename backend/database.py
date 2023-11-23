@@ -139,10 +139,10 @@ conn.commit()
 
 # add course note
 notes = [
-    {"courseID": 'CAES1000', "note": "Welcome to CAES1000!"},
-    {"courseID": 'CAES1000', "note": "We will have our first lecture on the coming Monday. See you!"},
-    {"courseID": 'COMP3278', "note": "Database managemnet is fun!"},
-    {"courseID": 'COMP1111', "note": "Don't skip my lectures!"},
+    {"courseID": 'CAES1000', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3162701"},
+    {"courseID": 'CAES1000', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3176147"},
+    {"courseID": 'COMP3278', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3100447"},
+    {"courseID": 'COMP1111', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3067672"},
 ]
 add_note = ('insert into course_note (courseID, note) values (%s, %s)')
 for note in notes:

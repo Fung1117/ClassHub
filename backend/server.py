@@ -2,8 +2,7 @@ import datetime
 import time
 from flask import Flask, request, render_template, redirect, jsonify
 from flask_cors import CORS
-from flask_mail import Mail
-from flask_mail import Message
+from flask_mail import Mail, Message
 import mysql.connector
 from dotenv import load_dotenv
 
@@ -48,6 +47,9 @@ def SendEmail():
                    "where email = %s", [email])
     query = cursor.fetchall()
     
+    if query == []:
+        return jsonify({'success': False})
+
     #print(query)
     
     name = query[0][0]
@@ -57,6 +59,9 @@ def SendEmail():
                    "where C.courseID = CN.courseID and C.courseID = CM.courseID and C.courseID = %s ", [courseUid])
 
     query = cursor.fetchall()
+
+    if query == []:
+        return jsonify({'success': False})
 
     #print(query)
 
@@ -400,8 +405,6 @@ def create_note():
 
         cursor.execute('SELECT * FROM course_note')
         existing_notes = cursor.fetchall()
-        
-
         # Render the create_note.html template for GET requests
         return render_template('create_note.html', existing_courses=existing_courses, existing_notes=existing_notes)
 

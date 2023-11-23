@@ -14,7 +14,7 @@
     <h2>Existing Notes:</h2>
     <ul>
         {% for note in existing_notes %}
-            <li>Course ID: {{ note.courseID }} | Note: {{ note.note }}</li>
+            <li>Course ID: {{ note[0] }} | Note: {{ note[1] }}</li>
         {% endfor %}
     </ul>
 

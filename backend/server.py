@@ -34,14 +34,11 @@ mail = Mail(app)
 
 @app.route('/sendEmail', methods=['POST'])
 def SendEmail():
-    print("send email")
     
     send_email_data = request.json
-    #courseUid = send_email_data.get('courseUid')
-    courseUid = "CAES1000"
+    courseUid = send_email_data.get('courseUid')
     email = send_email_data.get('email')
 
-    print(courseUid, email)
 
     cursor.execute("select name "
                    "from user " 
@@ -204,33 +201,10 @@ def OneHrCourse():
     else:
         course[0]['resourceLink'] = []
     return jsonify(course)
-    # return jsonify([{
-    #     "uid": "COMP3278",
-    #     "name": "Introduction to React",
-    #     "classroom": "Room 101",
-    #     "startTime": "09:30",
-    #     "endTime": "10:20",
-    #     "day": "Mon",
-    #     "zoomLink": "https://zoom.us/j/1234567890",
-    #     "teacher": "John Doe",
-    # }])
 
 @app.route('/messages', methods=['GET'])
 def Messages():
     uid = request.args.get('uid')
-    print(uid)
-    # messages = [
-    #     {
-    #         "courseUid": "COMP3330",
-    #         "teacher": "Teacher 1",
-    #         "message": "Hello students! Please submit your assignments by the end of this week.",
-    #     },
-    #     {
-    #         "courseUid": "COMP3330",
-    #         "teacher": "Teacher 2",
-    #         "message": "Reminder: There will be a quiz on Monday. Prepare well!",
-    #     },
-    # ]
     time.sleep(0.1)
     cursor.execute("select cm.courseID, cm.message, temp.teacher_name "
                    "from course_message cm, (select c.courseID, c.teacher_name from course c, study s where s.UID = %s and s.courseID = c.courseID) temp "
@@ -267,10 +241,6 @@ def drop_course():
 
 @app.route("/get-current-courses", methods=["GET"])
 def get_current_courses():
-    # current_courses = [
-    #     {"id": 1, "title": "Mathematics"},
-    #     {"id": 2, "title": "History"},
-    # ]
     uid = request.args.get('uid')
     cursor.execute('select courseID from study where UID = %s', [uid])
     query = cursor.fetchall()
@@ -284,18 +254,6 @@ def get_current_courses():
 
 @app.route("/get-available-courses", methods=["GET"])
 def get_available_courses():
-    # available_courses = [
-    #     {
-    #         "id": 1,
-    #         "uid": "COMP3214",
-    #         "courseName": "Introduction to React",
-    #         "teacher": "John Doe",
-    #         "startTime": "09:30",
-    #         "endTime": "10:20",
-    #         "day": "Mon",
-    #         "classroom": "Room 101",
-    #     },
-    # ]
     time.sleep(0.1)
     uid = request.args.get('uid')
     cursor.execute('select * from course where courseID not in (select courseID from study where UID = %s)', [uid])
@@ -312,15 +270,6 @@ def get_available_courses():
 @app.route('/Time', methods=['GET'])
 def Time():
     uid = request.args.get('uid')
-    print(uid)
-
-    # time_data = [100, 200, 300, 400, 150, 200,
-    #              10, 100, 200, 300, 400, 150, 200, 10]
-    # date_data = [
-    #     '11/11', '12/11', '13/11', '14/11', '15/11', '16/11',
-    #     '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
-    #     '16/10', '17/10'
-    # ]
     cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, login_date from time WHERE UID = %s and logout_time is not null order by login_date DESC LIMIT 10", [uid])
     query = cursor.fetchall()
     print(query)

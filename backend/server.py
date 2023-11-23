@@ -37,7 +37,8 @@ def SendEmail():
     print("send email")
     
     send_email_data = request.json
-    courseUid = send_email_data.get('courseUid')
+    #courseUid = send_email_data.get('courseUid')
+    courseUid = "CAES1000"
     email = send_email_data.get('email')
 
     print(courseUid, email)
@@ -47,33 +48,47 @@ def SendEmail():
                    "where email = %s", [email])
     query = cursor.fetchall()
     
+    name = query[0][0]
+    
     if query == []:
         return jsonify({'success': False})
 
-    #print(query)
-    
-    name = query[0][0]
-    
-    cursor.execute("select C.courseID, C.course_name, C.classroom, C.zoomLink, C.teacher_name, CN.note, CM.message "
-                   "from course C, course_note CN, course_message CM " 
-                   "where C.courseID = CN.courseID and C.courseID = CM.courseID and C.courseID = %s ", [courseUid])
+    cursor.execute("select courseID, course_name, classroom, zoomLink, teacher_name "
+                   "from course "
+                   "where courseID = %s", [courseUid])
 
     query = cursor.fetchall()
 
     if query == []:
         return jsonify({'success': False})
 
-    #print(query)
-
     courseID = query[0][0]
     course_name = query[0][1]
     classroom = query[0][2]
     zoomLink = query[0][3]
     teacher_name = query[0][4]
-    note = query[0][5]
-    message = query[0][6]
 
-    message = f"""
+    cursor.execute("select note "
+                   "from course_note "
+                   "where courseID = %s", [courseUid])
+    query = cursor.fetchall()
+    
+    if query == []:
+        return jsonify({'success': False})
+    note = query
+    print("note", note)
+
+    cursor.execute("select message "
+                   "from course_message "
+                   "where courseID = %s", [courseUid])
+    query = cursor.fetchall()
+    
+    if query == []:
+        return jsonify({'success': False})
+    message = query
+    print("message", message)
+
+    email_content = f"""
 Dear {name},
 
 You have a class coming up soon! Here are the details:
@@ -81,18 +96,28 @@ courseId: {courseID}
 course_name: {course_name}
 classroom: {classroom}
 teacher_name: {teacher_name}
-message: {message}
-note: {note}
 
 You can click the following link to join the class: (if available)
 zoomLink: {zoomLink}
+"""
 
+    for i in range(len(note)):
+        email_content += f"""
+Note {i+1}: {note[i][0]}
+"""
+
+    for i in range(len(message)):
+        email_content += f"""
+Message {i+1}: {message[i][0]}
+"""
+
+    email_content += """
 Best regards,
 Your friendly reminder
 """
 
     msg = Message('Upcoming Course Info', sender = 'noreply@gmail.com', recipients = [email])
-    msg.body = message
+    msg.body = email_content
 
     mail.send(msg)
 
@@ -162,11 +187,7 @@ def OneHrCourse():
     # get closest upcoming course here
     now = time.strftime('%a %H:%M').split(" ")
     cursor.execute("select * from course "
-                   "where day = %s and "
-                   "startTime > %s and "
-                   "courseID in (select courseID from study where UID = %s) "
-                   "order by startTime "
-                   "limit 1", [now[0], now[1], uid])
+                   "limit 1")
     query = cursor.fetchall()
     if query == []:
         return jsonify([])

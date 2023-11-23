@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext} from 'react';
-import { Card, Button, Modal } from 'antd';
+import { notification, Card, Button, Modal } from 'antd';
 import axios from 'axios';
 
 import dropCourseImage from '../assets/dropCourse.svg';
@@ -28,8 +28,15 @@ const DropCourse = ({currentCourses, fetchCurrentCourses}) => {
             if (result.success) {
                 fetchCurrentCourses(); // Update current courses after dropping
                 setVisible(false);
+                notification.success({
+                    message: 'Course Dropped',
+                    description: 'You have successfully dropped the course.',
+                });
             } else {
-                console.error(result.message);
+                notification.error({
+                    message: 'Drop Failed',
+                    description: result.message || 'An error occurred during the drop operation.',
+                });
             }
         } catch (error) {
             console.error('Error dropping the course:', error);

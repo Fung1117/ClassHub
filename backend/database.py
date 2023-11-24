@@ -67,19 +67,20 @@ for table_name in TABLES:
             print(err.msg)
     else:
         print("OK")
-
 courses = [
-    { 'day': 'Mon', 'startTime': '09:30', 'endTime': '10:20', 'ID': 'MATH1851', 'name': 'Math', 'teacher': 'T1', 'classroom': 'RM100' },
-    { 'day': 'Tue', 'startTime': '10:30', 'endTime': '11:20', 'ID': 'CAES1000', 'name': 'English', 'teacher': 'T2', 'classroom': 'RM101' },
-    { 'day': 'Wed', 'startTime': '11:30', 'endTime': '12:20', 'ID': 'PHYS1240', 'name': 'Physics', 'teacher': 'T3', 'classroom': 'RM102' },
-    { 'day': 'Thu', 'startTime': '12:30', 'endTime': '14:20', 'ID': 'CHEM1340', 'name': 'Chemistry', 'teacher': 'T4', 'classroom': 'RM103' },
-    { 'day': 'Fri', 'startTime': '14:30', 'endTime': '15:20', 'ID': 'CCGL9007', 'name': 'common core', 'teacher': 'T5', 'classroom': 'RM104' },
+    { 'day': 'Mon', 'startTime': '09:30', 'endTime': '10:20', 'ID': 'MATH1851', 'name': 'Math', 'teacher': 'T1', 'classroom': 'RM100', 'zoomLink': "https://hku.zoom.us/j/98307568693?pwd=QmlqZERWeDdWRVZ3SGdqWG51YUtndz09" },
+    { 'day': 'Tue', 'startTime': '10:30', 'endTime': '11:20', 'ID': 'CAES1000', 'name': 'English', 'teacher': 'T2', 'classroom': 'RM101', 'zoomLink': "https://hku.zoom.us/j/98307568693?pwd=QmlqZERWeDdWRVZ3SGdqWG51YUtndz09" },
+    { 'day': 'Wed', 'startTime': '11:30', 'endTime': '12:20', 'ID': 'PHYS1240', 'name': 'Physics', 'teacher': 'T3', 'classroom': 'RM102', 'zoomLink': "https://hku.zoom.us/j/98307568693?pwd=QmlqZERWeDdWRVZ3SGdqWG51YUtndz09" },
+    { 'day': 'Thu', 'startTime': '12:30', 'endTime': '14:20', 'ID': 'CHEM1340', 'name': 'Chemistry', 'teacher': 'T4', 'classroom': 'RM103', 'zoomLink': "https://hku.zoom.us/j/98307568693?pwd=QmlqZERWeDdWRVZ3SGdqWG51YUtndz09" },
+    { 'day': 'Fri', 'startTime': '14:30', 'endTime': '15:20', 'ID': 'CCGL9007', 'name': 'common core', 'teacher': 'T5', 'classroom': 'RM104', 'zoomLink': "https://hku.zoom.us/j/98307568693?pwd=QmlqZERWeDdWRVZ3SGdqWG51YUtndz09" },
+    { 'day': 'Thu', 'startTime': '15:30', 'endTime': '16:20', 'ID': 'COMP3278', 'name': 'Database management', 'teacher': 'T10', 'classroom': 'RM105', 'zoomLink': "https://hku.zoom.us/j/98307568693?pwd=QmlqZERWeDdWRVZ3SGdqWG51YUtndz09" },
+    { 'day': 'Thu', 'startTime': '04:30', 'endTime': '05:20', 'ID': 'COMP1111', 'name': 'Good grade management', 'teacher': 'T11', 'classroom': 'RM111', 'zoomLink': "https://hku.zoom.us/j/98307568693?pwd=QmlqZERWeDdWRVZ3SGdqWG51YUtndz09"},
     # Add more courses as needed
 ]
 
-add_course = ('insert into course (courseID, course_name, classroom, startTime, endTime, day, teacher_name) values (%s, %s, %s, %s, %s, %s, %s)')
+add_course = ('insert into course (courseID, course_name, classroom, startTime, endTime, day, teacher_name, zoomLink) values (%s, %s, %s, %s, %s, %s, %s, %s)')
 for course in courses:
-    cursor.execute(add_course, (course['ID'], course['name'], course['classroom'], course['startTime'], course['endTime'], course['day'], course['teacher']))
+    cursor.execute(add_course, (course['ID'], course['name'], course['classroom'], course['startTime'], course['endTime'], course['day'], course['teacher'], course['zoomLink']))
 conn.commit()
 
 users = [
@@ -104,17 +105,50 @@ add_study = ('insert into study (UID, courseID) values (%s, %s)')
 for study in studies:
     cursor.execute(add_study, (study['UID'], study['courseID']))
 conn.commit()
-
 time = [
     {"UID": '3035928287', "login_time": "09:30", "logout_time": "10:20", "login_date": "11/11", "logout_date": "11/11"},
     {"UID": '3035926447', "login_time": "10:30", "logout_time": "11:20", "login_date": "12/11", "logout_date": "12/11"},
-    {"UID": '3035926758', "login_time": "11:30", "logout_time": "12:20", "login_date": "13/11", "logout_date": "13/11"},
+    {"UID": '3035926758', "login_time": "21:18", "logout_time": "21:19", "login_date": "22/11", "logout_date": "22/11"},
+    {"UID": '3035930797', "login_time": "08:01", "logout_time": "09:13", "login_date": "21/11", "logout_date": "21/11"},
+    {"UID": '3035930797', "login_time": "22:50", "logout_time": "23:55", "login_date": "18/11", "logout_date": "18/11"},
+    {"UID": '3035930797', "login_time": "22:50", "logout_time": "23:55", "login_date": "18/11", "logout_date": "18/11"},
+    {"UID": '3035926758', "login_time": "22:58", "logout_time": "22:59", "login_date": "22/11", "logout_date": "22/11"},
+    {"UID": '3035926758', "login_time": "23:19", "logout_time": "23:20", "login_date": "22/11", "logout_date": "22/11"},
+    {"UID": '3035930797', "login_time": "17:20", "logout_time": "18:00", "login_date": "14/11", "logout_date": "14/11"},
+    {"UID": '3035930797', "login_time": "23:11", "logout_time": "23:59", "login_date": "13/11", "logout_date": "13/11"},
+    {"UID": '3035926758', "login_time": "23:50", "logout_time": "01:18", "login_date": "22/11", "logout_date": "23/11"},
+
 ]
 
 add_time = ('insert into time (UID, login_time, logout_time, login_date, logout_date) values (%s, %s, %s, %s, %s)')
 for t in time:
     cursor.execute(add_time, (t['UID'], t['login_time'], t['logout_time'], t['login_date'], t['logout_date']))
 conn.commit()
+
+messages = [
+    {"courseID": 'CAES1000', "message": "Welcome to CAES1000!"},
+    {"courseID": 'CAES1000', "message": "We will have our first lecture on the coming Monday. See you!"},
+    {"courseID": 'COMP3278', "message": "Database managemnet is fun!"},
+    {"courseID": 'COMP1111', "message": "Add oil!"},
+]
+
+add_message = ('insert into course_message (courseID, message) values (%s, %s)')
+for message in messages:
+    cursor.execute(add_message, [message['courseID'], message['message']])
+conn.commit()
+
+# add course note
+notes = [
+    {"courseID": 'CAES1000', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3162701"},
+    {"courseID": 'CAES1000', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3176147"},
+    {"courseID": 'COMP3278', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3100447"},
+    {"courseID": 'COMP1111', "note": "https://moodle.hku.hk/mod/resource/view.php?id=3067672"},
+]
+add_note = ('insert into course_note (courseID, note) values (%s, %s)')
+for note in notes:
+    cursor.execute(add_note, [note['courseID'], note['note']])
+conn.commit()
+
 
 cursor.close()
 conn.close()

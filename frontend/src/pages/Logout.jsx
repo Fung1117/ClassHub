@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { UserContext } from '../App';
 
-const Logout = ({removeUserUid, removeUserEmail}) => {
+const Logout = ({removeUserUid, removeUserEmail, removeUserName}) => {
 
     const userContext = useContext(UserContext);
 
@@ -13,6 +13,7 @@ const Logout = ({removeUserUid, removeUserEmail}) => {
         axios.post(`${import.meta.env.VITE_API_URL}Logout`, {uid: userContext.getUserUid()})
         removeUserUid();
         removeUserEmail();
+        removeUserName();
     }, [])
 
     return (

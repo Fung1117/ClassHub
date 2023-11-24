@@ -34,6 +34,9 @@ const App = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const getUserName = () => localStorage.getItem('userName');
+  const setUserName = (token) => localStorage.setItem('userName', token);
+  const removeUserName = () => localStorage.removeItem('userName')
   const getUserEmail = () => localStorage.getItem('userEmail');
   const setUserEmail = (token) => localStorage.setItem('userEmail', token);
   const removeUserEmail = () => localStorage.removeItem('userEmail')
@@ -48,7 +51,7 @@ const App = () => {
     if ((location.pathname === '/Login' || location.pathname === '/register') && !!getUserUid()) {
       navigate('/');
     }
-    console.log(location.pathname)
+    console.log(location.pathname);
     switch (location.pathname) {
       case '/':
         setSelectedKeys(['1'])
@@ -112,7 +115,6 @@ const App = () => {
 
     setSelectedKeys(key);
     localStorage.setItem('selectedKey', key);
-    console.log(link);
     navigate(link);
   };
 
@@ -172,7 +174,7 @@ const App = () => {
             justifyContent: 'center',
           }}
         >
-          <UserContext.Provider value={{ getUserUid, getUserEmail }}>
+          <UserContext.Provider value={{ getUserUid, getUserEmail, getUserName }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Enroll" element={<Enroll />} />
@@ -181,7 +183,7 @@ const App = () => {
               <Route path="/TimeTable" element={<CourseInformation />} />
               <Route path="/upcoming-course" element={<OneHrCourse />} />
               <Route path="/Statistic" element={<Statistic />} />
-              <Route path="/Logout" element={<Logout removeUserUid={removeUserUid} removeUserEmail={removeUserEmail} />} />
+              <Route path="/Logout" element={<Logout removeUserUid={removeUserUid} removeUserEmail={removeUserEmail} removeUserName={removeUserName}/>} />
             </Routes>
           </UserContext.Provider>
         </Content>

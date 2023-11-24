@@ -2,8 +2,7 @@ import datetime
 import time
 from flask import Flask, request, render_template, redirect, jsonify
 from flask_cors import CORS
-from flask_mail import Mail
-from flask_mail import Message
+from flask_mail import Mail, Message
 import mysql.connector
 from dotenv import load_dotenv
 
@@ -23,66 +22,103 @@ app = Flask(__name__)
 CORS(app)
 
 # Configure Flask-Mail
-app.config['MAIL_SERVER'] = 'smtp.office365.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
-app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'fakefungking@gmail.com'
+app.config['MAIL_PASSWORD'] = 'nrspafpukjezfrwe'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
 # Initialize Flask-Mail
 mail = Mail(app)
 
 @app.route('/sendEmail', methods=['POST'])
 def SendEmail():
+    
     send_email_data = request.json
     courseUid = send_email_data.get('courseUid')
     email = send_email_data.get('email')
-    cursor.execute("""
-                   select name 
-                   from user 
-                   where email = %s
-                   """, [email])
-    query = cursor.fetchall()
-    conn.commit()
-    name = query[0][0]
 
-    cursor.execute("""
-                   select C.courseID, C.course_name, C.classroom, C.zoomLink, C.teacher_name, CN.note, CM.message
-                   from course C, course_note CN, course_message CM
-                   where C.courseID = CN.courseID and C.courseID = CM.courseID and C.courseID = %s
-                   """ [courseUid])
+
+    cursor.execute("select name "
+                   "from user " 
+                   "where email = %s", [email])
     query = cursor.fetchall()
-    conn.commit()
+    
+    name = query[0][0]
+    
+    if query == []:
+        return jsonify({'success': False})
+
+    cursor.execute("select courseID, course_name, classroom, zoomLink, teacher_name "
+                   "from course "
+                   "where courseID = %s", [courseUid])
+
+    query = cursor.fetchall()
+
+    if query == []:
+        return jsonify({'success': False})
 
     courseID = query[0][0]
     course_name = query[0][1]
     classroom = query[0][2]
     zoomLink = query[0][3]
     teacher_name = query[0][4]
-    note = query[0][5]
-    message = query[0][6]
 
-    message = f"""
-    Dear {name},
+    cursor.execute("select note "
+                   "from course_note "
+                   "where courseID = %s", [courseUid])
+    query = cursor.fetchall()
+    
+    if query == []:
+        return jsonify({'success': False})
+    note = query
+    print("note", note)
 
-    You have a class coming up soon! Here are the details:
-    courseId: {courseID}
-    course_name: {course_name}
-    classroom: {classroom}
-    teacher_name: {teacher_name}
-    message: {message}
-    note: {note}
+    cursor.execute("select message "
+                   "from course_message "
+                   "where courseID = %s", [courseUid])
+    query = cursor.fetchall()
+    
+    if query == []:
+        return jsonify({'success': False})
+    message = query
+    print("message", message)
 
-    You can click the following link to join the class:
-    zoomLink: <a href={zoomLink}>{zoomLink}</a>
+    email_content = f"""
+Dear {name},
 
-    Best regards,
-    Your friendly reminder
-    """
-    subject = "Information about your upcoming courses"
-    msg = Message(recipients=email, body=message, subject=subject)
+You have a class coming up soon! Here are the details:
+courseId: {courseID}
+course_name: {course_name}
+classroom: {classroom}
+teacher_name: {teacher_name}
 
-    conn.send(msg)
+You can click the following link to join the class: (if available)
+zoomLink: {zoomLink}
+"""
+
+    for i in range(len(note)):
+        email_content += f"""
+Note {i+1}: {note[i][0]}
+"""
+
+    for i in range(len(message)):
+        email_content += f"""
+Message {i+1}: {message[i][0]}
+"""
+
+    email_content += """
+Best regards,
+Your friendly reminder
+"""
+
+    msg = Message('Upcoming Course Info', sender = 'noreply@gmail.com', recipients = [email])
+    msg.body = email_content
+
+    mail.send(msg)
+
+    return jsonify({'success': True})
 
 @app.route('/Register', methods=['POST'])
 def Register():
@@ -142,9 +178,9 @@ def Login():
         # Face login logic
         image = login_data.get('image')
         # Implement your face login verification here
-        print(recognize_face("FOX", image))
-        if recognize_face("FOX", image):
-            cursor.execute('update time set login_time = %s, login_date = %s where UID = %s', [now, today, DB_UID])
+        print("sign in with face for ", DB_UID)
+        if recognize_face(DB_UID, image):
+            cursor.execute('INSERT INTO time (login_time, login_date, UID) VALUES (%s, %s, %s)', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
@@ -153,7 +189,7 @@ def Login():
         input_password = login_data.get('password')
         print(email, input_password)
         if input_password == DB_password:
-            cursor.execute('update time set login_time = %s, login_date = %s where UID = %s', [now, today, DB_UID])
+            cursor.execute('INSERT INTO time (login_time, login_date, UID) VALUES (%s, %s, %s)', [now, today, DB_UID])
             conn.commit()
             return jsonify({'success': True, 'uid': DB_UID, 'Name': DB_name})
         else:
@@ -176,8 +212,6 @@ def TimeTable():
 @app.route('/upcomingCourse', methods=['GET'])
 def OneHrCourse():
     uid = request.args.get('uid')
-    print(uid)
-
     # get closest upcoming course here
     now = time.strftime('%a %H:%M').split(" ")
     cursor.execute("select * from course "
@@ -191,35 +225,26 @@ def OneHrCourse():
         return jsonify([])
     keys = ['uid', 'name', 'classroom', 'startTime', 'endTime', 'day', 'zoomLink', 'teacher']
     course = [{key: value for key, value in zip(keys, tpl)} for tpl in query]
+    cursor.execute("select note from course_note where courseID = %s", [course[0]['uid']])
+    query = cursor.fetchall()
+    if query:
+        course[0]['resourceLink'] = [row[0] for row in query]
+    else:
+        course[0]['resourceLink'] = []
     return jsonify(course)
-    # return jsonify([{
-    #     "uid": "COMP3278",
-    #     "name": "Introduction to React",
-    #     "classroom": "Room 101",
-    #     "startTime": "09:30",
-    #     "endTime": "10:20",
-    #     "day": "Mon",
-    #     "zoomLink": "https://zoom.us/j/1234567890",
-    #     "teacher": "John Doe",
-    # }])
 
 @app.route('/messages', methods=['GET'])
 def Messages():
     uid = request.args.get('uid')
-    print(uid)
-
-    messages = [
-        {
-            "courseUid": "COMP3330",
-            "teacher": "Teacher 1",
-            "message": "Hello students! Please submit your assignments by the end of this week.",
-        },
-        {
-            "courseUid": "COMP3330",
-            "teacher": "Teacher 2",
-            "message": "Reminder: There will be a quiz on Monday. Prepare well!",
-        },
-    ]
+    time.sleep(0.1)
+    cursor.execute("select cm.courseID, cm.message, temp.teacher_name "
+                   "from course_message cm, (select c.courseID, c.teacher_name from course c, study s where s.UID = %s and s.courseID = c.courseID) temp "
+                   "where temp.courseID = cm.courseID;", [uid])
+    query = cursor.fetchall()
+    print(query)
+    keys = ['courseUid', 'message', 'teacher']
+    messages = [{key: value for key,
+                          value in zip(keys, tpl)} for tpl in query]
     return jsonify(messages)
 
 
@@ -247,10 +272,6 @@ def drop_course():
 
 @app.route("/get-current-courses", methods=["GET"])
 def get_current_courses():
-    # current_courses = [
-    #     {"id": 1, "title": "Mathematics"},
-    #     {"id": 2, "title": "History"},
-    # ]
     uid = request.args.get('uid')
     cursor.execute('select courseID from study where UID = %s', [uid])
     query = cursor.fetchall()
@@ -264,18 +285,6 @@ def get_current_courses():
 
 @app.route("/get-available-courses", methods=["GET"])
 def get_available_courses():
-    # available_courses = [
-    #     {
-    #         "id": 1,
-    #         "uid": "COMP3214",
-    #         "courseName": "Introduction to React",
-    #         "teacher": "John Doe",
-    #         "startTime": "09:30",
-    #         "endTime": "10:20",
-    #         "day": "Mon",
-    #         "classroom": "Room 101",
-    #     },
-    # ]
     time.sleep(0.1)
     uid = request.args.get('uid')
     cursor.execute('select * from course where courseID not in (select courseID from study where UID = %s)', [uid])
@@ -292,28 +301,17 @@ def get_available_courses():
 @app.route('/Time', methods=['GET'])
 def Time():
     uid = request.args.get('uid')
-    print(uid)
-
-    # time_data = [100, 200, 300, 400, 150, 200,
-    #              10, 100, 200, 300, 400, 150, 200, 10]
-    # date_data = [
-    #     '11/11', '12/11', '13/11', '14/11', '15/11', '16/11',
-    #     '17/11', '11/10', '12/10', '13/10', '14/10', '15/10',
-    #     '16/10', '17/10'
-    # ]
-    cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, login_date from time WHERE UID = %s order by login_date", [uid])
+    cursor.execute("select TIME_TO_SEC(TIMEDIFF(logout_time, login_time))/60, login_date from time WHERE UID = %s and logout_time is not null order by login_date DESC LIMIT 10", [uid])
     query = cursor.fetchall()
     print(query)
     time_data, date_data = zip(*query)
-    return jsonify(time=time_data, date=date_data)
+    return jsonify(time=time_data[::-1], date=date_data[::-1])
 
 
 @app.route('/last-login', methods=['GET'])
 def LastLogin():
     uid = request.args.get('uid')
-    print(uid)
-
-    cursor.execute('select logout_time, logout_date from time where UID = %s', [uid])
+    cursor.execute('select logout_time, logout_date from time where UID = %s order by logout_date DESC, logout_time DESC LIMIT 1', [uid])
     query = cursor.fetchall()
     if query == []:
         return jsonify({'lastLogin': None})
@@ -332,7 +330,9 @@ def Logout():
     current_time = datetime.datetime.now()
     date = current_time.strftime('%d/%m')
     now = current_time.strftime('%H:%M')
-    cursor.execute('update time set logout_time = %s, logout_date = %s where UID = %s', [now, date, DB_UID])
+    cursor.execute("select login_time from time where UID = %s order by login_date desc, login_time desc limit 1", [DB_UID])
+    login = cursor.fetchone()[0]
+    cursor.execute("update time set logout_time = %s, logout_date = %s where UID = %s and login_time = %s", [now, date, DB_UID, login])
     conn.commit()
     return jsonify([])
 
@@ -410,8 +410,6 @@ def create_note():
 
         cursor.execute('SELECT * FROM course_note')
         existing_notes = cursor.fetchall()
-        
-
         # Render the create_note.html template for GET requests
         return render_template('create_note.html', existing_courses=existing_courses, existing_notes=existing_notes)
 

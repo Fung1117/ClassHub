@@ -6,8 +6,8 @@ faceCascade = cv2.CascadeClassifier("haarcascade/haarcascade_frontalface_default
 video_capture = cv2.VideoCapture(0)
 
 # Specify the `user_name` and `NUM_IMGS` here.
-user_name = "Ian"
-NUM_IMGS = 400
+user_name = "3035930797"
+NUM_IMGS = 800
 if not os.path.exists("data/{}".format(user_name)):
     os.mkdir("data/{}".format(user_name))
 
@@ -25,7 +25,7 @@ while cnt <= NUM_IMGS:
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    
+    '''
     faces = faceCascade.detectMultiScale(
         gray,
         scaleFactor=1.1,
@@ -37,6 +37,7 @@ while cnt <= NUM_IMGS:
     # Draw a rectangle around the faces
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    '''
 
     msg = "Saving {}'s Face Data [{}/{}]".format(user_name, cnt, NUM_IMGS)
     cv2.putText(frame, msg,

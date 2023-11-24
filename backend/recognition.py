@@ -97,6 +97,8 @@ def train():
     recognizer.save("train.yml")
 
 def recognize_face(name, image_data):
+    print("Recognizing face...")
+
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read("train.yml")
 
@@ -104,7 +106,7 @@ def recognize_face(name, image_data):
     with open("labels.pickle", "rb") as f:
         labels = pickle.load(f)
         labels = {v: k for k, v in labels.items()}
-
+    print("Labels: %s" %labels)
     face_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_frontalface_default.xml')
 
     nparr = np.frombuffer(base64.b64decode(image_data.split(',')[1]), np.uint8)
@@ -113,11 +115,17 @@ def recognize_face(name, image_data):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
 
+    print("Faces:", end=" ")
+    print(faces)
+
     for x, y, w, h in faces:
         roi_gray = gray[y: y + h, x: x + w]
         id_, conf = recognizer.predict(roi_gray)
 
-        if conf >= 60 and labels[id_] == name:
+        print("Confidence for %s: %s" %(labels[id_], conf))
+        # print(labels[id_], conf)
+        if conf >= 45 and labels[id_] == name:
             return True
+
 
     return False

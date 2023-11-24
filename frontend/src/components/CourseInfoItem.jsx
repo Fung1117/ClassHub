@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { Card, Flex, Result, Space, Button, notification } from 'antd';
+import { Card, Flex, Result, Space, Button, notification, Modal, List } from 'antd';
 import CountdownClock from 'react-countdown-clock';
 import {
     MailOutlined,
     SmileOutlined,
     VideoCameraOutlined,
     ReadOutlined,
+    FilePdfOutlined,
 } from '@ant-design/icons';
 import classImage from '../assets/class.svg';
 import courseImage from '../assets/course.svg';
@@ -21,7 +22,9 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
     const [color, setColor] = useState('#1E90FF');
     const [countdownComplete, setCountdownComplete] = useState(false)
     const [api, contextHolder] = notification.useNotification();
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const userContext = useContext(UserContext);
+
     const openNotification = () => {
         api.open({
             message: 'Your class is starting soon!',
@@ -46,8 +49,9 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
 
     const OnSendEmail = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, {email: userContext.getUserEmail(), courseUid: courseUid});
-            if (response.status === 200) {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}sendEmail`, { email: userContext.getUserEmail(), courseUid: courseUid });
+            console.log(response)
+            if (response.data.success) {
                 notification.success({
                     message: 'Success',
                     description: 'Email sent!',
@@ -66,8 +70,16 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
         }
     }
 
+    const handleButtonClick = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleModalCancel = () => {
+        setIsModalVisible(false);
+    };
+
     return (
-        <Flex gap="middle" align="center" justify="center" style={{width: '100%'}} >
+        <Flex gap="middle" align="center" justify="center" style={{ width: '100%' }} >
             {contextHolder}
             <Card hoverable cover={<img src={courseImage} height={500} />} style={{ height: 650, width: '60%' }}>
                 <Meta title={courseTitle} />
@@ -85,9 +97,8 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
                         <Button
                             type="primary"
                             size="large"
-                            href={resourceLink}
                             icon={<ReadOutlined />}
-                            onClick={() => { }}
+                            onClick={handleButtonClick}
                         >
                             Resources
                         </Button>
@@ -119,11 +130,29 @@ const CourseInfoItem = ({ courseTitle, courseUid, timeLeft, zoomLink, resourceLi
                             onComplete={() => {
                                 setCountdownComplete(true);
                                 openNotification();
-                              }}
-                            />
+                            }}
+                        />
                     </Flex>
                 )}
             </Card>
+
+            <Modal
+                title="Resources: Notes"
+                visible={isModalVisible}
+                onCancel={handleModalCancel}
+                footer={null}
+            >
+                <List
+                    dataSource={resourceLink}
+                    renderItem={(item, index) => (
+                        <List.Item>
+                            <a href={item} target="_blank" rel="noopener noreferrer">
+                                <FilePdfOutlined /> {`Note material ${index + 1}`}
+                            </a>
+                        </List.Item>
+                    )}
+                />
+            </Modal>
         </Flex>
     );
 }
